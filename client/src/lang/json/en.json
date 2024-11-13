@@ -1,0 +1,163 @@
+{
+  "page": {
+    "home": "Home",
+    "role": "Role",
+    "staff": "Staff",
+    "room": "Room",
+    "typeRoom": "Room Type",
+    "floor": "Floor",
+    "building": "Building",
+    "service": "Service",
+    "furniture": "Furniture"
+  },
+  "validation": {
+    "attribute": {
+      "min": "{{attribute}} must be at least {{min}} characters",
+      "max": "{{attribute}} must not exceed {{max}} characters",
+      "minValue": "{{attribute}} must be at least {{min}}",
+      "matches": "{{attribute}} must not contain special characters",
+      "integer": "{{attribute}} must be an integer",
+      "required": "Please enter {{attribute}}",
+      "positive": "{{attribute}} must be a positive number"
+    }
+  },
+  "attribute": {
+    "role": "Role",
+    "roleName": "Role Name",
+    "staff": "Staff",
+    "building": "Building"
+  },
+  "action": {
+    "authentication": {
+      "delete": "Authenticate deletion of {{attribute}}"
+    },
+    "message": {
+      "delete": "Do you want to delete this {{attribute}}?"
+    },
+    "attribute": {
+      "role": "Role"
+    }
+  },
+  "message": {
+    "authentication": {
+      "delete": "Do you want to delete this {{attribute}}?"
+    },
+    "attribute": {
+      "role": "Role"
+    }
+  },
+  "table": {
+    "column": {
+      "viewDetail": "View Detail",
+      "role": {
+        "name": "Role Name",
+        "created_at": "Creation Time",
+        "updated_at": "Update Time",
+        "action": "Action"
+      }
+    }
+  },
+  "labelView": {
+    "staff": {
+      "username": "Username",
+      "rolename": "Role Name",
+      "password": "Password",
+      "passwordDefault": "Default Password",
+      "fullname": "Full Name",
+      "addressDetail": "Address Detail",
+      "address": "Address",
+      "note": "Note",
+      "img": "Profile Picture",
+      "province": "Province/City",
+      "district": "District",
+      "ward": "Ward",
+      "email": "Email",
+      "phoneNumber": "Phone Number"
+    },
+    "typeRoom": {
+      "name": "Room Type Name",
+      "code": "Room Type Code",
+      "created_at": "Creation Time",
+      "updated_at": "Update Time"
+    },
+    "floor": {
+      "name": "Floor Name",
+      "code": "Floor Code",
+      "created_at": "Creation Time",
+      "updated_at": "Update Time"
+    },
+    "building": {
+      "name": "Building Name",
+      "code": "Building Code",
+      "numberFloor": "Total Floors",
+      "numbeRoomsRent": "Total Rooms",
+      "address": "Address",
+      "note": "Note",
+      "img": "Profile Picture",
+      "province": "Province/City",
+      "district": "District",
+      "ward": "Ward",
+      "addressDetail": "Address Detail",
+      "created_at": "Creation Time",
+      "updated_at": "Update Time"
+    },
+    "service": {
+      "name": "Service Name",
+      "code": "Service Code",
+      "price": "Service Price",
+      "unit": "Unit",
+      "unitValue": {
+        "people": "People",
+        "room": "Room",
+        "number": "Number",
+        "block": "Block"
+      },
+      "quantity": "Quantity",
+      "created_at": "Creation Time",
+      "updated_at": "Update Time"
+    },
+    "furniture": {
+      "name": "Furniture Name",
+      "code": "Furniture Code",
+      "price": "Furniture Price",
+      "created_at": "Creation Time",
+      "updated_at": "Update Time"
+    },
+    "room": {
+      "name": "Room Name",
+      "code": "Room Code",
+      "typeRoom": "Room Type",
+      "floor": "Floor",
+      "image": "Room Image",
+      "building": "Building",
+      "length": "Length",
+      "height": "Height",
+      "width": "Width",
+      "note": "Note",
+      "acreage": "Acreage",
+      "service": "Service",
+      "furniture": "Furniture",
+      "created_at": "Creation Time",
+      "updated_at": "Update Time"
+    }
+  },
+  "actionView": {
+    "create": "Create",
+    "update": "Update",
+    "delete": "Delete",
+    "detail": "View Detail",
+    "close": "Close",
+    "upload": "Upload Image"
+  },
+  "messageView": {
+    "search": "Enter the information you want to find",
+    "selectTypeFilter": "Select the filter time type",
+    "startTimeFilter": "Start Time",
+    "endTimeFilter": "End Time"
+  },
+  "lang": {
+    "vietnam": "Vietnamese",
+    "english": "English"
+  },
+  "noData": "No Data"
+}
