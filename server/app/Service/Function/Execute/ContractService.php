@@ -30,26 +30,31 @@ class ContractService extends BaseService
         $end = $this->request->end ?? null;
         $model = $this->model->with([
             'customer.user' => function ($query) {
-                $query->select('id', 'fullname'); 
-            } ,
-        'service.service' => function ($query) {
-            $query->select('id', 'name'); 
-        } ,
-        'furniture.furniture' => function ($query) {
-            $query->select('id', 'name'); 
-        } ,
-        'user' => function ($query) {
-            $query->select('id', 'fullname'); 
-        } ,
-        'room.building' => function ($query) {
-            $query->select('id', 'fullname'); 
-        } ,
-        'staff' => function ($query) {
-            $query->select('id', 'fullname'); 
-        } ,
-        'room' => function ($query) {
-            $query->select('id', 'name'); 
-        } ]);
+                $query->select('id', 'fullname');
+            },
+            'service.service' => function ($query) {
+                $query->select('id', 'name','price','unit');
+            },
+            'furniture.furniture' => function ($query) {
+                $query->select('id', 'name','price');
+            },
+            'user' => function ($query) {
+                $query->select('id', 'fullname');
+            },
+            'staff' => function ($query) {
+                $query->select('id', 'fullname');
+            },
+            'room' => function ($query) { 
+                $query->select('id', 'name', 'buildingId','floorId');
+            },
+            'room.floor' => function ($query) { 
+                $query->select('id', 'name','code');
+            },
+            'room.building' => function ($query) { 
+                $query->select('id', 'name', 'code', 'address');
+            },
+        ]);
+        
         $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end);
         return $result;
     }

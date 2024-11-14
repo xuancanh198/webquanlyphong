@@ -80,9 +80,8 @@ function List({ data }) {
 
   let filters = useSelector((state) => state.listTable.filters);
   const maxNumber = 1;
-  console.log(custormers)
   const removeCustomrers = (item) => {
-    console.log(item)
+
     setCustormers(custormers =>
       custormers.filter(custormer => Number(custormer.label) !== Number(item.label))
     );
@@ -441,27 +440,27 @@ function List({ data }) {
         label: dataDeatil.room.name
       });
       setQuantityService(
-        dataDeatil.service.map(serviceItem => ({
-          serviceId: serviceItem.service.id,
-          name: serviceItem.service.name,
-          id: serviceItem.id,
-          quantity: serviceItem.quantity
+        dataDeatil.service?.map(serviceItem => ({
+          serviceId: serviceItem?.service?.id,
+          name: serviceItem?.service?.name,
+          id: serviceItem?.id,
+          quantity: serviceItem?.quantity
         }))
       );
       setQuantityFurniture(
-        dataDeatil.furniture.map(furnitureItem => ({
-          furnitureId: furnitureItem.furniture.id,
-          name: furnitureItem.furniture.name,
-          id: furnitureItem.id,
-          quantity: furnitureItem.quantity,
-          maxQuantity : furnitureItem.max_quantity
+        dataDeatil.furniture?.map(furnitureItem => ({
+          furnitureId: furnitureItem?.furniture?.id,
+          name: furnitureItem?.furniture?.name,
+          id: furnitureItem?.id,
+          quantity: furnitureItem?.quantity,
+          maxQuantity : furnitureItem?.max_quantity
         }))
       );
       setCustormers(
-        dataDeatil.custormer.map(custormerItem => ({
-          label: custormerItem.user.id,
-          value: custormerItem.user.fullname,
-          id: custormerItem.id,
+        dataDeatil?.custormer?.map(custormerItem => ({
+          label: custormerItem?.user?.id,
+          value: custormerItem?.user?.fullname,
+          id: custormerItem?.id,
         }))
       );
   
@@ -827,14 +826,13 @@ function List({ data }) {
                                 {formik.errors.custorm}
                               </Form.Control.Feedback></>
                           )}
-
                         <div className='list-user d-flex flex-wrap mt-4 gap-3'>
                           {checked === false ?
-                          dataDeatil.custormer.length > 0 && dataDeatil.custormer.map((item, index) => {
+                          dataDeatil?.custormer?.length > 0 && dataDeatil?.custormer?.map((item, index) => {
                             return (
                               <div key={index} className='item-user pt-3 pb-3 ps-4 pe-4'>
                                 <Link>
-                                  {item.user.fullname}
+                                  {item?.user?.fullname}
                                 </Link>
                                
                               </div>
@@ -854,7 +852,6 @@ function List({ data }) {
                             )
                           })
                           }
-                        
                         </div>
                       </Form.Group>
                       <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-2 mt-2'>
@@ -864,16 +861,16 @@ function List({ data }) {
                           (
 
                             <div className=' row mt-4'>
-                              {dataDeatil.furniture.length > 0 && dataDeatil.furniture.map((item, index) => {
+                              {dataDeatil?.furniture?.length > 0 && dataDeatil?.furniture?.map((item, index) => {
                                 return (
                                   <div key={index} className='col-xl-4 col-lg-6 col-md-12 col-sm-12 d-flex align-items-stretch'>
                                     <div className='item-user pt-3 pb-3 ps-4 pe-4 m-2 w-100'>
                                       <Link>
-                                        {t('lableView.furniture.price') + " : " + item.furniture.name}
+                                        {t('lableView.furniture.price') + " : " + item?.furniture?.name}
                                       </Link>
                                       <p>
-                                        {t('lableView.furniture.price') + " : " + formatPrice(item.furniture.price)} <br />
-                                        {t('quantity') + " : " + item.quantity}
+                                        {t('lableView.furniture.price') + " : " + formatPrice(item?.furniture?.price)} <br />
+                                        {t('quantity') + " : " + item?.quantity}
                                       </p>
                                       
                                     </div>
@@ -937,6 +934,7 @@ function List({ data }) {
                             </>
                           )}
                       </Form.Group>
+                      {console.log(dataDeatil?.customer)}
                       <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-2 mt-2'>
                         <Form.Label className='font-weight'> {t('lableView.contract.serivce')} : </Form.Label>
                         {checked === false ?
@@ -944,16 +942,16 @@ function List({ data }) {
                           (
 
                             <div className=' row mt-4'>
-                              {dataDeatil.service.length > 0 && dataDeatil.service.map((item, index) => {
+                              {dataDeatil?.service?.length > 0 && dataDeatil?.service?.map((item, index) => {
                                 return (
                                   <div key={index} className='col-xl-4 col-lg-6 col-md-12 col-sm-12 d-flex align-items-stretch'>
                                     <div className='item-user pt-3 pb-3 ps-4 pe-4 m-2 w-100'>
                                       <Link>
-                                        {t('lableView.service.price') + " : " + item.service.name}
+                                        {t('lableView.service.price') + " : " + item?.service?.name}
                                       </Link>
                                       <p>
-                                        {t('lableView.service.price') + " : " + formatPrice(item.service.price) + " / " + t("lableView.service.unitValue." + item.service.unit)} <br />
-                                        {t('quantity') + " : " + item.quantity}
+                                        {t('lableView.service.price') + " : " + formatPrice(item?.service?.price) + " / " + t("lableView.service.unitValue." + item.service.unit)} <br />
+                                        {t('quantity') + " : " + item?.quantity}
                                       </p>
                                     
                                     </div>

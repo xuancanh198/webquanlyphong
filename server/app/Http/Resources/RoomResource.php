@@ -12,10 +12,22 @@ class RoomResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,
+            'type_room' => $this->type_room ? [
+                'id' => $this->type_room->id,
+                'name' => $this->type_room->name,
+            ] : null,
+            'floor' => $this->floor ? [
+                'id' => $this->floor->id,
+                'name' => $this->floor->name,
+            ] : null,
+            'building' => $this->building ? [
+                'id' => $this->building->id,
+                'name' => $this->building->name,
+            ] : null,
             'length' => $this->length,
             'width' => $this->width,
             'height' => $this->height,
@@ -37,24 +49,21 @@ class RoomResource extends JsonResource
                 return [
                     'id' => $serviceRoom->id,
                     'service' => [
-                        'id' => $serviceRoom->service->id,
-                        'name' => $serviceRoom->service->name,
+                        'id' => $serviceRoom->service->id ?? null,
+                        'name' => $serviceRoom->service->name ?? null,
                     ],
                 ];
             }),
-            'furniture_room' => $this->furniture_room,  // Assuming it's an empty collection, keep it as is
-            'building' => [
-                'id' => $this->building->id,
-                'name' => $this->building->name,
-            ],
-            'floor' => [
-                'id' => $this->floor->id,
-                'name' => $this->floor->name,
-            ],
-            'type_room' => [
-                'id' => $this->type_room->id,
-                'name' => $this->type_room->name,
-            ],
+            'furniture_room' => $this->furniture_room->map(function ($furnitureRoom) {
+                return [
+                    'id' => $furnitureRoom->id,
+                    'quantity' => $furnitureRoom->quantity,
+                    'furniture' => [
+                        'id' => $furnitureRoom->furniture->id ?? null,
+                        'name' => $furnitureRoom->furniture->name ?? null,
+                    ],
+                ];
+            }),
         ];
     }
 }
