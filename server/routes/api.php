@@ -44,6 +44,8 @@ Route::middleware(['admin.middleware'])->group(function () {
                 Route::post('/', [ContractController::class, 'store']);
                 Route::put('/{id}', [ContractController::class, 'update']);
                 Route::delete('/{id}', [ContractController::class, 'destroy']);
+                Route::get('/get-service/{id}', [ContractController::class, 'getService']);
+                Route::get('/get-furniture/{id}', [ContractController::class, 'getFurniture']);
             });
         });
         Route::group(['prefix' => 'permission'], function () {

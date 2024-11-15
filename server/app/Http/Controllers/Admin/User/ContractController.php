@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Service\Function\Execute\ContractService;
 use App\Http\Resources\ContractResource;
 use App\Http\Requests\ContractRequest;
-
+use App\Models\Room\RoomFurnitureModel;
+use App\Models\Room\RoomServiceModel;
 class ContractController extends Controller
 {
     protected $service;
@@ -33,5 +34,16 @@ class ContractController extends Controller
     public function destroy($id) {
         $result = $this->service->deleteAction($id);
         return $this->returnResponseMessgae($result ? "success" : "fail",'deleteAction');
+    }
+
+    public function getService($roomId)
+    {
+        $result = $this->service->getDataInRoom($roomId, RoomServiceModel::class,'service');
+        return $this->returnResponseData('success', $result);
+    }
+    public function getFurniture($roomId)
+    {
+        $result = $this->service->getDataInRoom($roomId, RoomFurnitureModel::class,'furniture');
+        return $this->returnResponseData('success', $result);
     }
 }

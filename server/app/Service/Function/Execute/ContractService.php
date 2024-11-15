@@ -7,8 +7,8 @@ use App\Http\Requests\ContractRequest;
 use App\Service\Function\Base\BaseService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Service\Function\Action\Room;
-
+use App\Service\Function\Action\Contract;
+use App\Service\Function\Action\Firebase;
 class ContractService extends BaseService
 {
     protected $model;
@@ -60,26 +60,23 @@ class ContractService extends BaseService
     }
     public function createAction()
     {
-        $this->model->name =  $this->request->name;
+        $this->model->priceTime =  $this->request->priceTime;
+        $this->model->deposit =  $this->request->deposit;
         $this->model->code =  $this->request->code;
-        $this->model->typeRoomId =  $this->request->typeRoomId;
-        $this->model->floorId =  $this->request->floorId;
-        $this->model->buildingId =  $this->request->buildingId;
-        $this->model->length =  $this->request->length;
-        $this->model->width =  $this->request->width;
-        $this->model->height =  $this->request->height;
-        $this->model->acreage =  $this->request->acreage;
-        $this->model->status =  1;
-        $this->model->price =  $this->request->price;
+        $this->model->startTime =  $this->request->startTime;
+        $this->model->endTime =  $this->request->endTime;
+        $this->model->roomId =  $this->request->roomId;
+        $this->model->userId =  $this->request->userId;
         $this->model->note =  $this->request->note;
+        $this->model->img =  app(Firebase::class)->uploadImage($this->request->file('image'));
         $this->model->created_at = Carbon::now();
         DB::beginTransaction();
-        $addRoom = $this->model->save();
-        $addRoomImg =  app(Room::class)->roomImg( $this->request->images, $this->model->id);
-        $addRoomService =  app(Room::class)->roomService($this->request->service, $this->model->id);
-        $addRoomFurniture =  app(Room::class)->roomFurniture($this->request->furniture, $this->model->id);
+        $addContract = $this->model->save();
+        $addContractService =  app(Contract::class)->ContractService($this->request->service, $this->model->id);
+        $addContractFurniture =  app(Contract::class)->ContractFurniture($this->request->furniture, $this->model->id);
+        $addContractcustomers =  app(Contract::class)->ContractCustomers($this->request->customers, $this->model->id);
         DB::commit();
-        return $addRoom === true  && $addRoomImg === true && $addRoomService === true && $addRoomFurniture === true ? true : false;
+        return $addContract === true && $addContractService === true && $addContractcustomers === true && $addContractFurniture === true ? true : false;
     }
     public function updateAction($id)
     {
@@ -98,31 +95,32 @@ class ContractService extends BaseService
         $data->note =  $this->request->note;
         $data->updated_at = Carbon::now();
         DB::beginTransaction();
-        $addRoom = $data->save();
-        $addRoomImg = true;
-        if($this->request->hasFile('images')){
-            $addRoomImg =  app(Room::class)->updateRoomImg( $this->request->images, $id);
-        }
-        $addRoomService =  app(Room::class)->updateRoomService($this->request->service, $id);
-        $addRoomFurniture =  app(Room::class)->updateRoomFurniture($this->request->furniture, $id);
+        $addContract = $data->save();
+        $addContractImg = true;
+
+        $addContractService =  app(Contract::class)->updateRoomService($this->request->service, $id);
+        $addContractFurniture =  app(Contract::class)->updateRoomFurniture($this->request->furniture, $id);
         DB::commit();
-        return $addRoom === true  && $addRoomImg === true && $addRoomService === true && $addRoomFurniture === true ? true : false;
+        return $addContract === true  && $addContractImg === true && $addContractService === true && $addContractFurniture === true ? true : false;
     }
     public function deleteAction($id)
     {
         $data = $this->model->find($id);
         DB::beginTransaction();
         try {
-            $deleteRoomImg = app(Room::class)->deleteRoomImgAll($id);
-            $deleteRoomService = app(Room::class)->deleteRoomServiceAll($id);
-            $deleteRoomFurniture = app(Room::class)->deleteRoomFurnitureAll($id);
+            $deleteRoomService = app(Contract::class)->deleteRoomServiceAll($id);
+            $deleteRoomFurniture = app(Contract::class)->deleteRoomFurnitureAll($id);
             $deleteRoom = $data->delete();
             DB::commit();
-            return $deleteRoom && $deleteRoomImg && $deleteRoomService && $deleteRoomFurniture;
+            return $deleteRoom && $deleteRoomService && $deleteRoomFurniture;
         } catch (\Exception $e) {
             DB::rollBack();
             return false; 
         }
     }
-    
+    public function getDataInRoom($roomId, $model, $relationship)
+    {
+        $modelInstance = new $model();
+        return $modelInstance->with($relationship)->where('roomId', $roomId)->get();
+    }
 }

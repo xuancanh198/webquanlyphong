@@ -17,15 +17,14 @@ class ContractResource extends JsonResource
         return [
             'id' => $this->id,
             'code' => $this->code,
-            'price_time' => $this->priceTime,
+            'priceTime' => $this->priceTime,
             'deposit' => $this->deposit,
-            'start_time' => $this->startTime,
-            'end_time' => $this->endTime,
+            'startTime' => $this->startTime,
+            'endTime' => $this->endTime,
             'note' => $this->note,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'img' => $this->img,
-
             'custormer' => $this->customer,
             'service' => $this->service,
             'furniture' => $this->furniture,

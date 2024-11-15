@@ -776,35 +776,35 @@ function List({ data }) {
                           <>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
                               <p> <span className='lable-form'>{t('lableView.contract.checkIsNow')}</span>  :
-                                {new Date(dataDeatil.endTime) > new Date() ? t('lableView.contract.checkIsNowStatus.has') : t('lableView.contract.checkIsNowStatus.hasnot')} </p>
+                                {new Date(dataDeatil?.endTime) > new Date() ? t('lableView.contract.checkIsNowStatus.has') : t('lableView.contract.checkIsNowStatus.hasnot')} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
                               <p> <span className='lable-form'>{t('lableView.contract.created_at')}</span>  :
-                                {convertDateTimeFull(dataDeatil.created_at)} </p>
+                                {convertDateTimeFull(dataDeatil?.created_at)} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
                               <p> <span className='lable-form'>{t('lableView.contract.updated_at')}</span>  :
-                                {dataDeatil.updated_at !== null ? convertDateTimeFull(dataDeatil.updated_at) : t('noData')} </p>
+                                {dataDeatil?.updated_at !== null ? convertDateTimeFull(dataDeatil?.updated_at) : t('noData')} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
                               <p> <span className='lable-form'>{t('lableView.building.name')}</span>  :
-                                {dataDeatil.room.building.name !== null ? dataDeatil.room.building.name : t('noData')} </p>
+                                {dataDeatil?.room?.building?.name !== null ? dataDeatil?.room?.building?.name : t('noData')} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
                               <p> <span className='lable-form'>{t('lableView.building.code')}</span>  :
-                                {dataDeatil.room.building.code !== null ? dataDeatil.room.building.code : t('noData')} </p>
+                                {dataDeatil?.room?.building?.code !== null ? dataDeatil?.room?.building?.code : t('noData')} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
                               <p> <span className='lable-form'>{t('lableView.building.address')}</span>  :
-                                {dataDeatil.room.building.address !== null ? dataDeatil.room.building.address : t('noData')} </p>
+                                {dataDeatil?.room?.building?.address !== null ? dataDeatil?.room?.building.address : t('noData')} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
                               <p> <span className='lable-form'>{t('lableView.floor.name')}</span>  :
-                                {dataDeatil.room.floor.name !== null ? dataDeatil.room.floor.name : t('noData')} </p>
+                                {dataDeatil?.room?.floor?.name !== null ? dataDeatil?.room?.floor?.name : t('noData')} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
                               <p> <span className='lable-form'>{t('lableView.floor.code')}</span>  :
-                                {dataDeatil.room.floor.code !== null ? dataDeatil.room.floor.code : t('noData')} </p>
+                                {dataDeatil?.room?.floor?.code !== null ? dataDeatil?.room?.floor?.code : t('noData')} </p>
                             </Form.Group>
                           </>
                         )}
@@ -840,7 +840,7 @@ function List({ data }) {
                           })
                           :
                           
-                          custormers.length > 0 && custormers.map((item, index) => {
+                          custormers?.length > 0 && custormers?.map((item, index) => {
                             return (
                               <div key={index} className='item-user pt-3 pb-3 ps-4 pe-4'>
                                 <Link>
@@ -884,18 +884,18 @@ function List({ data }) {
                           (
                             <>
                               <div className="d-flex flex-wrap gap-3">
-                                {quantityFurniture && quantityFurniture.length > 0 && (
-                                  quantityFurniture.map((item) => (
+                                {quantityFurniture && quantityFurniture?.length > 0 && (
+                                  quantityFurniture?.map((item) => (
                                     <div key={item.id} className="quantity-item-custorm">
                                       <input
                                         type="checkbox"
                                         checked
                                         onChange={(e) => addItemFurnitures(e, item, true)}
                                       />
-                                      <label className='ms-1'>{item.name}</label>
+                                      <label className='ms-1'>{item?.name}</label>
                                       <InputNumber
                                         className="input-quantity"
-                                        value={getQuantityFurniture(item.furnitureId)}
+                                        value={getQuantityFurniture(item?.furnitureId)}
                                         min={0}
                                        
                                         step={1}
@@ -905,19 +905,19 @@ function List({ data }) {
                                   ))
                                 )}
 
-                                {listFurnitureRoom && listFurnitureRoom.length > 0 && (
+                                {listFurnitureRoom && listFurnitureRoom?.length > 0 && (
                                   listFurnitureRoom
-                                   .filter(item => !quantityFurniture.some(s => s.furnitureId === item.furniture.id))
-                                    .map((item) => (
+                                   ?.filter(item => !quantityFurniture.some(s => s.furnitureId === item.furniture.id))
+                                    ?.map((item) => (
                                       <div key={item.furniture.id} className="quantity-item-custorm">
                                         <input
                                           type="checkbox"
                                           onChange={(e) => addItemFurnitures(e, item)}
                                         />
-                                        <label className='ms-1'>{item.furniture.name}</label>
+                                        <label className='ms-1'>{item?.furniture?.name}</label>
                                         <InputNumber
                                           className="input-quantity"
-                                          value={getQuantityFurniture(item.furniture.id)}
+                                          value={getQuantityFurniture(item?.furniture?.id)}
                                           min={0}
                                       
                                           step={1}
