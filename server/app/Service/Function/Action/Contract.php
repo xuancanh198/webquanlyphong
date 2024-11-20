@@ -13,8 +13,8 @@ class Contract
     public function ContractService($services, $ContractId)
     {
         try {
-            $data = json_decode($services, true);
-            foreach ($data as $key => $service) {
+            foreach ($services as $key => $service) {
+                $data = json_decode($service, true);
                 ServiceContractModel::create([
                     'contractId' => $ContractId,
                     'serviceId' => $data['serviceId'],
@@ -30,7 +30,7 @@ class Contract
     {
         try {
             foreach ($customers as $key => $customer) {
-                ServiceContractModel::create([
+                UserContractModel::create([
                     'contractId' => $ContractId,
                     'userId' => $customer,
                 ]);
@@ -64,6 +64,34 @@ class Contract
                     ServiceContractModel::where('id', $service['id'])->update([
                         'contractId' => $ContractId,
                         'serviceId' => $service['serviceId']
+                    ]);
+                }
+            }
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+    public function updateContractCustomers($customers, $ContractId)
+    {
+        $decodedCustomers = [];
+        foreach ($customers as $customer) {
+            $decodedCustomers[] = json_decode($customer, true);
+        }
+        $existingNotServicesId = UserContractModel::where('contractId', $ContractId)->whereNotIn('id', $this->getIdInArray($decodedCustomers))->pluck('id')
+            ->toArray();
+        $this->deleteContractService($existingNotServicesId);
+        try {
+            foreach ($decodedCustomers as $key => $user) {
+                if (!isset($service['id'])) {
+                    UserContractModel::create([
+                        'contractId' => $ContractId,
+                        'userId' => $user['user_id']
+                    ]);
+                } else {
+                    UserContractModel::where('id', $user['id'])->update([
+                        'contractId' => $ContractId,
+                        'userId' => $user['user_id']
                     ]);
                 }
             }
@@ -148,6 +176,15 @@ class Contract
     {
         try {
             FurnitureContractModel::where('contractId', $ContractId)->delete();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+    public function deleteContractCustomersAll($ContractId)
+    {
+        try {
+            UserContractModel::where('contractId', $ContractId)->delete();
             return true;
         } catch (\Exception $e) {
             return false;

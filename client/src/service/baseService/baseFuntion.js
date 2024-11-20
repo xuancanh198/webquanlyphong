@@ -1,7 +1,7 @@
 import APILink from "../API";
 import {
   getListData, setpage, setLimit, setTotal, setEcelDowload, setModalAdd, setModalUpdate,
-  setRoleAll
+  setRoleAll, setPrevQuery
 } from "../../redux/accction/listTable";
 import { setLoading} from "../../redux/accction/reducers";
 import { toast } from 'react-toastify';
@@ -36,7 +36,6 @@ export const getListFunService = (objectGet) => {
           };
           exportExcelFun(objectGetExcel);
           dispatch(setEcelDowload(false))
-
         } else if (response.data.status === "errorValidate") {
           toast.error(response.data.mess);
           response.data.errors.map((item) => {
@@ -46,7 +45,9 @@ export const getListFunService = (objectGet) => {
       })
       .catch((error) => {
         console.error(error);
-      });
+      }) .finally(() => {
+        dispatch(setOldUrl());
+      });;
   };
 };
 
@@ -185,3 +186,10 @@ export const deleteFunService = (routerLink, id, listFun) => {
   };
 }
 
+export const setOldUrl = () =>{
+  const searchParams = new URLSearchParams(location.search);
+  const roleParam = searchParams.get('query');
+  return (dispatch) => {
+    dispatch(setPrevQuery(roleParam))
+  }
+}

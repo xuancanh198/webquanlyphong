@@ -9,7 +9,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import i18n from './lang/lang';
 import Loading from './service/component/loading';
 import ProtectedRoute from "./middleware/AuthRouter";
-
+import Cookies from 'js-cookie';
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'));
 const Login = React.lazy(() => import('./views/pages/login/Login'));
 const Register = React.lazy(() => import('./views/pages/register/Register'));
@@ -21,7 +21,7 @@ const App = () => {
   const lang = useSelector((state) => state.reducers.lang);
   const storedTheme = useSelector((state) => state.theme);
   const loadding = useSelector((state) => state.reducers.loadding);
-
+  console.log(Cookies.get('token'));
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.href.split('?')[1]);
     const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0];

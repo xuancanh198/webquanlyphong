@@ -28,7 +28,8 @@ class StaffService extends BaseService
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
         $model = $this->model->with('role');
-        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end);
+        $filtersBase64 = $this->request->filtersBase64 ?? null;
+        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64 );
         return $result;
     }
     public function createAction()

@@ -28,6 +28,7 @@ class RoomService extends BaseService
         $typeTime = $this->request->typeTime ?? null;
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
+        $filtersBase64 = $this->request->filtersBase64 ?? null;
         $model = $this->model->with([
             'img', 
         'service_room.service' => function ($query) {
@@ -45,7 +46,7 @@ class RoomService extends BaseService
         'type_room' => function ($query) {
             $query->select('id', 'name'); 
         } ]);
-        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end);
+        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64);
         return $result;
     }
     public function createAction()

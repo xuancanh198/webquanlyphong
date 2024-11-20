@@ -29,7 +29,8 @@ const initialState = {
   districtFirst: null,
   modalAdd: false,
   modalUpdate: false,
-  filterTime: null
+  filterTime: null,
+  prevQuery: null
 };
 const listTable = (state = initialState, action) => {
   switch (action.type) {
@@ -188,6 +189,11 @@ const listTable = (state = initialState, action) => {
         ...state,
         listServiceRoom: action.payload,
       };
+      case 'SETVALEPREQUERY':
+        return {
+          ...state,
+          prevQuery: action.payload,
+        };
     default:
       return state;
   }

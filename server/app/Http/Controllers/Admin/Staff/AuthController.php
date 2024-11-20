@@ -6,26 +6,32 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\Passport;
+
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-      
+
         $credentials = $request->validate([
             'username' => 'required',
             'password' => 'required',
         ]);
-    
+
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            $token = $user->createToken('Personal Access Token')->accessToken; 
-    
+
+            $tokenResult = $user->createToken('Token admin', ['admin']);
+            $accessToken = $tokenResult->accessToken;
+            $token = $tokenResult->token;
+            $token->expires_at = now()->addDays(7);
+            $token->save();
             return response()->json([
                 'status' => 'success',
-                'token' => $token,
+                'token' => $accessToken,
+                'type' => 'admin'
             ], 200);
         }
-    
+
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
 }

@@ -103,13 +103,13 @@ const NavConfig = () => {
     },
     {
       component: CNavGroup,
-      name:"icon",
+      name: t('page.system'),
       icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
       items: [
         {
           component: CNavItem,
-          name: "icon",
-          to: '/icons',
+          name: t('page.setting'),
+          to: '/page?query=setting',
         },
       ],
     },

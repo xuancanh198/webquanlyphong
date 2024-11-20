@@ -260,7 +260,6 @@ function List({ data }) {
     }
     dispatch(setFilter(btoa(JSON.stringify(filters))));
   }
-  console.log(dataDeatil)
   return (
     <div className='p-3'>
       <CTable>

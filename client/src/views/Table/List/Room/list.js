@@ -919,7 +919,6 @@ function List({ data }) {
                         </>
                       )}
                     </Form.Group>
-                    {console.log(dataDeatil)}
                     <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-2 mt-2'>
                       {checked === false ? (
                         <p>

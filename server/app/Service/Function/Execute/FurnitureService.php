@@ -26,7 +26,8 @@ class FurnitureService extends BaseService
         $typeTime = $this->request->typeTime ?? null;
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
-        $result = $this->getListBaseFun($this->model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end);
+        $filtersBase64 = $this->request->filtersBase64 ?? null;
+        $result = $this->getListBaseFun($this->model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64);
         return $result;
     }
     public function createAction()

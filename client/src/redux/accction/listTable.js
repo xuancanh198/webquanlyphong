@@ -130,3 +130,9 @@ export const setListServiceRoom= (items) => ({
     type: 'SETSERVICEROOM',
     payload: items,
 });
+
+
+export const setPrevQuery= (items) => ({
+    type: 'SETVALEPREQUERY',
+    payload: items,
+});

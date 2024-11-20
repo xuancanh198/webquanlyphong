@@ -215,9 +215,7 @@ function List({ data }) {
           Promise.resolve(dispatch(getListServiceRoom(roomId.value))),
           Promise.resolve(dispatch(getListFurnitureRoom(roomId.value)))
         ]);
-
       };
-
       fetchData();
     }
 

@@ -9,6 +9,7 @@ const APILink = axios.create({
 
 APILink.interceptors.request.use(  (config) => {
     const token = Cookies.get('token');
+   
     if (token && token !== null) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }

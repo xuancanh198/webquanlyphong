@@ -9,11 +9,13 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Service\Function\Action\Contract;
 use App\Service\Function\Action\Firebase;
+use Illuminate\Support\Facades\Auth;
+
 class ContractService extends BaseService
 {
     protected $model;
     protected $request;
-    protected $columSearch = ['name', 'code'];
+    protected $columSearch = ['code'];
     public function __construct(ContractModel $model, ContractRequest $request)
     {
         $this->model = $model;
@@ -28,15 +30,16 @@ class ContractService extends BaseService
         $typeTime = $this->request->typeTime ?? null;
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
+        $filtersBase64 = $this->request->filtersBase64 ?? null;
         $model = $this->model->with([
             'customer.user' => function ($query) {
                 $query->select('id', 'fullname');
             },
             'service.service' => function ($query) {
-                $query->select('id', 'name','price','unit');
+                $query->select('id', 'name', 'price', 'unit');
             },
             'furniture.furniture' => function ($query) {
-                $query->select('id', 'name','price');
+                $query->select('id', 'name', 'price');
             },
             'user' => function ($query) {
                 $query->select('id', 'fullname');
@@ -44,23 +47,24 @@ class ContractService extends BaseService
             'staff' => function ($query) {
                 $query->select('id', 'fullname');
             },
-            'room' => function ($query) { 
-                $query->select('id', 'name', 'buildingId','floorId');
+            'room' => function ($query) {
+                $query->select('id', 'name', 'buildingId', 'floorId');
             },
-            'room.floor' => function ($query) { 
-                $query->select('id', 'name','code');
+            'room.floor' => function ($query) {
+                $query->select('id', 'name', 'code');
             },
-            'room.building' => function ($query) { 
+            'room.building' => function ($query) {
                 $query->select('id', 'name', 'code', 'address');
             },
         ]);
-        
-        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end);
+
+        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64);
         return $result;
     }
     public function createAction()
     {
         $this->model->priceTime =  $this->request->priceTime;
+        $this->model->staffId =  Auth::user()->id;
         $this->model->deposit =  $this->request->deposit;
         $this->model->code =  $this->request->code;
         $this->model->startTime =  $this->request->startTime;
@@ -71,53 +75,89 @@ class ContractService extends BaseService
         $this->model->img =  app(Firebase::class)->uploadImage($this->request->file('image'));
         $this->model->created_at = Carbon::now();
         DB::beginTransaction();
-        $addContract = $this->model->save();
-        $addContractService =  app(Contract::class)->ContractService($this->request->service, $this->model->id);
-        $addContractFurniture =  app(Contract::class)->ContractFurniture($this->request->furniture, $this->model->id);
-        $addContractcustomers =  app(Contract::class)->ContractCustomers($this->request->customers, $this->model->id);
-        DB::commit();
-        return $addContract === true && $addContractService === true && $addContractcustomers === true && $addContractFurniture === true ? true : false;
+
+        try {
+            $addContract = $this->model->save();
+            if ($addContract) {
+                $addContractService = app(Contract::class)->ContractService($this->request->service, $this->model->id);
+                $addContractFurniture = app(Contract::class)->ContractFurniture($this->request->furniture, $this->model->id);
+                $addContractCustomers = app(Contract::class)->ContractCustomers($this->request->customers, $this->model->id);
+                if ($addContractService && $addContractFurniture && $addContractCustomers) {
+                    DB::commit();
+                    return true;
+                } else {
+                    DB::rollback();
+                    return false;
+                }
+            } else {
+                DB::rollback();
+                return false;
+            }
+        } catch (\Exception $e) {
+            DB::rollback();
+            return false;
+        }
     }
     public function updateAction($id)
     {
-        
-        $data = $this->model->find($id);
-        $data->name = $this->request->name;
-        $data->code = $this->request->code; 
-        $data->typeRoomId =  $this->request->typeRoomId;
-        $data->floorId =  $this->request->floorId;
-        $data->buildingId =  $this->request->buildingId;
-        $data->length =  $this->request->length;
-        $data->width =  $this->request->width;
-        $data->height =  $this->request->height;
-        $data->acreage =  $this->request->acreage;
-        $data->price =  $this->request->price;
-        $data->note =  $this->request->note;
-        $data->updated_at = Carbon::now();
-        DB::beginTransaction();
-        $addContract = $data->save();
-        $addContractImg = true;
 
-        $addContractService =  app(Contract::class)->updateRoomService($this->request->service, $id);
-        $addContractFurniture =  app(Contract::class)->updateRoomFurniture($this->request->furniture, $id);
-        DB::commit();
-        return $addContract === true  && $addContractImg === true && $addContractService === true && $addContractFurniture === true ? true : false;
+        $data = $this->model->find($id);
+        $data->priceTime =  $this->request->priceTime;
+        $data->deposit =  $this->request->deposit;
+        $data->code =  $this->request->code;
+        $data->startTime =  $this->request->startTime;
+        $data->endTime =  $this->request->endTime;
+        $data->roomId =  $this->request->roomId;
+        $data->userId =  $this->request->userId;
+        $data->note =  $this->request->note;
+        if ($this->request->hasFile('images')) {
+            $this->model->img =  app(Firebase::class)->uploadImage($this->request->file('image'));
+        }
+        $data->updated_at = Carbon::now();
+        try {
+            $updateContract = $data->save();
+            if ($updateContract) {
+                $updateContractService = app(Contract::class)->updateContractService($this->request->service, $id);
+                $updateContractFurniture = app(Contract::class)->updateContractFurniture($this->request->furniture, $id);
+                $updateContractCustomers = app(Contract::class)->updateContractCustomers($this->request->customers, $id);
+                if ($updateContractService && $updateContractFurniture  && $updateContractService) {
+                    DB::commit();
+                    return true;
+                } else {
+                    DB::rollback();
+                    return false;
+                }
+            } else {
+                DB::rollback();
+                return false;
+            }
+        } catch (\Exception $e) {
+            DB::rollback();
+            return false;
+        }
     }
     public function deleteAction($id)
     {
         $data = $this->model->find($id);
         DB::beginTransaction();
         try {
-            $deleteRoomService = app(Contract::class)->deleteRoomServiceAll($id);
-            $deleteRoomFurniture = app(Contract::class)->deleteRoomFurnitureAll($id);
-            $deleteRoom = $data->delete();
-            DB::commit();
-            return $deleteRoom && $deleteRoomService && $deleteRoomFurniture;
+            $deleteRoomService = app(Contract::class)->deleteContractServiceAll($id);
+            $deleteRoomFurniture = app(Contract::class)->deleteContractFurnitureAll($id);
+            $deleteContractCustomer = app(Contract::class)->deleteContractCustomersAll($id);
+            $deleteContract = $data->delete();
+            if ($deleteRoomService && $deleteRoomFurniture && $deleteContractCustomer && $deleteContract) {
+                DB::commit();
+                return true; 
+            }
+    
+            DB::rollBack(); 
+    
         } catch (\Exception $e) {
             DB::rollBack();
             return false; 
         }
     }
+    
     public function getDataInRoom($roomId, $model, $relationship)
     {
         $modelInstance = new $model();

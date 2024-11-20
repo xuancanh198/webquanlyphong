@@ -12,7 +12,6 @@ import {
   CPagination,
   CPaginationItem,
 } from '@coreui/react'
-import { DocsExample } from 'src/components'
 import RoleList from "./List/Role/list";
 import TypeRoomList from "./List/TypeRoom/list";
 import FurnitureList from "./List/Furniture/list";
@@ -23,6 +22,7 @@ import PermisstionList from "./List/Permisstion/list";
 import ServiceList from "./List/Service/list";
 import AcctionList from "./List/Acction/list";
 import FloorList from "./List/Floor/list";
+import SettingList from "./List/Setting/list";
 import RoomList from "./List/Room/list";
 import ContractList from "./List/Contract/list";
 import FloorModal from "./Modal/Floor/modal";
@@ -33,11 +33,12 @@ import StaffModal from "./Modal/Staff/modal";
 import FurnitureModal from "./Modal/Furniture/modal";
 import ServiceModal from "./Modal/Service/modal";
 import RoomModal from "./Modal/Room/modal";
+import SettingModal from "./Modal/Setting/modal";
 import UserModal from "./Modal/User/modal";
 import AcctionModal from "./Modal/Acction/modal";
 import PermisstionModal from "./Modal/Permisstion/modal";
 import ContractModal from "./Modal/Contract/modal";
-import { getListRole,getListAcction, getListStaff, getListTypeRoom, getListFloor, getListBuilding, getListService, getListFurniture, getListRoom, getListUser, getListContract, getListPermisstion } from "../../service/baseService/cruds";
+import { getListRole, getListAcction, getListStaff, getListTypeRoom, getListFloor, getListBuilding, getListService, getListFurniture, getListRoom, getListUser, getListContract, getListPermisstion, getListSetting } from "../../service/baseService/cruds";
 import { useSelector, useDispatch } from 'react-redux';
 import { setTypeFilter, setpage, setLimit, setFilterStatus, setStartFilter, setEndFilter, setSearchVluae, setSeachStatus, setEcelDowload, setFilter } from "../../redux/accction/listTable";
 import { convertDateTime } from "../../service/FunService/funweb";
@@ -65,6 +66,7 @@ const Tables = () => {
   const typeFilterTime = useSelector((state) => state.listTable.typeFilterTime);
   const exportExcel = useSelector((state) => state.listTable.exportExcel);
   const filtersbase64 = useSelector((state) => state.listTable.filters);
+  const prevQuery = useSelector((state) => state.listTable.prevQuery);
   const [filter, setFilterTime] = useState(null);
   let searchOb = {
     value: searchValue,
@@ -82,6 +84,7 @@ const Tables = () => {
   }, [filterStatus, filterStartTime, filterEndTime, typeFilterTime]);
 
   useEffect(() => {
+    console.log(prevQuery !== roleParam)
     getQueryUrl();
     if (filterStartTime !== null && filterEndTime !== null && filterStartTime < filterEndTime) {
       dispatch(setFilterStatus(true));
@@ -137,6 +140,10 @@ const Tables = () => {
         case 'acction':
           SetTitel(t('page.acction'));
           dispatch(getListAcction(t('page.acction'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          break;
+        case 'setting':
+          SetTitel(t('page.setting'));
+          dispatch(getListSetting(t('page.setting'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         default:
           SetTitel('Tiêu đề mặc định');
@@ -223,6 +230,8 @@ const Tables = () => {
                     return <PermisstionModal titel={titel} />;
                   case 'acction':
                     return <AcctionModal titel={titel} />;
+                  case 'setting':
+                    return <SettingModal titel={titel} />;
                   default:
                     return null;
                 }
@@ -307,6 +316,8 @@ const Tables = () => {
                 return <PermisstionList data={listTabledata} />;
               case 'acction':
                 return <AcctionList data={listTabledata} />;
+              case 'setting':
+                return <SettingList data={listTabledata} />;
               default:
                 return null;
             }

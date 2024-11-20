@@ -1,5 +1,5 @@
 {
-  "quantity" : "Số lượng",
+  "quantity": "Số lượng",
   "page": {
     "home": "Trang chủ",
     "role": "Chức vụ",
@@ -10,12 +10,14 @@
     "building": "tòa nhà",
     "service": "dịch vụ",
     "furniture": "đồ đạc, vật dụng",
-    "user" : "Khách thuê",
-    "login" :"Đăng nhập",
-    "missPassWord" : "Quên mật khẩu",
-    "contract" : "Hợp đồng",
-    "permisstion" : "Quyền",
-    "acction" : "Hành động"
+    "user": "Khách thuê",
+    "login": "Đăng nhập",
+    "missPassWord": "Quên mật khẩu",
+    "contract": "Hợp đồng",
+    "permisstion": "Quyền",
+    "acction": "Hành động",
+    "system": "Hệ thống",
+    "setting": "Cài đặt"
   },
   "validation": {
     "attribute": {
@@ -118,7 +120,7 @@
         "room": "Phòng",
         "number": "Số",
         "block": "Khối",
-        "vehicle" : "Phương tiệns"
+        "vehicle": "Phương tiệns"
       },
       "quantity": "Số lượng thực tính",
       "created_at": "Thời gian tạo",
@@ -135,21 +137,21 @@
       "name": "Tên phòng",
       "code": "Mã phòng",
       "typeRoom": "Loại phòng",
-      "floor" : "tầng",
-      "image" : "Ảnh phòng",
-      "building" : "tòa nhà",
-      "length" : "chiều dài",
-      "height" : "Chiều cao",
-      "width" : "chiều rộng",
-      "note" : "ghi chú",
-      "acreage" : "Diện tích",
-      "service" : "dịch vụ",
-      "furniture" : "đồ đạc",
-      "status" : "Trạng thái",
-      "price" : "Giá thuê",
-      "statusValue" :{
-        "online" : "Đang hoạt động cho thuê",
-        "off" : "Đang tạm thời đóng"
+      "floor": "tầng",
+      "image": "Ảnh phòng",
+      "building": "tòa nhà",
+      "length": "chiều dài",
+      "height": "Chiều cao",
+      "width": "chiều rộng",
+      "note": "ghi chú",
+      "acreage": "Diện tích",
+      "service": "dịch vụ",
+      "furniture": "đồ đạc",
+      "status": "Trạng thái",
+      "price": "Giá thuê",
+      "statusValue": {
+        "online": "Đang hoạt động cho thuê",
+        "off": "Đang tạm thời đóng"
       },
       "created_at": "Thời gian tạo",
       "updated_at": "Thời gian cập nhật"
@@ -169,35 +171,35 @@
       "ward": "Phường, xã",
       "email": "Emai",
       "phoneNumber": " Số điện thoại",
-      "dateOfBirth" : "Ngày sinh",
-      "dateIssuanceCard" : "Ngày cấp căn cước",
-      "placeIssue" : "Nơi cấp căn cước"
+      "dateOfBirth": "Ngày sinh",
+      "dateIssuanceCard": "Ngày cấp căn cước",
+      "placeIssue": "Nơi cấp căn cước"
     },
-    "login" :{
-      "username" : "Tên đăng nhập",
-      "password" : "Mật khẩu"
+    "login": {
+      "username": "Tên đăng nhập",
+      "password": "Mật khẩu"
     },
-    "contract" : {
-      "code" : "Mã hợp đồng",
-      "room" : "Phòng cho thuê",
-      "priceTime" : "Giá lúc cho thuê",
-      "deposit" : "Tiền cọc",
-      "userepresentative" : "Người kí hợp đồng",
-      "img" :"Ảnh hợp đồng",
-      "startTime" : "Thời gian bắt đầu hiệu lực",
-      "endTime" : "Thời gian hết hạn hiệu lực",
-      "created_at" : "Thời gian tạo",
-      "updated_at" : "Thời gian cập nhật",
-      "note" : "Ghi chú",
+    "contract": {
+      "code": "Mã hợp đồng",
+      "room": "Phòng cho thuê",
+      "priceTime": "Giá lúc cho thuê",
+      "deposit": "Tiền cọc",
+      "userepresentative": "Người kí hợp đồng",
+      "img": "Ảnh hợp đồng",
+      "startTime": "Thời gian bắt đầu hiệu lực",
+      "endTime": "Thời gian hết hạn hiệu lực",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật",
+      "note": "Ghi chú",
       "custorm": "Tên thành viên trong phòng",
-      "user" : "tên người kí",
-      "checkIsNow" : "Thời hạn hợp đồng",
-      "checkIsNowStatus" : {
-        "has" : "Còn thời giạn",
-        "hasnot" : "Đã hết hạn hợp đồng"
+      "user": "tên người kí",
+      "checkIsNow": "Thời hạn hợp đồng",
+      "checkIsNowStatus": {
+        "has": "Còn thời giạn",
+        "hasnot": "Đã hết hạn hợp đồng"
       },
-       "serivce" : "Dịch vụ trong phòng",
-       "furniture" : "Đồ đạc trong phòng"
+      "serivce": "Dịch vụ trong phòng",
+      "furniture": "Đồ đạc trong phòng"
     },
     "permisstion": {
       "name": "Tên quyền",
@@ -210,6 +212,13 @@
       "code": "Mã hành động",
       "created_at": "Thời gian tạo",
       "updated_at": "Thời gian cập nhật"
+    },
+    "setting": {
+      "key": "Tên giá trị",
+      "value": "Giá trị",
+      "note" : "ghi chú",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
     }
   },
   "actionView": {
@@ -218,7 +227,7 @@
     "delete": "Xóa",
     "detail": "Xem chi tiết",
     "close": "đóng",
-    "upload" : "tải ảnh lên"
+    "upload": "tải ảnh lên"
   },
   "messageView": {
     "search": "Nhập thông tin cần tìm kiếm",
@@ -231,14 +240,13 @@
     "english": "Tiếng Anh"
   },
   "noData": "Không có dữ liệu",
-  "loading" : "Đang thực hiện vui lòng chờ !",
- 
-  "messageText" :{
-    "note" : "Ghi chú",
-    "login" : "Đăng nhập để vào trang",
-    "loginPageMessage"  : "Bạn phải đăng nhập bằng tài khoản quản trị viên để được vào trang quản trị nếu chưa có tài khoản liên hệ với quản trị để tạo tài khoản",
-    "searchTitel" : "Nhập {{attribute}} cần tìm",
-    "requiredChange" : "Vui lòng chọn {{attribute}} để hiển thị dữ liệu ...",
-    "changeQuantityFail" : "Số lượng {{attribute}} trong phòng không đủ hoặc bạn chưa chọn ô nhập !"
+  "loading": "Đang thực hiện vui lòng chờ !",
+  "messageText": {
+    "note": "Ghi chú",
+    "login": "Đăng nhập để vào trang",
+    "loginPageMessage": "Bạn phải đăng nhập bằng tài khoản quản trị viên để được vào trang quản trị nếu chưa có tài khoản liên hệ với quản trị để tạo tài khoản",
+    "searchTitel": "Nhập {{attribute}} cần tìm",
+    "requiredChange": "Vui lòng chọn {{attribute}} để hiển thị dữ liệu ...",
+    "changeQuantityFail": "Số lượng {{attribute}} trong phòng không đủ hoặc bạn chưa chọn ô nhập !"
   }
 }

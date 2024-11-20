@@ -805,3 +805,65 @@ export const deleteAcction = (id) => {
     dispatch(deleteFunService(routerLink, id ,getListAcction ));
   };
 };
+
+
+export const getListSetting= (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+  const objectGet ={
+    page: page,
+    limit : limit,
+    search :search ,
+    fitler :fitler,
+    exportExcel : exportExcel,
+    filtersBase64 :filtersBase64,
+    routerLink : 'system/setting',
+    titelnameExcel : ["STT", "ID", "Tên chức vụ", "Thời gian tạo", "Cập nhật"],
+    columExcel :['id','name','created_at','updated_at'],
+    titelExcel : titel,
+  } 
+  return (dispatch) => {
+    dispatch(getListFunService(objectGet))
+  };
+};
+export const getAllSetting =(exportExcel = false, isSelectAll = false , page =1 ,limit =10, search = null) => {
+  const objectGet ={
+    getList: setRoleAll,
+    exportExcel:exportExcel,
+    routerLink : 'system/setting',
+    isSelect : isSelectAll,
+    page : exportExcel === true ? page : null,
+    limit : exportExcel === true ? limit : null,
+    search: (search !== null && search.trim().length > 0) ? search : null
+  } 
+  return (dispatch) => {
+    dispatch(getAllData(objectGet))
+  };
+};
+export const addSetting = (data,resetForm) => {
+  const objectCreate ={
+    routerLink : 'system/setting',
+    data : data,
+    resetForm : resetForm,
+    getList : getListSetting
+  }
+  return (dispatch) => {
+    dispatch(addFunService(objectCreate));
+  };
+};
+export const updateSetting = (data, id , resetForm) => {
+  const objectUpdate ={
+    id : id,
+    routerLink : 'system/setting',
+    data : data,
+    resetForm : resetForm,
+    getList : getListSetting
+  }
+  return (dispatch) => {
+    dispatch(updateFunService(objectUpdate));
+  };
+};
+export const deleteSetting = (id) => {
+  const  routerLink = "system/setting";
+  return (dispatch) => {
+    dispatch(deleteFunService(routerLink, id,getListSetting ));
+  };
+};
