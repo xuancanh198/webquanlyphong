@@ -99,6 +99,11 @@ const NavConfig = () => {
           name: t('page.acction'),
           to: '/page?query=acction',
         },
+        {
+          component: CNavItem,
+          name: t('page.permisstionDetail'),
+          to: '/page?query=permisstionDetail',
+        },
       ],
     },
     {

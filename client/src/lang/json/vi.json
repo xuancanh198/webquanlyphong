@@ -17,6 +17,7 @@
     "permisstion": "Quyền",
     "acction": "Hành động",
     "system": "Hệ thống",
+    "permisstionDetail": "Quyền chi tiết",
     "setting": "Cài đặt"
   },
   "validation": {
@@ -204,6 +205,13 @@
     "permisstion": {
       "name": "Tên quyền",
       "code": "Mã quyền",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
+    },
+    "permisstionDetail": {
+      "name": "Tên quyền chi tiết",
+      "code": "Mã quyền chi tiết",
+      "url": "Đường dẫn",
       "created_at": "Thời gian tạo",
       "updated_at": "Thời gian cập nhật"
     },

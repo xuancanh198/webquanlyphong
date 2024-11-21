@@ -21,7 +21,6 @@ const App = () => {
   const lang = useSelector((state) => state.reducers.lang);
   const storedTheme = useSelector((state) => state.theme);
   const loadding = useSelector((state) => state.reducers.loadding);
-  console.log(Cookies.get('token'));
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.href.split('?')[1]);
     const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0];

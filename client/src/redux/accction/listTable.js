@@ -131,7 +131,14 @@ export const setListServiceRoom= (items) => ({
     payload: items,
 });
 
-
+export const setPermisstionAll = (items) => ({
+    type: 'SETPERMISSTIONALL',
+    payload: items,
+});
+export const setAcctionAll = (items) => ({
+    type: 'SETACCTIONALL',
+    payload: items,
+});
 export const setPrevQuery= (items) => ({
     type: 'SETVALEPREQUERY',
     payload: items,

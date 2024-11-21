@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Staff\RoleController;
 use App\Http\Controllers\Admin\User\UserController;
 use App\Http\Controllers\Admin\Permisstion\PermisstionController;
 use App\Http\Controllers\Admin\Permisstion\ActionController;
+use App\Http\Controllers\Admin\Permisstion\PermisstionDetailController;
 use App\Http\Controllers\Admin\User\ContractController;
 use App\Http\Controllers\Admin\Staff\AuthController;
 use App\Http\Controllers\Admin\Staff\StaffController;
@@ -65,6 +66,12 @@ Route::middleware(['admin.middleware'])->group(function () {
                     Route::post('/', [PermisstionController::class, 'store']);
                     Route::put('/{id}', [PermisstionController::class, 'update']);
                     Route::delete('/{id}', [PermisstionController::class, 'destroy']);
+                });
+                Route::group(['prefix' => 'permissionDetail'], function () {
+                    Route::get('/', [PermisstionDetailController::class, 'index']);
+                    Route::post('/', [PermisstionDetailController::class, 'store']);
+                    Route::put('/{id}', [PermisstionDetailController::class, 'update']);
+                    Route::delete('/{id}', [PermisstionDetailController::class, 'destroy']);
                 });
                 Route::group(['prefix' => 'action'], function () {
                     Route::get('/', [ActionController::class, 'index']);

@@ -9,7 +9,8 @@ import {
    setUserAll ,
    setListFurnitureRoom,
    setListServiceRoom,
-   
+   setAcctionAll,
+   setPermisstionAll
 } from "../../redux/accction/listTable";
 import { setLoading} from "../../redux/accction/reducers";
 import APILink from "../API";
@@ -707,10 +708,9 @@ export const getListPermisstion = (titel = null, page = 1, limit = 10, search = 
 };
 export const getAllPermisstion= (exportExcel = false) => {
   const objectGet ={
-    getList: setFurnitureAll,
+    getList: setPermisstionAll,
     exportExcel:exportExcel,
-    routerLink : 'permission/permission',
-
+    routerLink : 'permission/permission'
   } 
   return (dispatch) => {
     dispatch(getAllData(objectGet))
@@ -747,6 +747,66 @@ export const deletePermisstion = (id) => {
   };
 };
 
+
+export const getListPermisstionDetail = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+  const objectGet ={
+    page: page,
+    limit : limit,
+    search :search ,
+    fitler :fitler,
+    exportExcel : exportExcel,
+    filtersBase64 :filtersBase64,
+    routerLink : 'permission/permissionDetail',
+    titelnameExcel : ['Stt','id đồ đạc vật dụng','tên đồ đạc vật dụng','mã đồ đạc vật dụng','giá mua đồ đạc vật dụng','thời gian tạo', ' thời gian cập nhật'],
+    columExcel :['id','name','code','price','created_at','updated_at'],
+    titelExcel : titel,
+  } 
+  return (dispatch) => {
+    dispatch(getListFunService(objectGet))
+  };
+};
+export const getAllPermisstionDetail = (exportExcel = false) => {
+  const objectGet ={
+    getList: setFurnitureAll,
+    exportExcel:exportExcel,
+    routerLink : 'permission/permissionDetail',
+
+  } 
+  return (dispatch) => {
+    dispatch(getAllData(objectGet))
+  };
+};
+export const addPermisstionDetail = (data,resetForm ) => {
+  const objectCreate ={
+    routerLink : 'permission/permissionDetail',
+    data : data,
+    resetForm : resetForm,
+    getList : getListPermisstionDetail
+  }
+  return (dispatch) => {
+    dispatch(addFunService(objectCreate));
+  };
+};
+export const updatePermisstionDetail = (id, data ,resetForm ) => {
+  const objectUpdate ={
+    id : id,
+    routerLink : 'permission/permissionDetail',
+    data : data,
+    resetForm : resetForm,
+    getList : getListPermisstionDetail
+  }
+  return (dispatch) => {
+    dispatch(updateFunService(objectUpdate, true));
+  };
+};
+
+export const deletePermisstionDetail = (id) => {
+  const  routerLink = 'permission/permissionDetail';
+  return (dispatch) => {
+    dispatch(deleteFunService(routerLink, id ,getListPermisstionDetail ));
+  };
+};
+
 export const getListAcction= (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
   const objectGet ={
     page: page,
@@ -766,7 +826,7 @@ export const getListAcction= (titel = null, page = 1, limit = 10, search = null,
 };
 export const getAllAcction= (exportExcel = false) => {
   const objectGet ={
-    getList: setFurnitureAll,
+    getList: setAcctionAll,
     exportExcel:exportExcel,
     routerLink : 'permission/action',
 

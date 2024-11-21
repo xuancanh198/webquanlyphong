@@ -10,6 +10,8 @@ const initialState = {
   listUserAll: null,
   listServiceRoom: null,
   listFurnitureRoom: null,
+  listPermisstionAll: null,
+  listAcctionAll : null,
   page: 1,
   limit: 10,
   searchValue: null,
@@ -159,6 +161,17 @@ const listTable = (state = initialState, action) => {
         ...state,
         listRoomAll: action.payload,
       };
+
+      case 'SETPERMISSTIONALL':
+        return {
+          ...state,
+          listPermisstionAll: action.payload,
+        };
+        case 'SETACCTIONALL':
+          return {
+            ...state,
+            listAcctionAll: action.payload,
+          };
     case 'SETTYPEROOMALL':
       return {
         ...state,
