@@ -2,20 +2,23 @@
 
 namespace App\Service\Function\Execute;
 
-use App\Models\User\ContractModel;
-use App\Http\Requests\ContractRequest;
+use App\Models\User\BilModel;
+use App\Http\Requests\BillRequest;
 use App\Service\Function\Base\BaseService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Service\Function\Action\Contract;
 use App\Service\Function\Action\Firebase;
 use Illuminate\Support\Facades\Auth;
-class ContractService extends BaseService
+use App\Service\Function\Action\Bill;
+use App\Models\User\ContractModel;
+
+class BillService extends BaseService
 {
     protected $model;
     protected $request;
     protected $columSearch = ['code'];
-    public function __construct(ContractModel $model, ContractRequest $request)
+    public function __construct(BilModel $model, BillRequest $request)
     {
         $this->model = $model;
         $this->request = $request;
@@ -31,14 +34,8 @@ class ContractService extends BaseService
         $end = $this->request->end ?? null;
         $filtersBase64 = $this->request->filtersBase64 ?? null;
         $model = $this->model->with([
-            'customer.user' => function ($query) {
-                $query->select('id', 'fullname');
-            },
-            'service.service' => function ($query) {
+            'detail.service' => function ($query) {
                 $query->select('id', 'name', 'price', 'unit');
-            },
-            'furniture.furniture' => function ($query) {
-                $query->select('id', 'name', 'price');
             },
             'user' => function ($query) {
                 $query->select('id', 'fullname');
@@ -48,6 +45,9 @@ class ContractService extends BaseService
             },
             'room' => function ($query) {
                 $query->select('id', 'name', 'buildingId', 'floorId');
+            },
+            'room.type_room' => function ($query) {
+                $query->select('id', 'name', 'code');
             },
             'room.floor' => function ($query) {
                 $query->select('id', 'name', 'code');
@@ -62,7 +62,8 @@ class ContractService extends BaseService
     }
     public function createAction()
     {
-        
+        dd($this->request->all());
+        $room = app(Bill::class)->getRoomInfo($this->request->roomId);
         $this->model->priceTime =  $this->request->priceTime;
         $this->model->staffId =  Auth::user()->id;
         $this->model->deposit =  $this->request->deposit;
@@ -72,6 +73,7 @@ class ContractService extends BaseService
         $this->model->roomId =  $this->request->roomId;
         $this->model->userId =  $this->request->userId;
         $this->model->note =  $this->request->note;
+        $this->model->img =  app(Firebase::class)->uploadImage($this->request->file('image'));
         $this->model->created_at = Carbon::now();
         DB::beginTransaction();
 
@@ -119,7 +121,7 @@ class ContractService extends BaseService
                 $updateContractService = app(Contract::class)->updateContractService($this->request->service, $id);
                 $updateContractFurniture = app(Contract::class)->updateContractFurniture($this->request->furniture, $id);
                 $updateContractCustomers = app(Contract::class)->updateContractCustomers($this->request->customers, $id);
-                if ($updateContractService && $updateContractFurniture  && $updateContractCustomers) {
+                if ($updateContractService && $updateContractFurniture  && $updateContractService) {
                     DB::commit();
                     return true;
                 } else {
@@ -146,20 +148,26 @@ class ContractService extends BaseService
             $deleteContract = $data->delete();
             if ($deleteRoomService && $deleteRoomFurniture && $deleteContractCustomer && $deleteContract) {
                 DB::commit();
-                return true; 
+                return true;
             }
-    
-            DB::rollBack(); 
-    
+
+            DB::rollBack();
         } catch (\Exception $e) {
             DB::rollBack();
-            return false; 
+            return false;
         }
     }
-    
-    public function getDataInRoom($roomId, $model, $relationship)
+
+    public function getDataInRoomContract($roomId, $model, $relationship)
     {
-        $modelInstance = new $model();
-        return $modelInstance->with($relationship)->where('roomId', $roomId)->get();
+        $getContract = ContractModel::where('roomId', $roomId)->orderBy('id', 'desc')->first();
+        if(!$getContract){
+            return [];
+        }
+        return $model::with([
+            $relationship => function ($query) {
+                $query->select('id', 'name', 'code', 'price', 'unit');
+            }
+        ])->where('contractId', $getContract->id)->get() ?? [];
     }
 }

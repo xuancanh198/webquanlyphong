@@ -22,6 +22,7 @@ import PermisstionList from "./List/Permisstion/list";
 import PermisstionDetailList from "./List/PermisstionDetail/list";
 import ServiceList from "./List/Service/list";
 import AcctionList from "./List/Acction/list";
+import BillList from "./List/Bill/list";
 import FloorList from "./List/Floor/list";
 import SettingList from "./List/Setting/list";
 import RoomList from "./List/Room/list";
@@ -29,6 +30,7 @@ import ContractList from "./List/Contract/list";
 import FloorModal from "./Modal/Floor/modal";
 import RoleModal from "./Modal/Role/modal";
 import TypeRoomModal from "./Modal/TypeRoom/modal";
+import BillModal from "./Modal/Bill/modal";
 import BuildingModal from "./Modal/Building/modal";
 import StaffModal from "./Modal/Staff/modal";
 import FurnitureModal from "./Modal/Furniture/modal";
@@ -40,7 +42,23 @@ import AcctionModal from "./Modal/Acction/modal";
 import PermisstionModal from "./Modal/Permisstion/modal";
 import PermisstionDetailModal from "./Modal/PermisstionDetail/modal";
 import ContractModal from "./Modal/Contract/modal";
-import { getListRole, getListAcction, getListStaff, getListTypeRoom, getListFloor, getListBuilding, getListService, getListFurniture, getListRoom, getListUser, getListContract, getListPermisstion, getListSetting ,getListPermisstionDetail } from "../../service/baseService/cruds";
+import {
+  getListRole,
+  getListAcction,
+  getListStaff,
+  getListTypeRoom,
+  getListFloor,
+  getListBuilding,
+  getListService,
+  getListFurniture,
+  getListRoom,
+  getListUser,
+  getListContract,
+  getListPermisstion,
+  getListSetting,
+  getListPermisstionDetail,
+  getListBill
+} from "../../service/baseService/cruds";
 import { useSelector, useDispatch } from 'react-redux';
 import { setTypeFilter, setpage, setLimit, setFilterStatus, setStartFilter, setEndFilter, setSearchVluae, setSeachStatus, setEcelDowload, setFilter } from "../../redux/accction/listTable";
 import { convertDateTime } from "../../service/FunService/funweb";
@@ -134,6 +152,10 @@ const Tables = () => {
           SetTitel(t('page.contract'));
           dispatch(getListContract(t('page.contract'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
+        case 'bill':
+          SetTitel(t('page.bill'));
+          dispatch(getListBill(t('page.bill'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          break;
         case 'permisstion':
           SetTitel(t('page.permisstion'));
           dispatch(getListPermisstion(t('page.permisstion'), page, limit, searchOb, filter, exportExcel, filtersbase64));
@@ -142,10 +164,10 @@ const Tables = () => {
           SetTitel(t('page.acction'));
           dispatch(getListAcction(t('page.acction'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
-          case 'permisstionDetail':
-            SetTitel(t('page.permisstionDetail'));
-            dispatch(getListPermisstionDetail(t('page.permisstionDetail'), page, limit, searchOb, filter, exportExcel, filtersbase64));
-            break;
+        case 'permisstionDetail':
+          SetTitel(t('page.permisstionDetail'));
+          dispatch(getListPermisstionDetail(t('page.permisstionDetail'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          break;
         case 'setting':
           SetTitel(t('page.setting'));
           dispatch(getListSetting(t('page.setting'), page, limit, searchOb, filter, exportExcel, filtersbase64));
@@ -231,10 +253,12 @@ const Tables = () => {
                     return <UserModal titel={titel} />;
                   case 'contract':
                     return <ContractModal titel={titel} />;
+                  case 'bill':
+                    return <BillModal titel={titel} />;
                   case 'permisstion':
                     return <PermisstionModal titel={titel} />;
-                    case 'permisstionDetail':
-                      return <PermisstionDetailModal titel={titel} />;
+                  case 'permisstionDetail':
+                    return <PermisstionDetailModal titel={titel} />;
                   case 'acction':
                     return <AcctionModal titel={titel} />;
                   case 'setting':
@@ -319,10 +343,12 @@ const Tables = () => {
                 return <UserList data={listTabledata} />;
               case 'contract':
                 return <ContractList data={listTabledata} />;
+              case 'bill':
+                return <BillList data={listTabledata} />;
               case 'permisstion':
                 return <PermisstionList data={listTabledata} />;
-                case 'permisstionDetail':
-                  return <PermisstionDetailList data={listTabledata} />;
+              case 'permisstionDetail':
+                return <PermisstionDetailList data={listTabledata} />;
               case 'acction':
                 return <AcctionList data={listTabledata} />;
               case 'setting':

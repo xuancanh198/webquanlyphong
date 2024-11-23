@@ -9,10 +9,10 @@ import {
   CTableRow,
 } from '@coreui/react';
 import { convertDateTime } from '../../../../service/FunService/funweb';
-import { updatePermisstionDetail  ,deletePermisstionDetail, getAllAcction, getAllPermisstion} from '../../../../service/baseService/cruds';
+import { updatePermisstionDetail, deletePermisstionDetail, getAllAcction, getAllPermisstion } from '../../../../service/baseService/cruds';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import CIcon from '@coreui/icons-react'; 
+import CIcon from '@coreui/icons-react';
 import { cilArrowTop, cilArrowBottom } from '@coreui/icons';
 import {
   CCardBody,
@@ -29,73 +29,139 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { confirmAlert } from 'react-confirm-alert';
-import {setModalUpdate} from "../../../../redux/accction/listTable";
+import { setModalUpdate } from "../../../../redux/accction/listTable";
 import { useTranslation } from 'react-i18next';
 import { chaneFtiler } from "../../../../service/baseService/funService";
+import Select from 'react-select';
 
-function List({ data }) { 
+function List({ data }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [dataDeatil, setDataDeatil] = useState(null);
   const [checked, setChecked] = useState(false);
-  let filters = useSelector((state) => state.listTable.filters) ;
-  let show = useSelector((state) => state.listTable.modalUpdate) ;
+  let filters = useSelector((state) => state.listTable.filters);
+  let show = useSelector((state) => state.listTable.modalUpdate);
+  const listPermisstionAll = useSelector((state) => state.listTable.listPermisstionAll);
+  const listAcctionAll = useSelector((state) => state.listTable.listAcctionAll);
+
+  const [permisstionId, setPermisstionId] = useState(null);
+  const [listPermisstion, setListPermisstion] = useState([]);
+  const [acctionId, setAcctionId] = useState(null);
+  const [listAcction, setListAcction] = useState([]);
   const [validated, setValidated] = useState(false);
-  const [id , setId] = useState(0);
-    const handleClose = () => {
-      dispatch(setModalUpdate(false));
+  const [id, setId] = useState(0);
+  const handleClose = () => {
+    dispatch(setModalUpdate(false));
     if (show === true) {
       setDataDeatil("");
       formik.setValues({ name: "" });
       formik.setValues({ code: "" });
+      formik.setValues({ url: "" });
     }
   }
-  useEffect(()=>{
+  useEffect(() => {
+    if (permisstionId && acctionId) {
+      formik.setFieldValue('code', `${acctionId.code}.${permisstionId.code}`);
+    } else {
+      formik.setFieldValue('code', '');
+    }
+  }, [permisstionId, acctionId])
+  useEffect(() => {
+    if (permisstionId) {
+      formik.setFieldValue('permissionId', `${permisstionId.value}`);
+    }
+  }, [permisstionId])
+  useEffect(() => {
+    if (acctionId) {
+      formik.setFieldValue('acctionId', `${acctionId.value}`);
+    }
+  }, [acctionId])
+  useEffect(() => {
     dispatch(getAllPermisstion(true, true))
     dispatch(getAllAcction(true, true))
-  },[])
+  }, [])
   const handleShow = (item) => {
-    
+    console.log(item)
     dispatch(setModalUpdate(true));
     if (show === false) {
       setDataDeatil(item);
       setId(item.id);
-      formik.setValues({ name: item.name, code: item.code });
-
+      formik.setValues({
+        name: item.name,
+        code: item.code,
+        url: item.url,
+      });
+      setAcctionId({
+        value: item?.acction?.id,
+        label: item?.acction?.name,
+        code: item?.acction?.code
+      })
+      setPermisstionId({
+        value: item?.permission?.id,
+        label: item?.permission?.name,
+        code: item?.permission?.code
+      })
     }
   };
+  useEffect(() => {
+    if (listPermisstionAll !== null) {
+        setListPermisstion(
+            listPermisstionAll.length > 0 && listPermisstionAll.map(item => ({
+                value: item.id,
+                label: item.name,
+                code: item.code
+            }))
+        );
+    }
+}, [listPermisstionAll])
 
-  
+useEffect(() => {
+    if (listAcctionAll !== null) {
+        setListAcction(
+            listAcctionAll.length > 0 && listAcctionAll.map(item => ({
+                value: item.id,
+                label: item.name,
+                code: item.code
+            }))
+        );
+    }
+}, [listAcctionAll])
+
   const handleChange = (checked) => {
     setChecked(checked);
   };
   const formik = useFormik({
     initialValues: {
       name: '',
-      code: ''
+      code: '',
+      url: ""
     },
     validationSchema: Yup.object({
-        name: Yup.string()
-        .min(2, t('validation.attribute.min', { attribute: t('lableView.PermisstionDetail.name'), min: 2 }))
-        .max(50, t('validation.attribute.max', { attribute: t('lableView.PermisstionDetail.name'), max: 50 }))
-        .matches(/^[\p{L} ]+$/u, t('validation.attribute.matches', { attribute: t('lableView.PermisstionDetail.name')}))
-        .required(t('validation.attribute.required', { attribute: t('lableView.PermisstionDetail.name')})),
-    
-    code: Yup.string()
-        .min(2, t('validation.attribute.min', { attribute: t('lableView.PermisstionDetail.code'), min: 2 }))
-        .max(50, t('validation.attribute.max', { attribute: t('lableView.PermisstionDetail.code'), max: 50 }))
-        .matches(/^[\p{L}]+$/u, t('validation.attribute.matches', { attribute: t('lableView.PermisstionDetail.code')}))
-        .required(t('validation.attribute.required', { attribute: t('lableView.PermisstionDetail.code')})),
-    
+      name: Yup.string()
+        .min(2, t('validation.attribute.min', { attribute: t('lableView.permisstionDetail.name'), min: 2 }))
+        .max(50, t('validation.attribute.max', { attribute: t('lableView.permisstionDetail.name'), max: 50 }))
+        .matches(/^[\p{L} ]+$/u, t('validation.attribute.matches', { attribute: t('lableView.permisstionDetail.name') }))
+        .required(t('validation.attribute.required', { attribute: t('lableView.permisstion.name') })),
+      url: Yup.string()
+        .min(2, t('validation.attribute.min', { attribute: t('lableView.permisstionDetail.url'), min: 2 }))
+        .max(50, t('validation.attribute.max', { attribute: t('lableView.permisstionDetail.url'), max: 50 }))
+        // .matches(/^[\p{L} ]+$/u, t('validation.attribute.matches', { attribute: t('lableView.permisstionDetail.url') }))
+        .required(t('validation.attribute.required', { attribute: t('lableView.permisstionDetail.url') })),
+      code: Yup.string()
+        .min(2, t('validation.attribute.min', { attribute: t('lableView.permisstionDetail.code'), min: 2 }))
+        .max(50, t('validation.attribute.max', { attribute: t('lableView.permisstionDetail.code'), max: 50 }))
+        // .matches(/^[\p{L}]+$/u, t('validation.attribute.matches', { attribute: t('lableView.permisstion.code')}))
+        .required(t('validation.attribute.required', { attribute: t('lableView.permisstionDetail.code') })),
+
     }),
     onSubmit: (values, { resetForm }) => {
-      dispatch(updatePermisstionDetail(id,values,resetForm));
+      dispatch(updatePermisstionDetail(id, values, resetForm));
     }
   });
- const deletePermisstionDetailId = (id) => {
+  const deletePermisstionDetailId = (id) => {
     confirmAlert({
-      title:t('action.authentication.delete', { attribute: t('page.PermisstionDetail')}),
-      message: t('action.message.delete', { attribute: t('page.PermisstionDetail')}),
+      title: t('action.authentication.delete', { attribute: t('page.PermisstionDetail') }),
+      message: t('action.message.delete', { attribute: t('page.PermisstionDetail') }),
       buttons: [
         {
           label: t('actionView.delete'),
@@ -103,7 +169,7 @@ function List({ data }) {
         },
         {
           label: t('actionView.close'),
-          onClick: () => {}
+          onClick: () => { }
         }
       ]
     });
@@ -166,8 +232,8 @@ function List({ data }) {
             </CTableHeaderCell>
             <CTableHeaderCell scope='col'>
               <div className='flex_start'>
-               {t('lableView.permisstionDetail.created_at')}
-               <div>
+                {t('lableView.acction.name')}
+                <div>
                   <CIcon icon={cilArrowTop} className='icon-acction actice' size='sx'
                     onClick={() => dispatch(chaneFtiler(
                       {
@@ -191,22 +257,22 @@ function List({ data }) {
             </CTableHeaderCell>
             <CTableHeaderCell scope='col'>
               <div className='flex_start'>
-               {t('lableView.permisstionDetail.updated_at')}
+                {t('lableView.permisstion.name')}
                 <div>
                   <CIcon icon={cilArrowTop} size='sx'
-                   onClick={()=>chaneFtiler(
-                    {
-                    colum: "updated_at" ,
-                    order_by :"asc"
-                    }
-                    )} />
-                  <CIcon icon={cilArrowBottom} size='sx' 
-                     onClick={()=>chaneFtiler(
+                    onClick={() => chaneFtiler(
                       {
-                      colum: "updated_at" ,
-                      order_by :"desc"
+                        colum: "updated_at",
+                        order_by: "asc"
                       }
-                      )} 
+                    )} />
+                  <CIcon icon={cilArrowBottom} size='sx'
+                    onClick={() => chaneFtiler(
+                      {
+                        colum: "updated_at",
+                        order_by: "desc"
+                      }
+                    )}
                   />
                 </div>
               </div>
@@ -220,17 +286,17 @@ function List({ data }) {
               <CTableHeaderCell scope='row'>{index + 1}</CTableHeaderCell>
               <CTableDataCell>{item.name}</CTableDataCell>
               <CTableDataCell>{item.code}</CTableDataCell>
-              <CTableDataCell>{item.created_at ? convertDateTime(item.created_at) : ''}</CTableDataCell>
-              <CTableDataCell>{item.updated_at ? convertDateTime(item.updated_at) : ''}</CTableDataCell>
+              <CTableDataCell>{item?.permission?.name}</CTableDataCell>
+              <CTableDataCell>{item?.acction?.name}</CTableDataCell>
               <CTableDataCell>
                 <Button variant='primary' onClick={() => handleShow(item)}>
-                {t('table.colum.viewDetail')}
+                  {t('table.colum.viewDetail')}
                 </Button>
               </CTableDataCell>
             </CTableRow>
           ))}
         </CTableBody>
-        
+
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>
@@ -245,78 +311,150 @@ function List({ data }) {
                 <Switch className='toggle-modal-deatil' onChange={handleChange} checked={checked} />
                 <label> {t('actionView.update')}</label>
               </div>
-              <div className='flex_center icon-delete' onClick={()=>deletePermisstionDetailId(dataDeatil.id)}>
+              <div className='flex_center icon-delete' onClick={() => deletePermisstionDetailId(dataDeatil.id)}>
                 <i class="fa-solid fa-trash"></i>
               </div>
             </div>
             <Form noValidate validated={validated} onSubmit={formik.handleSubmit}>
               <Row className="mb-3 mt-3">
-                <Form.Group as={Col} md="12" className= {checked === false ?null : 'mt-2 mb-2' }>
+                <Form.Group as={Col} md="12" className={checked === false ? null : 'mt-2 mb-2'}>
                   {checked === false ?
                     <>
-                     <p> <Form.Label> {t('lableView.PermisstionDetail.name')}</Form.Label> : {dataDeatil && dataDeatil.name !== "" ? dataDeatil.name : "Không có dữ liệu"}</p>
+                      <p> <Form.Label> {t('lableView.permisstionDetail.name')}</Form.Label> : {dataDeatil && dataDeatil.name !== "" ? dataDeatil.name : "Không có dữ liệu"}</p>
                     </>
                     :
                     <>
-                      <Form.Label> {t('lableView.PermisstionDetail.name')}</Form.Label>
+                      <Form.Label> {t('lableView.permisstionDetail.name')}</Form.Label>
                       <Form.Control
-                          required
-                          type="text"
-                          name="name"
-                          value={formik.values.name}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          isInvalid={formik.touched.name && formik.errors.name}
-                        />
+                        required
+                        type="text"
+                        name="name"
+                        value={formik.values.name}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        isInvalid={formik.touched.name && formik.errors.name}
+                      />
 
                     </>
                   }
-                 <Form.Control.Feedback type="invalid">
+                  
+                  <Form.Control.Feedback type="invalid">
                     {formik.errors.name}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="12" className= {checked === false ?null : 'mt-2 mb-2' } >
+                <Form.Group as={Col} md="12" className={checked === false ? null : 'mt-2 mb-2'}>
                   {checked === false ?
                     <>
-                     <p> <Form.Label> {t('lableView.PermisstionDetail.code')}</Form.Label> : {dataDeatil && dataDeatil.code !== "" ? dataDeatil.code : "Không có dữ liệu"}</p>
+                      <p> <Form.Label> {t('lableView.permisstionDetail.url')}</Form.Label> : {dataDeatil && dataDeatil.url !== "" ? dataDeatil.url : "Không có dữ liệu"}</p>
                     </>
                     :
                     <>
-                      <Form.Label> {t('lableView.PermisstionDetail.code')}</Form.Label>
+                      <Form.Label> {t('lableView.permisstionDetail.name')}</Form.Label>
                       <Form.Control
-                          required
-                          type="text"
-                          name="code"
-                          value={formik.values.code}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          isInvalid={formik.touched.code && formik.errors.code}
-                        />
+                        required
+                        type="text"
+                        name="url"
+                        value={formik.values.url}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        isInvalid={formik.touched.url && formik.errors.url}
+                      />
+                    </>
+                  }
+                  <Form.Control.Feedback type="invalid">
+                    {formik.errors.url}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col} md="12" className={checked === false ? null : 'mt-2 mb-2'} >
+                  {checked === false ?
+                    <>
+                      <p> <Form.Label> {t('lableView.permisstionDetail.code')}</Form.Label> : {dataDeatil && dataDeatil.code !== "" ? dataDeatil.code : "Không có dữ liệu"}</p>
+                    </>
+                    :
+                    <>
+                      <Form.Label> {t('lableView.permisstionDetail.code')}</Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        name="code"
+                        value={formik.values.code}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        isInvalid={formik.touched.code && formik.errors.code}
+                      />
 
                     </>
                   }
-                 <Form.Control.Feedback type="invalid">
+                  <Form.Control.Feedback type="invalid">
                     {formik.errors.code}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="12" className= {checked === false ?null : 'mt-2 ' }>
-                  <p><Form.Label>{t('lableView.PermisstionDetail.created_at')} :</Form.Label> {dataDeatil && dataDeatil.created_at !== null ? convertDateTime(dataDeatil.created_at) : "Không có dữ liệu"}</p>
-                </Form.Group>
-                <Form.Group as={Col}   md="12">
-                  <p><Form.Label>{t('lableView.PermisstionDetail.updated_at')} :</Form.Label> {dataDeatil && dataDeatil.updated_at !== null ? convertDateTime(dataDeatil.updated_at) : "Không có dữ liệu"}</p>
-                </Form.Group>
+
+                {checked === false
+                  ? (
+                    <>
+                      <Form.Group as={Col} md="12" className={checked === false ? null : 'mt-2 '}>
+                        <p><Form.Label>{t('lableView.acction.name')} :</Form.Label> {dataDeatil?.acction?.name ?? t('noData')}</p>
+                      </Form.Group>
+                    </>
+                  ) : (<Form.Group as={Col} md="12" className='mb-3 mt-3 '>
+                    <Select
+                      value={acctionId}
+                      onChange={(e) => setAcctionId(e)}
+                      options={listAcction}
+                      placeholder={t('messageText.searchTitel', { attribute: t('page.acction') })}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {formik.errors.roomId}
+                    </Form.Control.Feedback>
+                  </Form.Group>)
+                }
+                {checked === false
+                  ?
+                  (<Form.Group as={Col} md="12">
+                    <p><Form.Label>{t('lableView.permisstion.name')} :</Form.Label> {dataDeatil?.permission?.name ?? t('noData')}</p>
+                  </Form.Group>)
+                  :
+                  (
+                    <Form.Group as={Col} md="12" className='mb-3 mt-3 '>
+                      <Select
+                        value={permisstionId}
+                        onChange={(e) => setPermisstionId(e)}
+                        options={listPermisstion}
+                        placeholder={t('messageText.searchTitel', { attribute: t('page.permisstion') })}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {formik.errors.roomId}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  )
+                }
+
+                {checked === false
+                  &&
+                  (
+                    <>
+                      <Form.Group as={Col} md="12" className={checked === false ? null : 'mt-2 '}>
+                        <p><Form.Label>{t('lableView.permisstionDetail.created_at')} :</Form.Label> {dataDeatil && dataDeatil.created_at !== null ? convertDateTime(dataDeatil.created_at) : "Không có dữ liệu"}</p>
+                      </Form.Group>
+                      <Form.Group as={Col} md="12">
+                        <p><Form.Label>{t('lableView.permisstionDetail.updated_at')} :</Form.Label> {dataDeatil && dataDeatil.updated_at !== null ? convertDateTime(dataDeatil.updated_at) : "Không có dữ liệu"}</p>
+                      </Form.Group>
+                    </>
+                  )
+                }
               </Row>
               {checked === false ? null : (
                 <div className='mt-3'>
                   <Button variant='primary' type='submit' className='m-2'>
-                  {t('actionView.update')}
+                    {t('actionView.update')}
                   </Button>
                   <Button variant='secondary' className='m-2' onClick={handleClose}>
-                  {t('actionView.close')}
+                    {t('actionView.close')}
                   </Button>
                 </div>
               )}
-           </Form>
+            </Form>
           </Modal.Body>
 
         </Modal>

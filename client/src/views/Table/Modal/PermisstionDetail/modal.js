@@ -4,26 +4,25 @@ import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { addPermisstionDetail  } from "../../../../service/baseService/cruds";
-import {useSelector, useDispatch } from 'react-redux';
+import { addPermisstionDetail } from "../../../../service/baseService/cruds";
+import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import {setModalAdd} from "../../../../redux/accction/listTable";
+import { setModalAdd } from "../../../../redux/accction/listTable";
 import Select from 'react-select';
 function Example({ title }) {
     const { t } = useTranslation();
 
     const dispatch = useDispatch();
-    const show = useSelector((state) => state.listTable.modalAdd) ;
+    const show = useSelector((state) => state.listTable.modalAdd);
     const [validated, setValidated] = useState(false);
     const listPermisstionAll = useSelector((state) => state.listTable.listPermisstionAll);
     const listAcctionAll = useSelector((state) => state.listTable.listAcctionAll);
 
-    const [permisstionId, setPermisstionId] = useState(null);  
+    const [permisstionId, setPermisstionId] = useState(null);
     const [listPermisstion, setListPermisstion] = useState([]);
-    const [acctionId, setAcctionId] = useState(null);  
+    const [acctionId, setAcctionId] = useState(null);
     const [listAcction, setListAcction] = useState([]);
     const handleClose = () => dispatch(setModalAdd(false));
     const handleShow = () => dispatch(setModalAdd(true));
@@ -35,39 +34,38 @@ function Example({ title }) {
         }
     }, [permisstionId, acctionId])
     useEffect(() => {
-        if (permisstionId ) {
-            formik.setFieldValue('permisstionId', `${permisstionId.value}`);
-        } 
+        if (permisstionId) {
+            formik.setFieldValue('permissionId', `${permisstionId.value}`);
+        }
     }, [permisstionId])
     useEffect(() => {
-        if (acctionId ) {
+        if (acctionId) {
             formik.setFieldValue('acctionId', `${acctionId.value}`);
-        } 
+        }
     }, [acctionId])
-    console.log(acctionId)
     const formik = useFormik({
         initialValues: {
             name: '',
             code: '',
-            url : ""
+            url: ""
         },
         validationSchema: Yup.object({
             name: Yup.string()
-            .min(2, t('validation.attribute.min', { attribute: t('lableView.permisstionDetail.name'), min: 2 }))
-            .max(50, t('validation.attribute.max', { attribute: t('lableView.permisstionDetail.name'), max: 50 }))
-            .matches(/^[\p{L} ]+$/u, t('validation.attribute.matches', { attribute: t('lableView.permisstionDetail.name')}))
-            .required(t('validation.attribute.required', { attribute: t('lableView.permisstion.name')})),
+                .min(2, t('validation.attribute.min', { attribute: t('lableView.permisstionDetail.name'), min: 2 }))
+                .max(50, t('validation.attribute.max', { attribute: t('lableView.permisstionDetail.name'), max: 50 }))
+                .matches(/^[\p{L} ]+$/u, t('validation.attribute.matches', { attribute: t('lableView.permisstionDetail.name') }))
+                .required(t('validation.attribute.required', { attribute: t('lableView.permisstion.name') })),
             url: Yup.string()
-            .min(2, t('validation.attribute.min', { attribute: t('lableView.permisstionDetail.url'), min: 2 }))
-            .max(50, t('validation.attribute.max', { attribute: t('lableView.permisstionDetail.url'), max: 50 }))
-            .matches(/^[\p{L} ]+$/u, t('validation.attribute.matches', { attribute: t('lableView.permisstionDetail.url')}))
-            .required(t('validation.attribute.required', { attribute: t('lableView.permisstionDetail.url')})),
-        code: Yup.string()
-            .min(2, t('validation.attribute.min', { attribute: t('lableView.permisstionDetail.code'), min: 2 }))
-            .max(50, t('validation.attribute.max', { attribute: t('lableView.permisstionDetail.code'), max: 50 }))
-            // .matches(/^[\p{L}]+$/u, t('validation.attribute.matches', { attribute: t('lableView.permisstion.code')}))
-            .required(t('validation.attribute.required', { attribute: t('lableView.permisstionDetail.code')})),
-        
+                .min(2, t('validation.attribute.min', { attribute: t('lableView.permisstionDetail.url'), min: 2 }))
+                .max(50, t('validation.attribute.max', { attribute: t('lableView.permisstionDetail.url'), max: 50 }))
+                .matches(/^[\p{L} ]+$/u, t('validation.attribute.matches', { attribute: t('lableView.permisstionDetail.url') }))
+                .required(t('validation.attribute.required', { attribute: t('lableView.permisstionDetail.url') })),
+            code: Yup.string()
+                .min(2, t('validation.attribute.min', { attribute: t('lableView.permisstionDetail.code'), min: 2 }))
+                .max(50, t('validation.attribute.max', { attribute: t('lableView.permisstionDetail.code'), max: 50 }))
+                // .matches(/^[\p{L}]+$/u, t('validation.attribute.matches', { attribute: t('lableView.permisstion.code')}))
+                .required(t('validation.attribute.required', { attribute: t('lableView.permisstionDetail.code') })),
+
         }),
         onSubmit: (values, { resetForm }) => {
             dispatch(addPermisstionDetail(values, resetForm))
@@ -96,7 +94,7 @@ function Example({ title }) {
             );
         }
     }, [listAcctionAll])
-   
+
     return (
         <>
             <div className='modal-button flex_center' onClick={handleShow}>
@@ -108,8 +106,8 @@ function Example({ title }) {
                     <Modal.Title>{t('actionView.create')} {title}</Modal.Title>
                 </Modal.Header>
                 <Form noValidate validated={validated} onSubmit={formik.handleSubmit}>
-                <Modal.Body>
-                       <Row className="mb-3 mt-3">
+                    <Modal.Body>
+                        <Row className="mb-3 mt-3">
                             <Form.Group as={Col} md="12" className='mb-2 mt-2'>
                                 <Form.Label> {t('lableView.permisstionDetail.name')}</Form.Label>
                                 <Form.Control
@@ -153,40 +151,40 @@ function Example({ title }) {
                                     {formik.errors.url}
                                 </Form.Control.Feedback>
                             </Form.Group>
-                            <Form.Group as={Col} md="12"  className='mb-3 mt-3 '>
-                                    <Select
-                                        value={permisstionId}
-                                        onChange={(e) => setPermisstionId(e)}
-                                        options={listPermisstion}
-                                        placeholder={t('messageText.searchTitel', { attribute: t('page.permisstion') })}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {formik.errors.roomId}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group as={Col} md="12"  className='mb-3 mt-3 '>
-                                    <Select
-                                        value={acctionId}
-                                        onChange={(e) => setAcctionId(e)}
-                                        options={listAcction}
-                                        placeholder={t('messageText.searchTitel', { attribute: t('page.acction') })}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {formik.errors.roomId}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+                            <Form.Group as={Col} md="12" className='mb-3 mt-3 '>
+                                <Select
+                                    value={permisstionId}
+                                    onChange={(e) => setPermisstionId(e)}
+                                    options={listPermisstion}
+                                    placeholder={t('messageText.searchTitel', { attribute: t('page.permisstion') })}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {formik.errors.roomId}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group as={Col} md="12" className='mb-3 mt-3 '>
+                                <Select
+                                    value={acctionId}
+                                    onChange={(e) => setAcctionId(e)}
+                                    options={listAcction}
+                                    placeholder={t('messageText.searchTitel', { attribute: t('page.acction') })}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {formik.errors.roomId}
+                                </Form.Control.Feedback>
+                            </Form.Group>
                         </Row>
-                     
-                   
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                    {t('actionView.close')}
-                    </Button>
-                    <Button variant="primary" type="submit">
-                    {t('actionView.create')}
-                    </Button>
-                </Modal.Footer>
+
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            {t('actionView.close')}
+                        </Button>
+                        <Button variant="primary" type="submit">
+                            {t('actionView.create')}
+                        </Button>
+                    </Modal.Footer>
                 </Form>
             </Modal>
         </>

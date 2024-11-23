@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\Permisstion\PermisstionController;
 use App\Http\Controllers\Admin\Permisstion\ActionController;
 use App\Http\Controllers\Admin\Permisstion\PermisstionDetailController;
 use App\Http\Controllers\Admin\User\ContractController;
+use App\Http\Controllers\Admin\User\BillController;
 use App\Http\Controllers\Admin\Staff\AuthController;
 use App\Http\Controllers\Admin\Staff\StaffController;
 use App\Http\Controllers\Admin\System\SettingController;
@@ -58,6 +59,13 @@ Route::middleware(['admin.middleware'])->group(function () {
                     Route::delete('/{id}', [ContractController::class, 'destroy']);
                     Route::get('/get-service/{id}', [ContractController::class, 'getService']);
                     Route::get('/get-furniture/{id}', [ContractController::class, 'getFurniture']);
+                });
+                Route::group(['prefix' => 'bill'], function () {
+                    Route::get('/', [BillController::class, 'index']);
+                    Route::post('/', [BillController::class, 'store']);
+                    Route::put('/{id}', [BillController::class, 'update']);
+                    Route::delete('/{id}', [BillController::class, 'destroy']);
+                    Route::get('/get-service-room-contract/{roomId}', [BillController::class, 'getServiceRoomContract']);
                 });
             });
             Route::group(['prefix' => 'permission'], function () {

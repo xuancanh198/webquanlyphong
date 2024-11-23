@@ -66,6 +66,9 @@ class BaseRequest extends FormRequest
         if ($this->excel) {
             $data['excel'] = $this->ConvertData->convertToBool($this->excel);
         }
+        if ($this->isSelect) {
+            $data['isSelect'] = $this->ConvertData->convertToBool($this->isSelect);
+        }
         if (!empty($data)) {
             $this->merge($data);
         }
@@ -86,7 +89,9 @@ class BaseRequest extends FormRequest
             if ($this->has('excel') && $this->excel === false) {
                 $messages[] = trans('message.invalid_excel_value');
             }
-
+            if ($this->has('isSelect') && $this->isSelect === false) {
+                $messages[] = trans('message.invalid_isSelect_value');
+            }
             $messages = array_merge($messages, $this->checkFilterTime($this->start, $this->end, $this->typeTime));
 
             if (!empty($messages)) {

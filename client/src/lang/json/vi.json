@@ -14,6 +14,7 @@
     "login": "Đăng nhập",
     "missPassWord": "Quên mật khẩu",
     "contract": "Hợp đồng",
+    "bill" : "Hóa đơn",
     "permisstion": "Quyền",
     "acction": "Hành động",
     "system": "Hệ thống",
@@ -201,6 +202,9 @@
       },
       "serivce": "Dịch vụ trong phòng",
       "furniture": "Đồ đạc trong phòng"
+    },
+    "bill" : {
+      
     },
     "permisstion": {
       "name": "Tên quyền",

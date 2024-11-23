@@ -688,7 +688,76 @@ export const downloadFileContract = (id) => {
       });
   };
 };
-
+export const getListBill = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+  const objectGet ={
+    page: page,
+    limit : limit,
+    search :search ,
+    fitler :fitler,
+    exportExcel : exportExcel,
+    filtersBase64 :filtersBase64,
+    routerLink : 'user/bill',
+    titelnameExcel : ["STT", "ID", "Tên chức vụ", "Thời gian tạo", "Cập nhật"],
+    columExcel :['id','name','created_at','updated_at'],
+    titelExcel : titel,
+  } 
+  return (dispatch) => {
+    dispatch(getListFunService(objectGet))
+  };
+};
+export const getAllBill =(exportExcel = false, isSelectAll = false , page =1 ,limit =10, search = null) => {
+  const objectGet ={
+    getList: getListBill,
+    exportExcel:exportExcel,
+    routerLink : 'user/bill',
+    isSelect : isSelectAll,
+    page : exportExcel === true ? page : null,
+    limit : exportExcel === true ? limit : null,
+    search: (search !== null && search.trim().length > 0) ? search : null
+  } 
+  return (dispatch) => {
+    dispatch(getAllData(objectGet))
+  };
+};
+export const addBill = (data,resetForm) => {
+  const objectCreate ={
+    routerLink : 'user/bill',
+    data : data,
+    resetForm : resetForm,
+    getList : getListBill
+  }
+  return (dispatch) => {
+    dispatch(addFunService(objectCreate));
+  };
+};
+export const updateBill = (data, id , resetForm) => {
+  const objectUpdate ={
+    id : id,
+    routerLink : 'user/bill',
+    data : data,
+    resetForm : resetForm,
+    getList : getListBill
+  }
+  return (dispatch) => {
+    dispatch(updateFunService(objectUpdate));
+  };
+};
+export const deleteBill = (id) => {
+  const  routerLink = 'user/bill';
+  return (dispatch) => {
+    dispatch(deleteFunService(routerLink, id, getListBill ));
+  };
+};
+export const getListServiceRoomContract = (id) => {
+  const objectGet ={
+    getList: setListServiceRoom,
+    routerLink : `user/bill/get-service-room-contract/${id}`,
+    typeIsQuery : true
+  } 
+  return (dispatch) => {
+    dispatch(getAllData(objectGet))
+  };
+};
 export const getListPermisstion = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
   const objectGet ={
     page: page,
@@ -796,7 +865,7 @@ export const updatePermisstionDetail = (id, data ,resetForm ) => {
     getList : getListPermisstionDetail
   }
   return (dispatch) => {
-    dispatch(updateFunService(objectUpdate, true));
+    dispatch(updateFunService(objectUpdate, false));
   };
 };
 

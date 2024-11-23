@@ -19,6 +19,7 @@ class PermisstionDetailResource extends JsonResource
             'name' => $this->name,
             'status' => $this->status,
             'code' => $this->code,
+            'url' => $this->url,
             'permission' => [
                 'id' => $this->permission->id,
                 'code' => $this->permission->code,

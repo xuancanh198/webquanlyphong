@@ -5,12 +5,16 @@ use Carbon\Carbon;
 
 class BaseService
 {
-    public function getListBaseFun($model, $page = 1, $limit = 10, $search, $columSearch, $excel = false, $typeTime = null, $start = null, $end = null, $filtersBase64 = null)
+    public function getListBaseFun($model, $page = 1, $limit = 10, $search, $columSearch, $excel = false, $typeTime = null, $start = null, $end = null, $filtersBase64 = null, $isSelect = false, $columSelect = [])
     {
-        if ($excel === true) {
-            return $model->get();
-        }
         $query = $model->newQuery();
+        if($isSelect === true){
+            $query->select($columSelect);
+        }
+        
+        if ($excel === true) {
+            return $query->get();
+        }
         if ($search !== null) {
             foreach ($columSearch as $index => $item) {
                 if ($index === 0) {

@@ -14,6 +14,7 @@ class RoomService extends BaseService
     protected $model;
     protected $request;
     protected $columSearch = ['name', 'code'];
+    protected $columSelect = ['id', 'name','code'];
     public function __construct(RoomModel $model, RoomRequest $request)
     {
         $this->model = $model;
@@ -28,25 +29,30 @@ class RoomService extends BaseService
         $typeTime = $this->request->typeTime ?? null;
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
+        $isSelect = $this->request->isSelect ?? false;
         $filtersBase64 = $this->request->filtersBase64 ?? null;
-        $model = $this->model->with([
-            'img', 
-        'service_room.service' => function ($query) {
-            $query->select('id', 'name'); 
-        } ,
-        'furniture_room.furniture' => function ($query) {
-            $query->select('id', 'name'); 
-        } ,
-        'building' => function ($query) {
-            $query->select('id', 'name'); 
-        } ,
-        'floor' => function ($query) {
-            $query->select('id', 'name'); 
-        } ,
-        'type_room' => function ($query) {
-            $query->select('id', 'name'); 
-        } ]);
-        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64);
+        $model = $this->model;
+        if ($isSelect !== true) {
+            $model = $model->with([
+                'img', 
+                'service_room.service' => function ($query) {
+                    $query->select('id', 'name'); 
+                },
+                'furniture_room.furniture' => function ($query) {
+                    $query->select('id', 'name'); 
+                },
+                'building' => function ($query) {
+                    $query->select('id', 'name'); 
+                },
+                'floor' => function ($query) {
+                    $query->select('id', 'name'); 
+                },
+                'type_room' => function ($query) {
+                    $query->select('id', 'name'); 
+                }
+            ]);
+        }
+        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64 , $isSelect, $this->columSelect );
         return $result;
     }
     public function createAction()
