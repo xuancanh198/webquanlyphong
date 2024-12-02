@@ -117,6 +117,8 @@ return [
     'idSetting' => 'id cấu hình',
     'namePermisstionDetail' => 'Tên quyền chi tiết',
     'codePermisstionDetail' => 'Mã quyền chi tiết',
+    'idBill' => 'ID hóa đơn',
+    'noteBill' => 'Ghi chú hóa đơn',
     'urlPermisstionDetail' => 'Đường dẫn của quyền chi tiết',
     'idPermisstionDetail' => 'Mã quyền chi tiết',
     'createAction' => 'Thêm mới',

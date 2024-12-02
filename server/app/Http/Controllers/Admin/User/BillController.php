@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use App\Service\Function\Execute\BillService;
-use App\Http\Resources\ContractResource;
+use App\Http\Resources\BillResource;
 use App\Http\Requests\BillRequest;
 use App\Models\User\Contract\ServiceContractModel;
 class BillController extends Controller
@@ -19,7 +19,7 @@ class BillController extends Controller
     public function index()
     {
         $result = $this->service->getList();
-        return $this->returnResponseBase(ContractResource::class, $this->request, $result);
+        return $this->returnResponseBase(BillResource::class, $this->request, $result);
     }
 
     public function store() {

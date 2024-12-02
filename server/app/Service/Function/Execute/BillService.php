@@ -18,6 +18,7 @@ class BillService extends BaseService
     protected $model;
     protected $request;
     protected $columSearch = ['code'];
+    protected $columCode = 'code';
     public function __construct(BilModel $model, BillRequest $request)
     {
         $this->model = $model;
@@ -33,6 +34,7 @@ class BillService extends BaseService
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
         $filtersBase64 = $this->request->filtersBase64 ?? null;
+        
         $model = $this->model->with([
             'detail.service' => function ($query) {
                 $query->select('id', 'name', 'price', 'unit');
@@ -56,34 +58,31 @@ class BillService extends BaseService
                 $query->select('id', 'name', 'code', 'address');
             },
         ]);
-
         $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64);
         return $result;
     }
     public function createAction()
     {
-        dd($this->request->all());
         $room = app(Bill::class)->getRoomInfo($this->request->roomId);
-        $this->model->priceTime =  $this->request->priceTime;
+        $this->model->userId =  $room->userId;
         $this->model->staffId =  Auth::user()->id;
-        $this->model->deposit =  $this->request->deposit;
-        $this->model->code =  $this->request->code;
-        $this->model->startTime =  $this->request->startTime;
-        $this->model->endTime =  $this->request->endTime;
-        $this->model->roomId =  $this->request->roomId;
-        $this->model->userId =  $this->request->userId;
+        $this->model->roomId =  $room->roomId;
+        $this->model->contractId =  $room->id;
+        $this->model->totalMoney =  $this->request->totalMoney;
+        $this->model->status =  1;
+        $this->model->ends_at = $this->getEndDateBill();
+        $this->model->started_at =  $this->getStartDateBill();
+        $this->model->code =  $this->generateUniqueCode(BilModel::class, $this->columCode);
         $this->model->note =  $this->request->note;
-        $this->model->img =  app(Firebase::class)->uploadImage($this->request->file('image'));
         $this->model->created_at = Carbon::now();
         DB::beginTransaction();
 
         try {
-            $addContract = $this->model->save();
-            if ($addContract) {
-                $addContractService = app(Contract::class)->ContractService($this->request->service, $this->model->id);
-                $addContractFurniture = app(Contract::class)->ContractFurniture($this->request->furniture, $this->model->id);
-                $addContractCustomers = app(Contract::class)->ContractCustomers($this->request->customers, $this->model->id);
-                if ($addContractService && $addContractFurniture && $addContractCustomers) {
+            $addBill = $this->model->save();
+
+            if ($addBill) {
+                $addBillService = app(Bill::class)->BillService($this->request->servicesBill, $this->model->id);
+                if ($addBillService) {
                     DB::commit();
                     return true;
                 } else {
@@ -103,25 +102,19 @@ class BillService extends BaseService
     {
 
         $data = $this->model->find($id);
-        $data->priceTime =  $this->request->priceTime;
-        $data->deposit =  $this->request->deposit;
-        $data->code =  $this->request->code;
-        $data->startTime =  $this->request->startTime;
-        $data->endTime =  $this->request->endTime;
-        $data->roomId =  $this->request->roomId;
-        $data->userId =  $this->request->userId;
+        $data->ends_at = $this->getEndDateBill();
+        $data->started_at =  $this->getStartDateBill();
+        $data->totalMoney =  $this->request->totalMoney;
         $data->note =  $this->request->note;
-        if ($this->request->hasFile('images')) {
-            $this->model->img =  app(Firebase::class)->uploadImage($this->request->file('image'));
-        }
         $data->updated_at = Carbon::now();
+        DB::beginTransaction();
+
         try {
-            $updateContract = $data->save();
-            if ($updateContract) {
-                $updateContractService = app(Contract::class)->updateContractService($this->request->service, $id);
-                $updateContractFurniture = app(Contract::class)->updateContractFurniture($this->request->furniture, $id);
-                $updateContractCustomers = app(Contract::class)->updateContractCustomers($this->request->customers, $id);
-                if ($updateContractService && $updateContractFurniture  && $updateContractService) {
+            $updateBill = $this->model->save();
+
+            if ($updateBill) {
+                $updateBillService = app(Bill::class)->updateBillService($this->request->servicesBill, $id);
+                if ($updateBillService) {
                     DB::commit();
                     return true;
                 } else {
@@ -161,7 +154,7 @@ class BillService extends BaseService
     public function getDataInRoomContract($roomId, $model, $relationship)
     {
         $getContract = ContractModel::where('roomId', $roomId)->orderBy('id', 'desc')->first();
-        if(!$getContract){
+        if (!$getContract) {
             return [];
         }
         return $model::with([

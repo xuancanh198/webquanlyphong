@@ -204,7 +204,22 @@
       "furniture": "Đồ đạc trong phòng"
     },
     "bill" : {
-      
+      "code" : "Mã hóa đơn",
+      "totalMoney" : "Tổng tiền",
+      "created_at" :"Thời gian tạo",
+      "updated_at" :"Thời gian cập nhật",
+      "start_at" : "Thời gian bắt đầu",
+      "pay_at" : "Thời gian thanh toán",
+      "end_at" : "Thời gian hết hạn",
+      "status" : "Trạng thái hóa đơn" ,
+      "formPayment" : "Phường thức thanh toán",
+      "user" : "Người nhận hóa đơn",
+      "staff" : "Nhân viên tạo hóa đơn",
+      "intoMoney" : "Thành tiền",
+      "checkIsNowStatus": {
+        "has": "Đã thanh toán ",
+        "hasnot": "Chưa thanh toán"
+      }
     },
     "permisstion": {
       "name": "Tên quyền",

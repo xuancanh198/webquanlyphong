@@ -12,6 +12,7 @@ class BilDetailModel extends Model
     protected $primary = 'id';
     protected $fillable = ['bill_id', 'seviceId', 'quantity', 'price'];
     protected $hidden = [ 'bill_id', 'seviceId'];
+    public $timestamps = false;
     public function service(){
         return $this->belongsTo(ServiceModel::class, 'seviceId', 'id');
     }

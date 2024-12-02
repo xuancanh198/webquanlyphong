@@ -26,7 +26,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ImageUploading from 'react-images-uploading';
 import { cilUser, cilX, cilNotes } from '@coreui/icons';
 import { setFilter, setModalUpdate } from "../../../../redux/accction/listTable";
-import { getAllRoom, getAllUser,  getListServiceRoom, getListFurnitureRoom,  updateContract, deleteContract, downloadFileContract , getListBill} from "../../../../service/baseService/cruds";
+import {updateBill, deleteContract, downloadFileContract, getListBill } from "../../../../service/baseService/cruds";
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -42,25 +42,8 @@ function List({ data }) {
   const [statusToggle, setStatusToggle] = useState(false);
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
-  const [roomId, setRoomId] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const [changeUserId, setChangeUserId] = useState(null);
-  const listUserAll = useSelector((state) => state.listTable.listUserAll);
-  const listRoomAll = useSelector((state) => state.listTable.listRoomAll);
-  const listServiceRoom = useSelector((state) => state.listTable.listServiceRoom);
-  const listFurnitureRoom = useSelector((state) => state.listTable.listFurnitureRoom);
+  const [quantityService, setQuantityService] = useState([]);
   const [note, setNote] = useState('')
-  const [images, setImages] = useState([]);
-  const [pageUser, setPageUser] = useState(1);
-  const [pageRoom, setPageRoom] = useState(1);
-  const [searchUser, setSearchUser] = useState(null);
-  const [searchRoom, setSearchRoom] = useState(null);
-  const [custormers, setCustormers] = useState([])
-  const [listRoom, setListRoom] = useState([]);
-  const [listUser, setListUser] = useState([]);
-  const [quantityFurniture, setQuantityFurniture] = useState(null);
-  const [quantityService, setQuantityService] = useState(null);
-
   const [id, setId] = useState(0);
   const [initialValues, setInitialValues] = useState({
     priceTime: '',
@@ -77,332 +60,27 @@ function List({ data }) {
     furniture: []
   });
 
-  useEffect(()=>{
-    dispatch(getAllRoom(true, true))
-  },[])
   let filters = useSelector((state) => state.listTable.filters);
-  const maxNumber = 1;
-  const removeCustomrers = (item) => {
-
-    setCustormers(custormers =>
-      custormers.filter(custormer => Number(custormer.label) !== Number(item.label))
-    );
-    setChangeUserId(null);
-  }
-  useEffect(() => {
-    const fetchData = async () => {
-      if (show === true) {
-        if (listUserAll === null && listRoomAll === null) {
-          try {
-            await Promise.all([
-              dispatch(getAllUser(false, true, pageUser, 20, searchUser)),
-              dispatch(getAllRoom(false, true, pageRoom, 20, searchRoom))
-            ]);
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          }
-        } else {
-          if (listUserAll === null) {
-            try {
-              await dispatch(getAllUser(false, true, pageUser, 20, searchUser));
-            } catch (error) {
-              console.error('Error fetching user data:', error);
-            }
-          }
-          if (listRoomAll === null) {
-            try {
-              await dispatch(getAllRoom(false, true, pageRoom, 20, searchRoom));
-            } catch (error) {
-              console.error('Error fetching room data:', error);
-            }
-          }
-        }
-      }
-    };
-    fetchData();
-  }, [show, dispatch]);
 
   useEffect(() => {
-    if (listUserAll !== null) {
-      setListUser(
-        listUserAll.length > 0 && listUserAll.map(item => ({
-          value: item.id,
-          label: item.fullname
-        }))
-      );
-    }
-  }, [listUserAll])
-  useEffect(() => {
-    if (listRoomAll !== null) {
-      setListRoom(
-        listRoomAll.length > 0 && listRoomAll.map(item => ({
-          value: item.id,
-          label: item.name
-        }))
-      );
-    }
-  }, [listRoomAll]);
-  const addCustormers = (custormer) => {
-    const isAlreadySelected = custormers.some(user => Number(user.value) === Number(custormer.value));
-    if (isAlreadySelected === false) {
-      setCustormers(custormers => [
-        ...custormers,
-        custormer
-      ]);
-      setChangeUserId(Number(custormer.value))
-    }
-  };
-  const updateContractFun = async (values, resetForm) => {
-    const formData = new FormData();
-    Object.keys(values).forEach(key => {
-      if (key === 'image' && values[key]) {
-        if (images === null) {
-          formData.delete('image');
-        } else {
-          formData.append('image', values[key]);
-        }
-      }
-      
-      else if (key === 'customers' && values[key]) {
-        custormers.forEach((customer) => {
-        const newObject = {
-         id : customer.id,
-          user_id : customer.label,
-           fullname : customer.value,
-        }
-          formData.append('customers[]',JSON.stringify(newObject));
-        });
-      }
-      else if (key === 'service' && values[key]) {
-        quantityService.forEach((service) => {
-          delete service.name;
-          formData.append('service[]', JSON.stringify(service));
-        });
-      }
-      else if (key === 'furniture' && values[key]) {
-
-        quantityFurniture.forEach((furniture) => {
-          delete furniture.name;
-          formData.append('furniture[]', JSON.stringify(furniture));
-        });
-      }
-      else {
-        formData.append(key, values[key]);
-      }
-    });
-    try {
-      await dispatch(updateContract(id, formData, resetForm));
-      formik.resetForm();
-    } catch (error) {
-      toast.error('có lỗi xảy ra');
-    }
-  };
-
-  useEffect(() => {
+    
     formik.setFieldValue('startTime', convertDateTimeFull(startTime));
   }, [startTime]);
   useEffect(() => {
     formik.setFieldValue('endTime', convertDateTimeFull(endTime));
   }, [endTime])
-  useEffect(() => {
-    if (userId !== null) {
-      formik.setFieldValue('userId', userId.value);
-    }
-  }, [userId]);
-  useEffect(() => {
-    if (roomId !== null) {
-      formik.setFieldValue('roomId', roomId.value);
-      const fetchData = async () => {
-        await Promise.all([
-          Promise.resolve(dispatch(getListServiceRoom(roomId.value))),
-          Promise.resolve(dispatch(getListFurnitureRoom(roomId.value)))
-        ]);
-      };
-      fetchData();
-    }
 
-  }, [roomId])
   const formik = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
     validationSchema: Yup.object({
-      priceTime: Yup.number()
-      .required(t('validation.attribute.required', { attribute: t('lableView.contract.priceTime') }))
-      .min(1, t('validation.attribute.min', { attribute: t('lableView.contract.priceTime'), min: 1 }))
-      .integer(t('validation.attribute.integer', { attribute: t('lableView.contract.priceTime') }))
-      .typeError(t('validation.attribute.integer', { attribute: t('lableView.contract.priceTime') })),
-  deposit: Yup.number()
-      .required(t('validation.attribute.required', { attribute: t('lableView.contract.deposit') }))
-      .min(1, t('validation.attribute.min', { attribute: t('lableView.contract.deposit'), min: 1 }))
-      .integer(t('validation.attribute.integer', { attribute: t('lableView.contract.deposit') }))
-      .typeError(t('validation.attribute.integer', { attribute: t('lableView.contract.deposit') })),
-  roomId: Yup.number()
-      .required(t('validation.attribute.required', { attribute: t('lableView.contract.room') }))
-      .min(1, t('validation.attribute.min', { attribute: t('lableView.contract.room'), min: 1 }))
-      .integer(t('validation.attribute.integer', { attribute: t('lableView.contract.room') }))
-      .typeError(t('validation.attribute.integer', { attribute: t('lableView.contract.room') })),
 
-  userId: Yup.number()
-      .required(t('validation.attribute.required', { attribute: t('lableView.room.user') }))
-      .min(1, t('validation.attribute.min', { attribute: t('lableView.room.user'), min: 1 }))
-      .integer(t('validation.attribute.integer', { attribute: t('lableView.room.user') }))
-      .typeError(t('validation.attribute.integer', { attribute: t('lableView.room.user') })),
-  code: Yup.string()
-      .required(t('validation.attribute.required', { attribute: t('lableView.room.code') }))
-      .min(1, t('validation.attribute.min', { attribute: t('lableView.room.code'), min: 1 }))
-      .max(255, t('validation.attribute.max', { attribute: t('lableView.room.code'), max: 255 }))
-      .matches(/^[a-zA-Z0-9]+$/, t('validation.attribute.matches', { attribute: t('lableView.room.code') })),
-  // image: Yup.mixed()
-  //     .required(t('validation.attribute.required', { attribute: t('lableView.contract.image') }))
-  //     .nullable(),
-  // customers: Yup.array()
-  //     .min(1, t('validation.attribute.minItems', { attribute: t('lableView.contract.customers'), min: 1 }))
-  //     .required(t('validation.attribute.required', { attribute: t('lableView.contract.customers') })),
-  // service: Yup.array()
-  //     .min(1, t('validation.attribute.minItems', { attribute: t('lableView.contract.service'), min: 1 }))
-  //     .required(t('validation.attribute.required', { attribute: t('lableView.contract.service') })),
-
-  // furniture: Yup.array()
-  //     .min(1, t('validation.attribute.minItems', { attribute: t('lableView.contract.furniture'), min: 1 }))
-  //     .required(t('validation.attribute.required', { attribute: t('lableView.contract.furniture') })),
     }),
     onSubmit: (values, { resetForm }) => {
-      updateContractFun(values, resetForm);
+     dispatch( updateBill(values,id, resetForm));
     }
   });
 
-
-  const onChange = (imageList) => {
-    if (imageList.length > 0) {
-      const file = imageList[0].file;
-      formik.setFieldValue('image', file);
-      setImages(imageList);
-    } else {
-      formik.setFieldValue('image', null);
-      setImages([]);
-    }
-  };
-
-  let triggerImageUpload = null;
-  const addItemFurnitures = (e, item, type =false) => {
-    const isChecked = e.target.checked;
-    const newObject = {
-      quantity: 1,
-      furnitureId: item.furnitureId ||  item.furniture.id,
-      id : type === true ? item.id : null,
-      name :  item.name||  item.furniture.name,
-      maxQuantity : item.quantity
-    };
-   
-    if (isChecked) {
-      setQuantityFurniture((prev) => {
-        const updatedPrev = prev || [];
-        const exists = updatedPrev.some(item => Number(item.furnitureId) === Number(newObject.furnitureId));
-        if (exists) {      
-          return updatedPrev;
-        } else {
-          return [...updatedPrev, newObject];
-        }
-      });
-    } else {
-      setQuantityFurniture((prev) => {
-        const updatedPrev = prev || [];
-        return updatedPrev.filter(item => item.furnitureId !== newObject.furnitureId);
-      });
-    }
-
-
-  };
-
-  const getQuantityFurniture = (furnitureId) => {
-    const item = Array.isArray(quantityFurniture) && quantityFurniture.find(f => Number(f.furnitureId) === Number(furnitureId));
-    return item ? item.quantity : 1;
-  };
-  const handleQuantityChangeFurniture = (item, value, type = false) => {
-
-    const numericValue = Number(value);
-     const maxQuantity = Number(type === true ? item.quantity : item.maxQuantity);
-    if (numericValue > maxQuantity) {
-      toast.error(t('messageText.changeQuantityFail', { attribute: t('lableView.contract.furniture') }));
-      setQuantityFurniture((prevFurnitures) => {
-        if (Array.isArray(prevFurnitures)) {
-          return prevFurnitures.map(furniture =>
-            furniture.furnitureId === item.furnitureId
-              ? { ...furniture, quantity: item.quantity }
-              : furniture
-          );
-        }
-        return prevFurnitures;
-      });
-    } else {
-      setQuantityFurniture((prevFurnitures) => {
-        if (Array.isArray(prevFurnitures)) {
-          const furnitureExists = prevFurnitures.some(furniture => Number(furniture.furnitureId) === Number(item.furnitureId));
-          if (furnitureExists) {
-            return prevFurnitures.map(furniture =>
-              Number(furniture.furnitureId) === Number( item.furnitureId)
-                ? { ...furniture, quantity: numericValue }
-                : furniture
-            );
-          } else {
-            return [...prevFurnitures, { furnitureId: item.furnitureId, quantity: numericValue }];
-          }
-        }
-        return prevFurnitures;
-      });
-    }
-  };
-
-  const addItemServices = (e, item , type = false) => {
-    const isChecked = e.target.checked;
-    const newObject = {
-      quantity: item.quantity || 1,
-      serviceId: item.serviceId ||  item.service.id,
-      id : type === true ? item.id : null,
-      name : item.name || item.service.name,
-    };
-   
-    if (isChecked) {
-      setQuantityService((prev) => {
-        const updatedPrev = prev || [];
-        const exists = updatedPrev.some(item => Number(item.serviceId) === Number(newObject.serviceId));
-        if (exists) {
-          return updatedPrev;
-        } else {
-          return [...updatedPrev, newObject];
-        }
-      });
-    } else {
-      setQuantityService((prev) => {
-        const updatedPrev = prev || [];
-        return updatedPrev.filter(item => Number(item.serviceId) !== Number(newObject.serviceId));
-      });
-    }
-  };
-
-  const getQuantityService = (serviceId) => {
-    const item = Array.isArray(quantityService) && quantityService.find(f => f.serviceId === serviceId);
-    return item ? item.quantity : 1;
-  };
-
-  const handleQuantityChangeService = (item, value) => {
-    const numericValue = Number(value);
-    setQuantityService((prevServices) => {
-      if (Array.isArray(prevServices)) {
-        const serviceExists = prevServices.some(service => Number(service.serviceId) === Number(item.id));
-        if (serviceExists) {
-          return prevServices.map(service =>
-            service.serviceId === item.id
-              ? { ...service, quantity: numericValue }
-              : service
-          );
-        } else {
-          return [...prevServices, { serviceId: item.id, quantity: numericValue }];
-        }
-      }
-      return prevServices;
-    });
-  };
   const handleClose = () => {
     dispatch(setModalUpdate(false));
     if (show === true) {
@@ -413,58 +91,27 @@ function List({ data }) {
   useEffect(() => {
     if (dataDeatil && dataDeatil !== null) {
       setInitialValues({
-        priceTime: dataDeatil.priceTime,
-        deposit: dataDeatil.deposit,
+        totalMoney: dataDeatil.totalMoney,
+        status: dataDeatil.status,
         code: dataDeatil.code,
         startTime: dataDeatil.startTime,
         endTime: dataDeatil.endTime,
-        roomId: dataDeatil.room.id,
-        userId: dataDeatil.user.id,
         note: dataDeatil.deposit || null,
         image: dataDeatil.img,
-        customers: [],
-        service: [],
-        furniture: []
       });
       setId(dataDeatil.id);
-      setStartTime(new Date(dataDeatil.startTime));
-      setEndTime(new Date(dataDeatil.endTime));
-      setUserId(
-        {
-          value: dataDeatil.user.id,
-          label: dataDeatil.user.fullname
-        }
-      );
-      setRoomId({
-        value: dataDeatil.room.id,
-        label: dataDeatil.room.name
-      });
+      setStartTime(new Date(dataDeatil.started_at));
+      setEndTime(new Date(dataDeatil.ends_at));
       setQuantityService(
-        dataDeatil.service?.map(serviceItem => ({
+        dataDeatil.detail?.map(serviceItem => ({
           serviceId: serviceItem?.service?.id,
-          name: serviceItem?.service?.name,
           id: serviceItem?.id,
           quantity: serviceItem?.quantity
         }))
+        
       );
-      setQuantityFurniture(
-        dataDeatil.furniture?.map(furnitureItem => ({
-          furnitureId: furnitureItem?.furniture?.id,
-          name: furnitureItem?.furniture?.name,
-          id: furnitureItem?.id,
-          quantity: furnitureItem?.quantity,
-          maxQuantity : furnitureItem?.max_quantity
-        }))
-      );
-      setCustormers(
-        dataDeatil?.custormer?.map(custormerItem => ({
-          label: custormerItem?.user?.id,
-          value: custormerItem?.user?.fullname,
-          id: custormerItem?.id,
-        }))
-      );
-  
     }
+
   }, [dataDeatil]);
   const handleShow = (item) => {
     dispatch(setModalUpdate(true));
@@ -476,7 +123,11 @@ function List({ data }) {
   const handleChange = (checked) => {
     setChecked(checked);
   };
+  const getValueService =(id)=>{  
+    const serviceItem = quantityService?.length > 0 && quantityService.find(item => Number(item.id) === Number(id));
+    return serviceItem ? serviceItem.quantity : 1;
 
+  }
   const deleteContractId = (id) => {
     confirmAlert({
       title: t('action.authentication.delete', { attribute: t('page.contract') }),
@@ -571,12 +222,12 @@ function List({ data }) {
                 <label> {t('actionView.update')}</label>
               </div>
               <div className='d-flex'>
-              <div className='flex_center icon-delete' onClick={() => deleteContractId(dataDeatil.id)}>
-                <i class="fa-solid fa-trash"></i>
-              </div>
-              <div className='flex_center icon-delete ms-3' onClick={() => dispatch(downloadFileContract(dataDeatil.id))}>
-              <CIcon className='' icon={cilNotes} size="l" />
-              </div>
+                <div className='flex_center icon-delete' onClick={() => deleteContractId(dataDeatil.id)}>
+                  <i class="fa-solid fa-trash"></i>
+                </div>
+                <div className='flex_center icon-delete ms-3' onClick={() => dispatch(downloadFileContract(dataDeatil.id))}>
+                  <CIcon className='' icon={cilNotes} size="l" />
+                </div>
               </div>
             </div>
             {dataDeatil !== null
@@ -585,45 +236,15 @@ function List({ data }) {
                 <Modal.Body>
                   <Row className="mb-3 mt-3">
                     <Form.Group as={Col} xl="3" lg="6" md="6" sm="12" className='mb-3 mt-3'>
-                      <ImageUploading
-                        value={images}
-                        onChange={onChange}
-                        maxNumber={maxNumber}
-                        dataURLKey="data_url"
-                      >
-                        {({
-                          imageList,
-                          onImageUpload,
-                          onImageRemove,
-                          isDragging,
-                        }) => {
-                          triggerImageUpload = { onImageUpload, isDragging };
-                          return (
-                            <div className="upload__image-wrapper">
-                              {imageList.length === 0 ? (
                                 <div className='img-form-div'>
                                   <img src={dataDeatil.img} className='img-form' />
                                 </div>
-                              ) : (
-                                imageList.map((image, index) => (
-                                  <div key={index} className='img-form-div'>
-                                    <img src={image['data_url']} alt="" width="100" className='img-form form-img-div' />
-                                    <div className="image-item__btn-wrapper">
-                                      <p onClick={() => onImageRemove(index)}>x</p>
-                                    </div>
-                                  </div>
-                                ))
-                              )}
-                            </div>
-                          );
-                        }}
-                      </ImageUploading>
                     </Form.Group>
                     <Form.Group as={Col} xl="9" lg="6" md="6" sm="12" className='mb-3 mt-3 row'>
-                      <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
+                      <Form.Group as={Col} xl= {checked === false  ?"4" : "12" } lg={checked === false  ?"4" : "12" } md="12" sm="12" className='mb-3 mt-3 '>
                         {checked === false ?
                           (
-                            <p> <span className='lable-form'>{t('lableView.contract.code')}</span>  : {dataDeatil.code !== null ? dataDeatil.code : t('noData')} </p>
+                            <p> <span className='lable-form'>{t('lableView.bill.code')}</span>  : {dataDeatil.code !== null ? dataDeatil.code : t('noData')} </p>
                           ) : (
                             <>
                               <div className=' css-animation'>
@@ -647,125 +268,24 @@ function List({ data }) {
                             </>
                           )}
                       </Form.Group>
-                      <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
+                      <Form.Group as={Col} xl= {checked === false  ?"4" : "6" } lg={checked === false  ?"4" : "6" } md="12" sm="12" className='mb-3 mt-3'>
                         {checked === false ?
                           (
-                            <p> <span className='lable-form'>{t('lableView.contract.code')}</span>  : {dataDeatil.code !== null ? dataDeatil.code : t('noData')} </p>
+                            <p> <span className='lable-form'>{t('lableView.bill.start_at')}</span>  : {dataDeatil.start_at !== null ? convertDateTimeFull(dataDeatil.start_at) : t('noData')} </p>
                           ) : (
                             <>
-                              <Select
-                                value={userId}
-                                onChange={(e) => setUserId(e)}
-                                options={listUser}
-                                placeholder={t('messageText.searchTitel', { attribute: t('lableView.contract.user') })}
-                              />
-                              <Form.Control.Feedback type="invalid">
-                                {formik.errors.userId}
-                              </Form.Control.Feedback>
-                            </>
-                          )}
-                      </Form.Group>
-                      <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
-                        {checked === false ?
-                          (
-                            <p> <span className='lable-form'>{t('page.room')}</span>  : {dataDeatil.code !== null ? dataDeatil.code : t('noData')} </p>
-                          ) : (
-                            <>
-                              <Select
-                                value={roomId}
-                                onChange={(e) => setRoomId(e)}
-                                options={listRoom}
-                                placeholder={t('messageText.searchTitel', { attribute: t('page.room') })}
-                              />
-                              <Form.Control.Feedback type="invalid">
-                                {formik.errors.roomId}
-                              </Form.Control.Feedback>
-                            </>
-                          )}
-                      </Form.Group>
-                      <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
-                        {checked === false ?
-                          (
-                            <p> <span className='lable-form'>{t('lableView.contract.priceTime')}</span>  : {dataDeatil.priceTime !== null ? formatPrice(dataDeatil.priceTime) : t('noData')} </p>
-                          ) : (
-                            <>
-                              <div className=' css-animation'>
-                                <div className='font-icon flex_center'>
-                                  <CIcon className='' icon={cilUser} size="l" />
-                                </div>
-                                <Form.Control
-                                  type="text"
-                                  name="priceTime"
-                                  value={formik.values.priceTime}
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur}
-                                  isInvalid={formik.touched.priceTime && formik.errors.priceTime}
-                                  required
-                                />
-                                <Form.Label> {t('lableView.contract.priceTime')}</Form.Label>
-                                <Form.Control.Feedback type="invalid">
-                                  {formik.errors.priceTime}
-                                </Form.Control.Feedback>
-                              </div>
-                            </>
-                          )}
-                      </Form.Group>
-                      <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
-                        {checked === false ?
-                          (
-                            <p> <span className='lable-form'>{t('lableView.contract.deposit')}</span>  : {dataDeatil.deposit !== null ? formatPrice(dataDeatil.deposit) : t('noData')} </p>
-                          ) : (
-                            <>
-                              <div className=' css-animation'>
-                                <div className='font-icon flex_center'>
-                                  <CIcon className='' icon={cilUser} size="l" />
-                                </div>
-                                <Form.Control
-                                  type="text"
-                                  name="deposit"
-                                  value={formik.values.deposit}
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur}
-                                  isInvalid={formik.touched.deposit && formik.errors.deposit}
-                                  required
-                                />
-                                <Form.Label> {t('lableView.contract.deposit')}</Form.Label>
-                                <Form.Control.Feedback type="invalid">
-                                  {formik.errors.deposit}
-                                </Form.Control.Feedback>
-                              </div>
-                            </>
-                          )}
-                      </Form.Group>
-                      {checked === true && (<Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3'>
-                        <div
-                          className='btn_upload_img'
-                          style={triggerImageUpload?.isDragging ? { color: 'red' } : undefined}
-                          onClick={() => triggerImageUpload && triggerImageUpload.onImageUpload()}
-                        >
-                          {t('lableView.contract.img')}
-                        </div>
-                      </Form.Group>)
-                      }
-
-                      <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3'>
-                        {checked === false ?
-                          (
-                            <p> <span className='lable-form'>{t('lableView.contract.startTime')}</span>  : {dataDeatil.startTime !== null ? dataDeatil.startTime : t('noData')} </p>
-                          ) : (
-                            <>
-                              <label className='mb-2 font-weight'> {t('lableView.contract.startTime')} : </label>
+                              <label className='mb-2 font-weight'> {t('lableView.bill.start_at')} : </label>
                               <DatePicker selected={startTime} onChange={(date) => setStartTime(date)} />
                             </>
                           )}
                       </Form.Group>
-                      <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3'>
+                      <Form.Group as={Col} xl= {checked === false  ?"4" : "6" } lg={checked === false  ?"4" : "6" } md="12" sm="12" className='mb-3 mt-3'>
                         {checked === false ?
                           (
-                            <p> <span className='lable-form'>{t('lableView.contract.endTime')}</span>  : {dataDeatil.endTime !== null ? dataDeatil.endTime : t('noData')} </p>
+                            <p> <span className='lable-form'>{t('lableView.bill.end_at')}</span>  : {dataDeatil.end_at !== null ? convertDateTimeFull(dataDeatil.end_at) : t('noData')} </p>
                           ) : (
                             <>
-                              <label className='mb-2 font-weight'> {t('lableView.contract.endTime')} : </label>
+                              <label className='mb-2 font-weight'> {t('lableView.bill.end_at')} : </label>
                               <DatePicker selected={endTime} onChange={(date) => setEndTime(date)} />
                             </>
                           )}
@@ -775,28 +295,49 @@ function List({ data }) {
                         (
                           <>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
-                              <p> <span className='lable-form'>{t('lableView.contract.checkIsNow')}</span>  :
-                                {new Date(dataDeatil?.endTime) > new Date() ? t('lableView.contract.checkIsNowStatus.has') : t('lableView.contract.checkIsNowStatus.hasnot')} </p>
+                              <p> <span className='lable-form'>{t('lableView.bill.user')}</span>  :
+                                {dataDeatil?.user?.fullname ?? t('noData')} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
-                              <p> <span className='lable-form'>{t('lableView.contract.created_at')}</span>  :
-                                {convertDateTimeFull(dataDeatil?.created_at)} </p>
+                              <p> <span className='lable-form'>{t('lableView.bill.staff')}</span>  :
+                                {dataDeatil?.staff?.fullname ?? t('noData')} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
-                              <p> <span className='lable-form'>{t('lableView.contract.updated_at')}</span>  :
-                                {dataDeatil?.updated_at !== null ? convertDateTimeFull(dataDeatil?.updated_at) : t('noData')} </p>
+                              <p> <span className='lable-form'>{t('lableView.bill.status')}</span>  :
+                                {dataDeatil?.pay_at ? t('lableView.bill.checkIsNowStatus.has') : t('lableView.bill.checkIsNowStatus.hasnot')} </p>
+                            </Form.Group>
+                            <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
+                              <p> <span className='lable-form'>{t('lableView.bill.status')}</span>  :
+                                {dataDeatil?.formPayment ? dataDeatil?.formPayment : t('noData')} </p>
+                            </Form.Group>
+
+                            <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
+                              <p> <span className='lable-form'>{t('lableView.bill.totalMoney')}</span>  :
+                                {(dataDeatil?.totalMoney && formatPrice(dataDeatil?.totalMoney)) ?? t('noData')} </p>
+                            </Form.Group>
+                            <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
+                              <p> <span className='lable-form'>{t('lableView.bill.created_at')}</span>  :
+                                {(dataDeatil?.created_at && convertDateTimeFull(dataDeatil?.created_at)) ?? t('noData')} </p>
+                            </Form.Group>
+                            <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
+                              <p> <span className='lable-form'>{t('lableView.bill.updated_at')}</span>  :
+                                {(dataDeatil?.updated_at && convertDateTimeFull(dataDeatil?.updated_at)) ?? t('noData')} </p>
+                            </Form.Group>
+                            <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
+                              <p> <span className='lable-form'>{t('lableView.bill.pay_at')}</span>  :
+                                {(dataDeatil?.pay_at && convertDateTimeFull(dataDeatil?.pay_at)) ?? t('noData')} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
                               <p> <span className='lable-form'>{t('lableView.building.name')}</span>  :
                                 {dataDeatil?.room?.building?.name !== null ? dataDeatil?.room?.building?.name : t('noData')} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
-                              <p> <span className='lable-form'>{t('lableView.building.code')}</span>  :
-                                {dataDeatil?.room?.building?.code !== null ? dataDeatil?.room?.building?.code : t('noData')} </p>
+                              <p> <span className='lable-form'>{t('lableView.room.name')}</span>  :
+                                {dataDeatil?.room?.name ?? t('noData')} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
-                              <p> <span className='lable-form'>{t('lableView.building.address')}</span>  :
-                                {dataDeatil?.room?.building?.address !== null ? dataDeatil?.room?.building.address : t('noData')} </p>
+                              <p> <span className='lable-form'>{t('lableView.room.code')}</span>  :
+                                {dataDeatil?.room?.floor?.code ?? t('noData')} </p>
                             </Form.Group>
                             <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
                               <p> <span className='lable-form'>{t('lableView.floor.name')}</span>  :
@@ -806,135 +347,22 @@ function List({ data }) {
                               <p> <span className='lable-form'>{t('lableView.floor.code')}</span>  :
                                 {dataDeatil?.room?.floor?.code !== null ? dataDeatil?.room?.floor?.code : t('noData')} </p>
                             </Form.Group>
+                            <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
+                              <p> <span className='lable-form'>{t('lableView.building.name')}</span>  :
+                                {dataDeatil?.room?.building.name ?? t('noData')} </p>
+                            </Form.Group>
+                            <Form.Group as={Col} xl="4" lg="6" md="12" sm="12" className='mb-3 mt-3 '>
+                              <p> <span className='lable-form'>{t('lableView.building.code')}</span>  :
+                                {dataDeatil?.room?.building.code ?? t('noData')} </p>
+                            </Form.Group>
+
+                            <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3 '>
+                              <p> <span className='lable-form'>{t('lableView.building.address')}</span>  :
+                                {dataDeatil?.room?.building?.address !== null ? dataDeatil?.room?.building.address : t('noData')} </p>
+                            </Form.Group>
                           </>
                         )}
 
-                      <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3 '>
-                        {checked === false ?
-
-                          (<p> <span className='lable-form'>{t('lableView.contract.custorm')}</span>  : </p>)
-                          :
-                          (
-                            <>
-                              <Select
-                                value={changeUserId}
-                                onChange={(e) => addCustormers(e)}
-                                options={listUser}
-                                placeholder={t('messageText.searchTitel', { attribute: t('lableView.contract.custorm') })}
-                              />
-                              <Form.Control.Feedback type="invalid">
-                                {formik.errors.custorm}
-                              </Form.Control.Feedback></>
-                          )}
-                        <div className='list-user d-flex flex-wrap mt-4 gap-3'>
-                          {checked === false ?
-                          dataDeatil?.custormer?.length > 0 && dataDeatil?.custormer?.map((item, index) => {
-                            return (
-                              <div key={index} className='item-user pt-3 pb-3 ps-4 pe-4'>
-                                <Link>
-                                  {item?.user?.fullname}
-                                </Link>
-                               
-                              </div>
-                            )
-                          })
-                          :
-                          
-                          custormers?.length > 0 && custormers?.map((item, index) => {
-                            return (
-                              <div key={index} className='item-user pt-3 pb-3 ps-4 pe-4'>
-                                <Link>
-                                  {item.value}
-                                </Link>
-                                {checked === true &&
-                                  (<CIcon icon={cilX} className="close-icon" onClick={() => removeCustomrers(item)} />)}
-                              </div>
-                            )
-                          })
-                          }
-                        </div>
-                      </Form.Group>
-                      <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-2 mt-2'>
-                        <Form.Label className='font-weight'> {t('lableView.contract.furniture')} : </Form.Label>
-                        {checked === false ?
-
-                          (
-
-                            <div className=' row mt-4'>
-                              {dataDeatil?.furniture?.length > 0 && dataDeatil?.furniture?.map((item, index) => {
-                                return (
-                                  <div key={index} className='col-xl-4 col-lg-6 col-md-12 col-sm-12 d-flex align-items-stretch'>
-                                    <div className='item-user pt-3 pb-3 ps-4 pe-4 m-2 w-100'>
-                                      <Link>
-                                        {t('lableView.furniture.price') + " : " + item?.furniture?.name}
-                                      </Link>
-                                      <p>
-                                        {t('lableView.furniture.price') + " : " + formatPrice(item?.furniture?.price)} <br />
-                                        {t('quantity') + " : " + item?.quantity}
-                                      </p>
-                                      
-                                    </div>
-                                  </div>
-                                )
-                              })}
-                            </div>
-
-                          )
-                          :
-                          (
-                            <>
-                              <div className="d-flex flex-wrap gap-3">
-                                {quantityFurniture && quantityFurniture?.length > 0 && (
-                                  quantityFurniture?.map((item) => (
-                                    <div key={item.id} className="quantity-item-custorm">
-                                      <input
-                                        type="checkbox"
-                                        checked
-                                        onChange={(e) => addItemFurnitures(e, item, true)}
-                                      />
-                                      <label className='ms-1'>{item?.name}</label>
-                                      <InputNumber
-                                        className="input-quantity"
-                                        value={getQuantityFurniture(item?.furnitureId)}
-                                        min={0}
-                                       
-                                        step={1}
-                                        onChange={(value) => handleQuantityChangeFurniture(item, value)}
-                                        />
-                                    </div>
-                                  ))
-                                )}
-
-                                {listFurnitureRoom && listFurnitureRoom?.length > 0 && (
-                                  listFurnitureRoom
-                                   ?.filter(item => !quantityFurniture.some(s => s.furnitureId === item.furniture.id))
-                                    ?.map((item) => (
-                                      <div key={item.furniture.id} className="quantity-item-custorm">
-                                        <input
-                                          type="checkbox"
-                                          onChange={(e) => addItemFurnitures(e, item)}
-                                        />
-                                        <label className='ms-1'>{item?.furniture?.name}</label>
-                                        <InputNumber
-                                          className="input-quantity"
-                                          value={getQuantityFurniture(item?.furniture?.id)}
-                                          min={0}
-                                      
-                                          step={1}
-                                          onChange={(value) => handleQuantityChangeFurniture(item, value, true)}
-                                        />
-                                      </div>
-                                    ))
-                                )}
-
-                                <Form.Control.Feedback type="invalid">
-                                  {formik.errors.furniture}
-                                </Form.Control.Feedback>
-                              </div>
-                            </>
-                          )}
-                      </Form.Group>
-                      {console.log(dataDeatil?.customer)}
                       <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-2 mt-2'>
                         <Form.Label className='font-weight'> {t('lableView.contract.serivce')} : </Form.Label>
                         {checked === false ?
@@ -942,18 +370,21 @@ function List({ data }) {
                           (
 
                             <div className=' row mt-4'>
-                              {dataDeatil?.service?.length > 0 && dataDeatil?.service?.map((item, index) => {
+                              {dataDeatil?.detail?.length > 0 && dataDeatil?.detail?.map((item, index) => {
                                 return (
                                   <div key={index} className='col-xl-4 col-lg-6 col-md-12 col-sm-12 d-flex align-items-stretch'>
                                     <div className='item-user pt-3 pb-3 ps-4 pe-4 m-2 w-100'>
                                       <Link>
-                                        {t('lableView.service.price') + " : " + item?.service?.name}
+                                        {t('lableView.service.name') + " : " + item?.service?.name}
                                       </Link>
                                       <p>
-                                        {t('lableView.service.price') + " : " + formatPrice(item?.service?.price) + " / " + t("lableView.service.unitValue." + item.service.unit)} <br />
-                                        {t('quantity') + " : " + item?.quantity}
+                                       {t('lableView.bill.intoMoney') + " : " }  { item?.price && item?.quantity && formatPrice(item?.price * item?.quantity)}
                                       </p>
-                                    
+                                      <p>
+                                        {t('lableView.service.price') + " : " + formatPrice(item?.price) + " / " + t("lableView.service.unitValue." + item.service.unit)} <br />
+                                        {t('quantity') + " : " + item?.quantity}
+                                      </p><br />
+
                                     </div>
                                   </div>
                                 )
@@ -965,47 +396,31 @@ function List({ data }) {
                           (
                             <>
                               <div className="d-flex flex-wrap gap-3">
-                              {quantityService !== null && quantityService.map((item, index) => (
-                                    <div key={item.id} className="quantity-item-custorm">
-                                    <input
-                                      type="checkbox"
-                                      onChange={(e) => addItemServices(e, item, true)}
-                                      checked
-                                    />
-                                    <label className='ms-1'>{item.name}</label>
-                                    <InputNumber
-                                      className={`input-quantity ms-2`}
-                                      value={getQuantityService(item.serviceId)}
-                                      min={0}
-                                      step={1}
-                                      onChange={(value) => handleQuantityChangeService(item, value)}
-                                    />
-                                  </div>
-                                ))}
-
-                                {listServiceRoom && listServiceRoom.length > 0 && (
-                                  listServiceRoom
-                                    .filter(item => !quantityService.some(s => s.serviceId === item.service.id))
-                                    .map((item, index) => (
-                                      <div key={item.id} className="quantity-item-custorm col-xl-3 col-lg-4 col-md-6 col-sm-12 w-100">
-                                        <input
-                                          type="checkbox"
-                                          onChange={(e) => addItemServices(e, item)}
-                                        />
-                                        <label className='ms-1'>{item.service.name}</label>
-                                        <InputNumber
-                                          className={`input-quantity ms-2`}
-                                          value={getQuantityService(item.id)}
-                                          min={0}
-                                          step={1}
-                                          onChange={(value) => handleQuantityChangeService(item, value)}
-                                        />
-                                      </div>
-                                    ))
-                                )}
-                                <Form.Control.Feedback type="invalid">
-                                  {formik.errors.furniture}
-                                </Form.Control.Feedback>
+                              <table className="mb-3 mt-3">
+                            {dataDeatil?.detail?.map((item, index) => {
+                                return (
+                                    <tr>
+                                        <td>
+                                            <Form.Label className="m-0 p-0 flex-shrink-0">{item?.service?.name} :</Form.Label>
+                                        </td>
+                                        <td className='py-2'>
+                                            <input
+                                                type="number"
+                                                //  onChange={(e) => addQuantityService(e.target.value, item)}
+                                                className="px-2 py-1 text-input-quantity flex-grow-1"
+                                                style={{ minWidth: "80px" }}
+                                                value={getValueService(item?.id)}
+                                            />
+                                        </td>
+                                        <td className='ps-2'>
+                                            <p className="m-0 p-0 flex-shrink-0">
+                                                {(item?.service?.price && formatPrice(item?.service?.price)) + " / " + item?.quantity + " " + t(`lableView.service.unitValue.${item?.service?.unit}`)}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
+                        </table>
                               </div>
                             </>
                           )}

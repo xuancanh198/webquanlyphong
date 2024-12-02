@@ -4,14 +4,17 @@ import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { addTypeRoom, getListServiceRoomContract } from "../../../../service/baseService/cruds";
+import { addBill, getListServiceRoomContract } from "../../../../service/baseService/cruds";
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { setModalAdd } from "../../../../redux/accction/listTable";
 import Select from 'react-select';
-import { formatPrice } from "../../../../service/FunService/funweb"
+import { formatPrice } from "../../../../service/FunService/funweb";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 function Example({ title }) {
     const { t } = useTranslation();
 
@@ -22,17 +25,20 @@ function Example({ title }) {
     const [roomId, setRoomId] = useState(null);
     const [listRoomId, setListRoomId] = useState([]);
     const [validated, setValidated] = useState(false);
-
+    const [servicesBill, setServicesBill] = useState([]);
     const handleClose = () => dispatch(setModalAdd(false));
     const handleShow = () => dispatch(setModalAdd(true));
+    const [note, setNote] = useState('')
+
     const formik = useFormik({
         initialValues: {
             roomId: '',
+            totalMoney : 0
         },
         validationSchema: Yup.object({
         }),
         onSubmit: (values, { resetForm }) => {
-            dispatch(addTypeRoom(values, resetForm))
+            dispatch(addBill(values, resetForm))
         }
     });
     useEffect(() => {
@@ -41,6 +47,14 @@ function Example({ title }) {
             formik.setFieldValue('roomId', `${roomId.value}`);
         }
     }, [roomId])
+    useEffect(() => {
+        if (servicesBill) {
+            formik.setFieldValue('totalMoney', servicesBill.reduce((total, item) => {
+                return total + (item.quantity * item.price);
+            }, 0));
+            formik.setFieldValue('servicesBill', servicesBill);
+        }
+    }, [servicesBill])
     useEffect(() => {
         if (listRoomAll !== null) {
             setListRoomId(
@@ -52,7 +66,30 @@ function Example({ title }) {
             );
         }
     }, [listRoomAll]);
-    console.log(listServiceRoom)
+    const addQuantityService = (value, item) => {
+        const newObject = {
+            serviceId: item?.service?.id,
+            quantity: Number(value),
+            price: item?.service?.price,
+        };
+    
+        setServicesBill((prevServicesBill) => {
+            const updatedPrevServices = prevServicesBill || [];
+            const exists = updatedPrevServices.some(
+                (service) => Number(service.serviceId) === Number(newObject.serviceId)
+            );
+    
+            if (exists) {
+                return updatedPrevServices.map((service) =>
+                    Number(service.serviceId) === Number(newObject.serviceId)
+                        ? { ...service, quantity: Number(value) }
+                        : service
+                );
+            }
+            return [...updatedPrevServices, newObject];
+        });
+    };
+    
     return (
         <>
             <div className='modal-button flex_center' onClick={handleShow}>
@@ -84,22 +121,43 @@ function Example({ title }) {
                                         <td>
                                             <Form.Label className="m-0 p-0 flex-shrink-0">{item?.service?.name} :</Form.Label>
                                         </td>
-                                        <td>
+                                        <td className='py-2'>
                                             <input
                                                 type="number"
+                                                onChange={(e) => addQuantityService(e.target.value, item)}
                                                 className="px-2 py-1 text-input-quantity flex-grow-1"
                                                 style={{ minWidth: "80px" }}
                                             />
                                         </td>
                                         <td className='ps-2'>
                                             <p className="m-0 p-0 flex-shrink-0">
-                                                {(item?.service?.price && formatPrice(item?.service?.price)) + " / " + t(`lableView.service.unitValue.${item?.service?.unit}`)}
+                                                {(item?.service?.price && formatPrice(item?.service?.price)) + " / " + item?.quantity + " " + t(`lableView.service.unitValue.${item?.service?.unit}`)}
                                             </p>
                                         </td>
                                     </tr>
                                 )
                             })}
                         </table>
+                        <Form.Group as={Col} xl="12" sm="12" className='mb-3 mt-3'>
+                                    <Form.Label className='font-weight'> {t('lableView.contract.note')}</Form.Label>
+                                    <CKEditor
+                                        name="note"
+                                        editor={ClassicEditor}
+                                        data={note}
+                                        onChange={(event, editor) => {
+                                            const data = editor.getData();
+                                            setNote(data);
+                                            formik.setFieldValue('note', data);
+                                        }}
+                                        config={{
+                                            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
+                                            ckfinder: {
+                                                uploadUrl: '/path/to/your/upload/url'
+                                            }
+                                        }}
+
+                                    />
+                                </Form.Group>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>

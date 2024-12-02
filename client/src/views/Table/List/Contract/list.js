@@ -809,7 +809,6 @@ function List({ data }) {
 
                       <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3 '>
                         {checked === false ?
-
                           (<p> <span className='lable-form'>{t('lableView.contract.custorm')}</span>  : </p>)
                           :
                           (
