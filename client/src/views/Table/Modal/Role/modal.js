@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
@@ -11,17 +11,23 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {setModalAdd} from "../../../../redux/accction/listTable";
-
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 function Example({ title }) {
     const { t } = useTranslation();
-
+    
     const dispatch = useDispatch();
     const show = useSelector((state) => state.listTable.modalAdd) ;
+    const listAcctionAll = useSelector((state) => state.listTable.listAcctionAll);
+    const listPermisstionDetailAll = useSelector((state) => state.listTable.listPermisstionDetailAll);
+    const listPermisstionAll = useSelector((state) => state.listTable.listPermisstionAll);
     const [validated, setValidated] = useState(false);
-
+    const [arrPemisstionDetail, setArrPemisstionDetail] = useState([])
     const handleClose = () => dispatch(setModalAdd(false));
     const handleShow = () => dispatch(setModalAdd(true));
-
+    useEffect(() => {
+        formik.setFieldValue('arrPemisstionDetail', arrPemisstionDetail);
+    }, [arrPemisstionDetail])
     const formik = useFormik({
         initialValues: {
             name: ''
@@ -37,8 +43,23 @@ function Example({ title }) {
             dispatch(addRole(values),resetForm())
         }
     });
-    
-    
+    const isValueInArray = (value) => {
+        return arrPemisstionDetail.includes(value);
+    };
+
+    const changePermisstionDetail = (isCheck, value) =>{
+        const result = listPermisstionDetailAll.filter((item) =>
+            item.code.includes(value) 
+        );
+        setArrPemisstionDetail((prev) => {
+            if (isCheck) {
+                const newItems = result.filter((item) => !prev.includes(item.code));
+                return [...prev, ...newItems.map((item) => item.code)];
+            } else {
+                return prev.filter((item) => !result.map((r) => r.code).includes(item));
+            }
+        })
+    }
     return (
         <>
             <div className='modal-button flex_center' onClick={handleShow}>
@@ -67,7 +88,59 @@ function Example({ title }) {
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </Row>
-                     
+                        <Form.Group as={Col} md="12" className='mb-2 mt-2'>
+                            <Tabs
+                                defaultActiveKey="permisstion"
+                                id="uncontrolled-tab-example"
+                                className="mb-3"
+                            >
+                                <Tab eventKey="permisstion" title={t('page.permisstion')}>
+                                    <div>
+                                        {listPermisstionAll?.map((item, index)=>{
+                                            return(
+                                                <div className='d-flex' key={index}>
+                                                    <input type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code}/>
+                                                    <label className='ms-2'>
+                                                        {item?.name}
+                                                    </label>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </Tab>
+                                <Tab eventKey="acction" title={t('page.acction')}>
+                                    <div>
+                                        {listAcctionAll?.map((item, index) => {
+                                            return (
+                                                <div className='d-flex' key={index}>
+                                                    <input type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
+                                                    <label className='ms-2'>
+                                                        {item?.name}
+                                                    </label>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </Tab>
+                                <Tab eventKey="permisstionDetail" title={t('page.permisstionDetail')}>
+                                    <div>
+                                        {listPermisstionDetailAll?.map((item, index) => {
+                                            return (
+                                                <div className='d-flex' key={index}>
+                                                    <input type='checkbox' 
+                                                        checked={isValueInArray(item?.code)}
+                                                    onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
+                                                    <label className='ms-2'>
+                                                        {item?.name}
+                                                    </label>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </Tab>
+                            </Tabs>
+
+                        </Form.Group>
                    
                 </Modal.Body>
                 <Modal.Footer>

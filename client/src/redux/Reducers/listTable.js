@@ -11,7 +11,8 @@ const initialState = {
   listServiceRoom: null,
   listFurnitureRoom: null,
   listPermisstionAll: null,
-  listAcctionAll : null,
+  listAcctionAll: null,
+  listPermisstionDetailAll: null,
   page: 1,
   limit: 10,
   searchValue: null,
@@ -162,16 +163,21 @@ const listTable = (state = initialState, action) => {
         listRoomAll: action.payload,
       };
 
-      case 'SETPERMISSTIONALL':
-        return {
-          ...state,
-          listPermisstionAll: action.payload,
-        };
-        case 'SETACCTIONALL':
-          return {
-            ...state,
-            listAcctionAll: action.payload,
-          };
+    case 'SETPERMISSTIONALL':
+      return {
+        ...state,
+        listPermisstionAll: action.payload,
+      };
+    case 'SETACCTIONALL':
+      return {
+        ...state,
+        listAcctionAll: action.payload,
+      };
+    case 'SETPERMISSTIONDETAILALL':
+      return {
+        ...state,
+        listPermisstionDetailAll: action.payload,
+      };
     case 'SETTYPEROOMALL':
       return {
         ...state,
@@ -202,11 +208,11 @@ const listTable = (state = initialState, action) => {
         ...state,
         listServiceRoom: action.payload,
       };
-      case 'SETVALEPREQUERY':
-        return {
-          ...state,
-          prevQuery: action.payload,
-        };
+    case 'SETVALEPREQUERY':
+      return {
+        ...state,
+        prevQuery: action.payload,
+      };
     default:
       return state;
   }

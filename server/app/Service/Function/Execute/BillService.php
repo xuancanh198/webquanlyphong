@@ -7,11 +7,8 @@ use App\Http\Requests\BillRequest;
 use App\Service\Function\Base\BaseService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Service\Function\Action\Contract;
-use App\Service\Function\Action\Firebase;
 use Illuminate\Support\Facades\Auth;
 use App\Service\Function\Action\Bill;
-use App\Models\User\ContractModel;
 
 class BillService extends BaseService
 {
@@ -102,18 +99,18 @@ class BillService extends BaseService
     {
 
         $data = $this->model->find($id);
-        $data->ends_at = $this->getEndDateBill();
-        $data->started_at =  $this->getStartDateBill();
+        $data->ends_at = $this->request->endTime;
+        $data->started_at =  $this->request->startTime;
         $data->totalMoney =  $this->request->totalMoney;
         $data->note =  $this->request->note;
         $data->updated_at = Carbon::now();
         DB::beginTransaction();
 
-        try {
-            $updateBill = $this->model->save();
-
+         try {
+            $updateBill = $data->save();
             if ($updateBill) {
                 $updateBillService = app(Bill::class)->updateBillService($this->request->servicesBill, $id);
+               
                 if ($updateBillService) {
                     DB::commit();
                     return true;
@@ -135,11 +132,9 @@ class BillService extends BaseService
         $data = $this->model->find($id);
         DB::beginTransaction();
         try {
-            $deleteRoomService = app(Contract::class)->deleteContractServiceAll($id);
-            $deleteRoomFurniture = app(Contract::class)->deleteContractFurnitureAll($id);
-            $deleteContractCustomer = app(Contract::class)->deleteContractCustomersAll($id);
+            $deleteBillService = app(Bill::class)->deleteBillServiceAll($id);
             $deleteContract = $data->delete();
-            if ($deleteRoomService && $deleteRoomFurniture && $deleteContractCustomer && $deleteContract) {
+            if ($deleteBillService && $deleteContract) {
                 DB::commit();
                 return true;
             }
@@ -149,18 +144,5 @@ class BillService extends BaseService
             DB::rollBack();
             return false;
         }
-    }
-
-    public function getDataInRoomContract($roomId, $model, $relationship)
-    {
-        $getContract = ContractModel::where('roomId', $roomId)->orderBy('id', 'desc')->first();
-        if (!$getContract) {
-            return [];
-        }
-        return $model::with([
-            $relationship => function ($query) {
-                $query->select('id', 'name', 'code', 'price', 'unit');
-            }
-        ])->where('contractId', $getContract->id)->get() ?? [];
     }
 }

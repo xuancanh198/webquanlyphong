@@ -34,9 +34,4 @@ class BillController extends Controller
         $result = $this->service->deleteAction($id);
         return $this->returnResponseMessgae($result ? "success" : "fail",'deleteAction');
     }
-    public function getServiceRoomContract($roomId)
-    {
-        $result = $this->service->getDataInRoomContract($roomId, ServiceContractModel::class,'service');
-        return $this->returnResponseData('success', $result);
-    }
 }

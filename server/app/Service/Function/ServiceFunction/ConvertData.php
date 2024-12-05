@@ -18,6 +18,19 @@ class ConvertData
           return false;
         }
     }
+    function convertArrayToKeyValue(array $arr)
+    {
+        $result = array_fill_keys($arr, false);
+
+        foreach ($arr as $item) {
+            if (in_array($item, $arr)) {
+                $result[$item] = true;
+            }
+        }
+
+        return json_encode($result);
+    }
+
     public function convertToBool(string $excel)
     {
         try {

@@ -30,20 +30,23 @@ class Bill
     }
     public function updateBillService($services, $billId)
     {
+       
         $existingNotServicesId = BilDetailModel::where('bill_id', $billId)->whereNotIn('id', $this->getIdInArray($services))->pluck('id')
             ->toArray();
-        $this->deleteContractServiceAll($existingNotServicesId);
+        $this->deleteBillServiceAll($existingNotServicesId);
         try {
             foreach ($services as $key => $service) {
                 if (!isset($service['id'])) {
                     BilDetailModel::create([
                         'bill_id' => $billId,
-                        'serviceId' => $service['serviceId']
+                       'seviceId' => $service['serviceId'],
+                        'quantity' => $service['quantity'],
                     ]);
                 } else {
                     BilDetailModel::where('id', $service['id'])->update([
                         'bill_id' => $billId,
-                        'serviceId' => $service['serviceId']
+                        'seviceId' => $service['serviceId'],
+                        'quantity' => $service['quantity'],
                     ]);
                 }
             }
@@ -52,7 +55,7 @@ class Bill
             return false;
         }
     }
-    public function deleteContractServiceAll($billId)
+    public function deleteBillServiceAll($billId)
     {
         try {
             BilDetailModel::where('bill_id', $billId)->delete();

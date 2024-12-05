@@ -139,6 +139,10 @@ export const setAcctionAll = (items) => ({
     type: 'SETACCTIONALL',
     payload: items,
 });
+export const setPermisstionDetailAll = (items) => ({
+    type: 'SETPERMISSTIONDETAILALL',
+    payload: items,
+});
 export const setPrevQuery= (items) => ({
     type: 'SETVALEPREQUERY',
     payload: items,

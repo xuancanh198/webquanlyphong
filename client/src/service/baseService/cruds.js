@@ -10,7 +10,8 @@ import {
    setListFurnitureRoom,
    setListServiceRoom,
    setAcctionAll,
-   setPermisstionAll
+   setPermisstionAll,
+  setPermisstionDetailAll
 } from "../../redux/accction/listTable";
 import { setLoading} from "../../redux/accction/reducers";
 import APILink from "../API";
@@ -775,12 +776,16 @@ export const getListPermisstion = (titel = null, page = 1, limit = 10, search = 
     dispatch(getListFunService(objectGet))
   };
 };
-export const getAllPermisstion= (exportExcel = false) => {
-  const objectGet ={
+export const getAllPermisstion = (exportExcel = false, isSelectAll = false, page = 1, limit = 10, search = null) => {
+  const objectGet = {
     getList: setPermisstionAll,
-    exportExcel:exportExcel,
-    routerLink : 'permission/permission'
-  } 
+    exportExcel: exportExcel,
+    routerLink: 'permission/permission',
+    isSelect: isSelectAll,
+    page: exportExcel === true ? page : null,
+    limit: exportExcel === true ? limit : null,
+    search: (search !== null && search.trim().length > 0) ? search : null
+  }
   return (dispatch) => {
     dispatch(getAllData(objectGet))
   };
@@ -834,13 +839,17 @@ export const getListPermisstionDetail = (titel = null, page = 1, limit = 10, sea
     dispatch(getListFunService(objectGet))
   };
 };
-export const getAllPermisstionDetail = (exportExcel = false) => {
-  const objectGet ={
-    getList: setFurnitureAll,
-    exportExcel:exportExcel,
-    routerLink : 'permission/permissionDetail',
 
-  } 
+export const getAllPermisstionDetail = (exportExcel = false, isSelectAll = false, page = 1, limit = 10, search = null) => {
+  const objectGet = {
+    getList: setPermisstionDetailAll,
+    exportExcel: exportExcel,
+    routerLink: 'permission/permissionDetail',
+    isSelect: isSelectAll,
+    page: exportExcel === true ? page : null,
+    limit: exportExcel === true ? limit : null,
+    search: (search !== null && search.trim().length > 0) ? search : null
+  }
   return (dispatch) => {
     dispatch(getAllData(objectGet))
   };
@@ -893,13 +902,16 @@ export const getListAcction= (titel = null, page = 1, limit = 10, search = null,
     dispatch(getListFunService(objectGet))
   };
 };
-export const getAllAcction= (exportExcel = false) => {
-  const objectGet ={
+export const getAllAcction = (exportExcel = false, isSelectAll = false, page = 1, limit = 10, search = null) => {
+  const objectGet = {
     getList: setAcctionAll,
-    exportExcel:exportExcel,
-    routerLink : 'permission/action',
-
-  } 
+    exportExcel: exportExcel,
+    routerLink: 'permission/action',
+    isSelect: isSelectAll,
+    page: exportExcel === true ? page : null,
+    limit: exportExcel === true ? limit : null,
+    search: (search !== null && search.trim().length > 0) ? search : null
+  }
   return (dispatch) => {
     dispatch(getAllData(objectGet))
   };

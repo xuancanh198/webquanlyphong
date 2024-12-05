@@ -26,7 +26,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ImageUploading from 'react-images-uploading';
 import { cilUser, cilX, cilNotes } from '@coreui/icons';
 import { setFilter, setModalUpdate } from "../../../../redux/accction/listTable";
-import {updateBill, deleteContract, downloadFileContract, getListBill } from "../../../../service/baseService/cruds";
+import {updateBill, deleteBill, downloadFileContract, getListBill } from "../../../../service/baseService/cruds";
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -39,7 +39,6 @@ function List({ data }) {
   const dispatch = useDispatch();
   const show = useSelector((state) => state.listTable.modalUpdate);
   const [dataDeatil, setDataDeatil] = useState(null);
-  const [statusToggle, setStatusToggle] = useState(false);
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [quantityService, setQuantityService] = useState([]);
@@ -54,10 +53,6 @@ function List({ data }) {
     roomId: "",
     userId: "",
     note: note,
-    image: null,
-    customers: [],
-    service: [],
-    furniture: []
   });
 
   let filters = useSelector((state) => state.listTable.filters);
@@ -69,7 +64,6 @@ function List({ data }) {
   useEffect(() => {
     formik.setFieldValue('endTime', convertDateTimeFull(endTime));
   }, [endTime])
-
   const formik = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
@@ -89,15 +83,26 @@ function List({ data }) {
     }
   }
   useEffect(() => {
+    if (quantityService) {
+      formik.setFieldValue('totalMoney', quantityService.reduce((total, item) => {
+        return total + (item.quantity * item.price);
+      }, 0));
+      formik.setFieldValue('servicesBill', quantityService);
+    }
+  }, [quantityService])
+  useEffect(() => {
     if (dataDeatil && dataDeatil !== null) {
       setInitialValues({
         totalMoney: dataDeatil.totalMoney,
-        status: dataDeatil.status,
-        code: dataDeatil.code,
-        startTime: dataDeatil.startTime,
-        endTime: dataDeatil.endTime,
+        startTime: convertDateTimeFull(dataDeatil.startTime),
+        endTime: convertDateTimeFull(dataDeatil.endTime),
         note: dataDeatil.deposit || null,
         image: dataDeatil.img,
+        servicesBill: dataDeatil.detail?.map(serviceItem => ({
+          serviceId: serviceItem?.service?.id,
+          id: serviceItem?.id,
+          quantity: serviceItem?.quantity
+        }))
       });
       setId(dataDeatil.id);
       setStartTime(new Date(dataDeatil.started_at));
@@ -113,6 +118,7 @@ function List({ data }) {
     }
 
   }, [dataDeatil]);
+  
   const handleShow = (item) => {
     dispatch(setModalUpdate(true));
     setDataDeatil(item);
@@ -128,14 +134,14 @@ function List({ data }) {
     return serviceItem ? serviceItem.quantity : 1;
 
   }
-  const deleteContractId = (id) => {
+  const deleteBillId = (id) => {
     confirmAlert({
-      title: t('action.authentication.delete', { attribute: t('page.contract') }),
-      message: t('action.message.delete', { attribute: t('page.contract') }),
+      title: t('action.authentication.delete', { attribute: t('page.bill') }),
+      message: t('action.message.delete', { attribute: t('page.bill') }),
       buttons: [
         {
           label: 'Xóa',
-          onClick: () => dispatch(deleteContract(id))
+          onClick: () => dispatch(deleteBill(id))
         },
         {
           label: 'Hủy',
@@ -166,6 +172,30 @@ function List({ data }) {
     }
     dispatch(setFilter(btoa(JSON.stringify(filters))));
   }
+  console.log(quantityService)
+  const addQuantityService = (value, item) => {
+    const newObject = {
+      serviceId: item?.service?.id,
+      quantity: Number(value),
+      price: item?.service?.price,
+    };
+
+    setQuantityService((prevServicesBill) => {
+      const updatedPrevServices = prevServicesBill || [];
+      const exists = updatedPrevServices.some(
+        (service) => Number(service.serviceId) === Number(newObject.serviceId)
+      );
+
+      if (exists) {
+        return updatedPrevServices.map((service) =>
+          Number(service.serviceId) === Number(newObject.serviceId)
+            ? { ...service, quantity: Number(value) }
+            : service
+        );
+      }
+      return [...updatedPrevServices, newObject];
+    });
+  };
   return (
     <div className='p-3'>
       <CTable>
@@ -222,7 +252,7 @@ function List({ data }) {
                 <label> {t('actionView.update')}</label>
               </div>
               <div className='d-flex'>
-                <div className='flex_center icon-delete' onClick={() => deleteContractId(dataDeatil.id)}>
+                <div className='flex_center icon-delete' onClick={() => deleteBillId(dataDeatil.id)}>
                   <i class="fa-solid fa-trash"></i>
                 </div>
                 <div className='flex_center icon-delete ms-3' onClick={() => dispatch(downloadFileContract(dataDeatil.id))}>
@@ -241,33 +271,14 @@ function List({ data }) {
                                 </div>
                     </Form.Group>
                     <Form.Group as={Col} xl="9" lg="6" md="6" sm="12" className='mb-3 mt-3 row'>
-                      <Form.Group as={Col} xl= {checked === false  ?"4" : "12" } lg={checked === false  ?"4" : "12" } md="12" sm="12" className='mb-3 mt-3 '>
-                        {checked === false ?
+                    
+                        {checked === false &&
                           (
-                            <p> <span className='lable-form'>{t('lableView.bill.code')}</span>  : {dataDeatil.code !== null ? dataDeatil.code : t('noData')} </p>
-                          ) : (
-                            <>
-                              <div className=' css-animation'>
-                                <div className='font-icon flex_center'>
-                                  <CIcon className='' icon={cilUser} size="l" />
-                                </div>
-                                <Form.Control
-                                  type="text"
-                                  name="code"
-                                  value={formik.values.code}
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur}
-                                  isInvalid={formik.touched.code && formik.errors.code}
-                                  required
-                                />
-                                <Form.Label> {t('lableView.contract.code')}</Form.Label>
-                                <Form.Control.Feedback type="invalid">
-                                  {formik.errors.code}
-                                </Form.Control.Feedback>
-                              </div>
-                            </>
-                          )}
-                      </Form.Group>
+                             <Form.Group as={Col} xl="4" lg="4" md="12" sm="12" className='mb-3 mt-3 '>
+                                   <p> <span className='lable-form'>{t('lableView.bill.code')}</span>  : {dataDeatil.code !== null ? dataDeatil.code : t('noData')} </p>
+                               </Form.Group>
+                          ) } 
+                     
                       <Form.Group as={Col} xl= {checked === false  ?"4" : "6" } lg={checked === false  ?"4" : "6" } md="12" sm="12" className='mb-3 mt-3'>
                         {checked === false ?
                           (
@@ -366,9 +377,7 @@ function List({ data }) {
                       <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-2 mt-2'>
                         <Form.Label className='font-weight'> {t('lableView.contract.serivce')} : </Form.Label>
                         {checked === false ?
-
                           (
-
                             <div className=' row mt-4'>
                               {dataDeatil?.detail?.length > 0 && dataDeatil?.detail?.map((item, index) => {
                                 return (
@@ -406,7 +415,7 @@ function List({ data }) {
                                         <td className='py-2'>
                                             <input
                                                 type="number"
-                                                //  onChange={(e) => addQuantityService(e.target.value, item)}
+                                                onChange={(e) => addQuantityService(e.target.value, item)}
                                                 className="px-2 py-1 text-input-quantity flex-grow-1"
                                                 style={{ minWidth: "80px" }}
                                                 value={getValueService(item?.id)}

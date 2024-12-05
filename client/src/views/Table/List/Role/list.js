@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Switch from 'react-switch';
 import {
   CTable,
@@ -9,7 +9,7 @@ import {
   CTableRow,
 } from '@coreui/react';
 import { convertDateTime } from '../../../../service/FunService/funweb';
-import { updateRole, deleteRole } from '../../../../service/baseService/cruds';
+import { updateRole, deleteRole, getAllPermisstion, getAllAcction, getAllPermisstionDetail } from '../../../../service/baseService/cruds';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import CIcon from '@coreui/icons-react';
@@ -25,13 +25,17 @@ import { confirmAlert } from 'react-confirm-alert';
 import { setModalUpdate } from "../../../../redux/accction/listTable";
 import { useTranslation } from 'react-i18next';
 import { chaneFtiler } from "../../../../service/baseService/funService";
-
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 function List({ data }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [dataDeatil, setDataDeatil] = useState(null);
   let filters = useSelector((state) => state.listTable.filters);
   const show = useSelector((state) => state.listTable.modalUpdate);
+  const listAcctionAll = useSelector((state) => state.listTable.listAcctionAll);
+  const listPermisstionDetailAll = useSelector((state) => state.listTable.listPermisstionDetailAll);
+  const listPermisstionAll = useSelector((state) => state.listTable.listPermisstionAll);
   const [validated, setValidated] = useState(false);
   const [checked, setChecked] = useState(false);
   const [id, setId] = useState(0);
@@ -42,7 +46,6 @@ function List({ data }) {
       formik.setValues({ name: "" });
     }
   }
-
   const handleShow = (item) => {
     dispatch(setModalUpdate(true));
     if (show === false) {
@@ -85,6 +88,11 @@ function List({ data }) {
       ]
     });
   };
+  useEffect(()=>{
+    dispatch(getAllPermisstion(true, true));
+    dispatch(getAllAcction(true, true));
+    dispatch(getAllPermisstionDetail(true, true));
+  },[])
   return (
     <div className='p-3'>
       <CTable>
@@ -207,11 +215,11 @@ function List({ data }) {
                 <Form.Group as={Col} md="12">
                   {checked === false ?
                     <>
-                      <p><Form.Label>  {t('table.colum.role.created_at')}</Form.Label> : {dataDeatil && dataDeatil.name !== "" ? dataDeatil.name : "Không có dữ liệu"}</p>
+                      <p><Form.Label>  {t('table.colum.role.name')}</Form.Label> : {dataDeatil && dataDeatil.name !== "" ? dataDeatil.name : "Không có dữ liệu"}</p>
                     </>
                     :
                     <>
-                      <Form.Label>  {t('table.colum.role.created_at')}</Form.Label>
+                      <Form.Label>  {t('table.colum.role.name')}</Form.Label>
                       <Form.Control
                         required
                         type="text"

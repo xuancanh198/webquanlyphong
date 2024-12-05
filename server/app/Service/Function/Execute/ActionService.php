@@ -12,6 +12,7 @@ class ActionService extends BaseService
     protected $model;
     protected $request;
     protected $columSearch = ['name', 'code'];
+    protected $columSelect = ['id', 'name', 'code'];
     public function __construct(ActionModel $model, ActionRequest $request)
     {
         $this->model = $model;
@@ -26,8 +27,9 @@ class ActionService extends BaseService
         $typeTime = $this->request->typeTime ?? null;
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
+        $isSelect = $this->request->isSelect ?? false;
         $filtersBase64 = $this->request->filtersBase64 ?? null;
-        $result = $this->getListBaseFun($this->model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64);
+        $result = $this->getListBaseFun($this->model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64, $isSelect, $this->columSelect);
         return $result;
     }
     public function createAction()

@@ -5,6 +5,7 @@ namespace App\Service\Function\Execute;
 use App\Models\Staff\RoleModel;
 use App\Http\Requests\RoleRequest;
 use App\Service\Function\Base\BaseService;
+use App\Service\Function\ServiceFunction\ConvertData;
 use Carbon\Carbon;
 
 class RoleService extends BaseService
@@ -28,12 +29,17 @@ class RoleService extends BaseService
         $end = $this->request->end ?? null;
         $filtersBase64 = $this->request->filtersBase64 ?? null;
         $result = $this->getListBaseFun($this->model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64);
+        $result->each(function ($role) {
+            $permissions = $role->permissions();
+            $role->permission_detail = $permissions;
+        });
         return $result;
     }
     public function createAction()
     {
         $this->model->name =  $this->request->name;
-        $this->model->created_at = Carbon::now();
+         $this->model->role_detail =  app(ConvertData::class)->convertArrayToKeyValue($this->request->arrPemisstionDetail);
+         $this->model->created_at = Carbon::now();
         return $this->model->save();
     }
     public function updateAction($id)
