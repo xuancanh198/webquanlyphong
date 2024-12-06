@@ -16,6 +16,7 @@ class RoleRequest extends BaseRequest
         if ($this->isMethod('post') || $this->isMethod('put')) {
             $rule = [
                 'name' => 'required|string|min:4|max:255',
+                'arrPemisstionDetail' => 'required|array|min:1',
             ];
             if($this->isMethod('post')){
                 $rule['name'] .= '|unique:tbl_role,name,';
@@ -42,7 +43,8 @@ class RoleRequest extends BaseRequest
     {
         $attributes = $this->attributesBase();
        return (array_merge($attributes, [
-            'name' => trans('message.nameRole'), 
+            'name' => trans('message.nameRole'),
+            'arrPemisstionDetail' => trans('message.userPermisstion'), 
             'id' => trans('message.idRole'), 
         ]));
     }

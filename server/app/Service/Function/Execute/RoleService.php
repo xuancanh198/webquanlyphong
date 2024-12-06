@@ -46,6 +46,7 @@ class RoleService extends BaseService
     {
         $data = $this->model->find($id);
         $data->name = $this->request->name;
+        $data->role_detail =  app(ConvertData::class)->convertArrayToKeyValue($this->request->arrPemisstionDetail);
         $data->updated_at = Carbon::now();
         return $data->save();
     }

@@ -60,7 +60,12 @@ body {
     min-height: calc(4rem + 1px); // stylelint-disable-line function-disallowed-list
   }
 }
-
+.color-violet{
+  color: var(--dark-primary-color)
+}
+.color-dark-accent{
+  color: var(--dark-accent-color)
+}
 .sidebar-toggler {
   @include ltr-rtl("margin-left", auto);
 }

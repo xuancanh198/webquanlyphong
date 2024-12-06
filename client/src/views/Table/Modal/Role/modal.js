@@ -60,6 +60,21 @@ function Example({ title }) {
             }
         })
     }
+    const returnResultCount = (code) => {
+        const arrPermisstionCount = arrPemisstionDetail?.filter((item) =>
+            item.includes(code)
+        ).length;
+        const listPermisstionCount = listPermisstionDetailAll?.filter((item) =>
+            item.code.includes(code)
+        ).length;
+        if (arrPermisstionCount === listPermisstionCount) {
+            return "full"
+        }
+        else if ((arrPermisstionCount > 0) && (arrPermisstionCount < listPermisstionCount)) {
+            return "insufficient"
+        }
+        return false;
+    };
     return (
         <>
             <div className='modal-button flex_center' onClick={handleShow}>
@@ -93,14 +108,18 @@ function Example({ title }) {
                                 defaultActiveKey="permisstion"
                                 id="uncontrolled-tab-example"
                                 className="mb-3"
-                            >
-                                <Tab eventKey="permisstion" title={t('page.permisstion')}>
+                            >  <Tab eventKey="permisstion" title={t('page.permisstion')}>
                                     <div>
-                                        {listPermisstionAll?.map((item, index)=>{
-                                            return(
+                                        {listPermisstionAll?.map((item, index) => {
+                                            return (
                                                 <div className='d-flex' key={index}>
-                                                    <input type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code}/>
-                                                    <label className='ms-2'>
+                                                    <input
+                                                        checked={
+                                                            returnResultCount(item?.code) === false
+                                                                ? false : true
+                                                        }
+                                                        type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
+                                                    <label className={`ms-2 ${returnResultCount(item?.code) !== false && (returnResultCount(item?.code) === "full" ? "color-violet" : "color-dark-accent")}`}>
                                                         {item?.name}
                                                     </label>
                                                 </div>
@@ -113,8 +132,13 @@ function Example({ title }) {
                                         {listAcctionAll?.map((item, index) => {
                                             return (
                                                 <div className='d-flex' key={index}>
-                                                    <input type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
-                                                    <label className='ms-2'>
+                                                    <input
+                                                        checked={
+                                                            returnResultCount(item?.code) === false
+                                                                ? false : true
+                                                        }
+                                                        type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
+                                                    <label className={`ms-2 ${returnResultCount(item?.code) !== false && (returnResultCount(item?.code) === "full" ? "color-violet" : "color-dark-accent")}`}>
                                                         {item?.name}
                                                     </label>
                                                 </div>

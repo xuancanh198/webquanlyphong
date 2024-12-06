@@ -121,6 +121,7 @@ return [
     'noteBill' => 'Ghi chú hóa đơn',
     'urlPermisstionDetail' => 'Đường dẫn của quyền chi tiết',
     'idPermisstionDetail' => 'Mã quyền chi tiết',
+    'userPermisstion' => 'Quyền của người dùng',
     'createAction' => 'Thêm mới',
     'updateAction' => 'Cập nhật',
     'deleteAction' => 'Xóa',

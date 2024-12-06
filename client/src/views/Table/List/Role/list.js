@@ -33,6 +33,7 @@ function List({ data }) {
   const [dataDeatil, setDataDeatil] = useState(null);
   let filters = useSelector((state) => state.listTable.filters);
   const show = useSelector((state) => state.listTable.modalUpdate);
+  const [arrPemisstionDetail, setArrPemisstionDetail] = useState([])
   const listAcctionAll = useSelector((state) => state.listTable.listAcctionAll);
   const listPermisstionDetailAll = useSelector((state) => state.listTable.listPermisstionDetailAll);
   const listPermisstionAll = useSelector((state) => state.listTable.listPermisstionAll);
@@ -44,6 +45,7 @@ function List({ data }) {
     if (show === true) {
       setDataDeatil("");
       formik.setValues({ name: "" });
+      setArrPemisstionDetail([])
     }
   }
   const handleShow = (item) => {
@@ -52,6 +54,8 @@ function List({ data }) {
       setDataDeatil(item);
       setId(item.id);
       formik.setValues({ name: item.name });
+      const codes = item.permission_detail?.map((detail) => detail.code) || [];
+      setArrPemisstionDetail(codes);
     }
   };
   const handleChange = (checked) => {
@@ -69,9 +73,30 @@ function List({ data }) {
         .required(t('validation.attribute.required', { attribute: t('attribute.roleName') }))
     }),
     onSubmit: (values, { resetForm }) => {
-      dispatch(updateRole(values, id,resetForm));
+      dispatch(updateRole(values, id, resetForm));
     }
   });
+
+  useEffect(() => {
+    formik.setFieldValue('arrPemisstionDetail', arrPemisstionDetail);
+  }, [arrPemisstionDetail]);
+  const changePermisstionDetail = (isCheck, value) => {
+    const result = listPermisstionDetailAll.filter((item) =>
+      item.code.includes(value)
+    );
+    setArrPemisstionDetail((prev) => {
+      if (isCheck) {
+        const newItems = result.filter((item) => !prev.includes(item.code));
+        return [...prev, ...newItems.map((item) => item.code)];
+      } else {
+        return prev.filter((item) => !result.map((r) => r.code).includes(item));
+      }
+    })
+  }
+  const isValueInArray = (value) => {
+    return arrPemisstionDetail.includes(value);
+  };
+
   const deleteRoleId = (id) => {
     confirmAlert({
       title: t('action.authentication.delete', { attribute: t('attribute.role') }),
@@ -88,11 +113,26 @@ function List({ data }) {
       ]
     });
   };
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getAllPermisstion(true, true));
     dispatch(getAllAcction(true, true));
     dispatch(getAllPermisstionDetail(true, true));
-  },[])
+  }, [])
+  const returnResultCount = (code) => {
+    const arrPermisstionCount = arrPemisstionDetail.filter((item) =>
+      item.includes(code)
+    ).length;
+    const listPermisstionCount = listPermisstionDetailAll.filter((item) =>
+      item.code.includes(code)
+    ).length;
+    if (arrPermisstionCount === listPermisstionCount) {
+      return "full"
+    }
+    else if ((arrPermisstionCount > 0) &&(arrPermisstionCount < listPermisstionCount)){
+      return "insufficient"
+    }
+    return false;
+  };
   return (
     <div className='p-3'>
       <CTable>
@@ -185,7 +225,7 @@ function List({ data }) {
               <CTableDataCell>{item.updated_at ? convertDateTime(item.updated_at) : ''}</CTableDataCell>
               <CTableDataCell>
                 <Button variant='primary' onClick={() => handleShow(item)}>
-                {t('table.colum.viewDetail')}
+                  {t('table.colum.viewDetail')}
                 </Button>
               </CTableDataCell>
             </CTableRow>
@@ -215,7 +255,7 @@ function List({ data }) {
                 <Form.Group as={Col} md="12">
                   {checked === false ?
                     <>
-                      <p><Form.Label>  {t('table.colum.role.name')}</Form.Label> : {dataDeatil && dataDeatil.name !== "" ? dataDeatil.name : "Không có dữ liệu"}</p>
+                      <p><Form.Label className='font-weight'>  {t('table.colum.role.name')}</Form.Label> : {dataDeatil && dataDeatil.name !== "" ? dataDeatil.name : "Không có dữ liệu"}</p>
                     </>
                     :
                     <>
@@ -236,9 +276,96 @@ function List({ data }) {
                     {formik.errors.name}
                   </Form.Control.Feedback>
                 </Form.Group>
+                <Form.Group as={Col} md="12 mt-4">
+                  {checked === false ?
+                    <div>
+                      <Form.Label className='font-weight'>  {t('page.permisstionDetail')} :</Form.Label>
+                      <div>
+                        {dataDeatil?.permission_detail?.map((item, index) => {
+                          return (
+                            <div className='my-3' key={index}>
+                              <p>
+                                {item?.name}
+                              </p>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                    :
+                    <>
+                      <>
+                        <Tabs
+                          defaultActiveKey="permisstion"
+                          id="uncontrolled-tab-example"
+                          className="mb-3"
+                        >
+                          <Tab eventKey="permisstion" title={t('page.permisstion')}>
+                            <div>
+                              {listPermisstionAll?.map((item, index) => {
+                                return (
+                                  <div className='d-flex' key={index}>
+                                    <input 
+                                      checked={
+                                        returnResultCount(item?.code) === false
+                                          ? false : true
+                                      }
+                                    type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
+                                    <label className={`ms-2 ${returnResultCount(item?.code) !== false && (returnResultCount(item?.code) === "full" ? "color-violet" : "color-dark-accent")}`}>
+                                      {item?.name}
+                                    </label>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          </Tab>
+                          <Tab eventKey="acction" title={t('page.acction')}>
+                            <div>
+                              {listAcctionAll?.map((item, index) => {
+                                return (
+                                  <div className='d-flex' key={index}>
+                                    <input
+                                      checked={
+                                        returnResultCount(item?.code) === false
+                                          ? false : true
+                                      }
+                                      type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
+                                    <label className={`ms-2 ${returnResultCount(item?.code) !== false && (returnResultCount(item?.code) === "full" ? "color-violet" : "color-dark-accent" )}`}>
+                                      {item?.name}
+                                    </label>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          </Tab>
+                          <Tab eventKey="permisstionDetail" title={t('page.permisstionDetail')}>
+                            <div>
+                              {listPermisstionDetailAll?.map((item, index) => {
+                                return (
+                                  <div className='d-flex' key={index}>
+                                    <input type='checkbox'
+                                      checked={isValueInArray(item?.code)}
+                                      onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
+                                    <label className='ms-2'>
+                                      {item?.name}
+                                    </label>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          </Tab>
+                        </Tabs>
+                      </>
+                    </>
+                  }
+                  <Form.Control.Feedback type="invalid">
+                    {formik.errors.name}
+                  </Form.Control.Feedback>
+                </Form.Group>
                 <Form.Group as={Col} className='mt-3' md="12" >
                   <p><Form.Label>{t('table.colum.role.created_at')} :</Form.Label> {dataDeatil && dataDeatil.created_at !== null ? convertDateTime(dataDeatil.created_at) : "Không có dữ liệu"}</p>
                 </Form.Group>
+
                 <Form.Group as={Col} className='mt-3' md="12">
                   <p><Form.Label>{t('table.colum.role.updated_at')} :</Form.Label> {dataDeatil && dataDeatil.updated_at !== null ? convertDateTime(dataDeatil.updated_at) : "Không có dữ liệu"}</p>
                 </Form.Group>
