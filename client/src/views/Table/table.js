@@ -77,6 +77,7 @@ const Tables = () => {
   const page = useSelector((state) => state.listTable.page);
   const limit = useSelector((state) => state.listTable.limit);
   const total = useSelector((state) => state.listTable.total);
+  const [arrayTimeFilter, setArrayTimeFilter] = useState([])
   const roleParam = searchParams.get('query');
   const filterStartTime = useSelector((state) => state.listTable.filterStartTime);
   const filterEndTime = useSelector((state) => state.listTable.filterEndTime);
@@ -87,6 +88,8 @@ const Tables = () => {
   const exportExcel = useSelector((state) => state.listTable.exportExcel);
   const filtersbase64 = useSelector((state) => state.listTable.filters);
   const prevQuery = useSelector((state) => state.listTable.prevQuery);
+  const [toggleSearch, setToggleSearch] = useState(false);
+  const [toggleFilterTime, setToggleFilterTime] = useState(false);
   const [filter, setFilterTime] = useState(null);
   let searchOb = {
     value: searchValue,
@@ -109,66 +112,160 @@ const Tables = () => {
       dispatch(setFilterStatus(true));
     }
   }, [roleParam, page, limit, filterStatus, filterEndTime, filterStartTime, filter, searchValue, exportExcel, filtersbase64])
+  const created_at_time = {
+    type_time: "created_at",
+    text: t('timeType.created_at')
+  }
+  const updated_at_time = {
+    type_time: "updated_at",
+    text: t('timeType.updated_at')
+  }
+  const start_at_time = {
+    type_time: "start_at",
+    text: t('timeType.start_at')
+  }
+  const end_at_time = {
+    type_time: "end_at",
+    text: t('timeType.end_at')
+  }
+  const start_at_timeContract = {
+    type_time: "startTime",
+    text: t('timeType.start_at')
+  }
+  const end_at_timeContract = {
+    type_time: "endTime",
+    text: t('timeType.end_at')
+  }
+  const pay_at_time = {
+    type_time: "pay_at",
+    text: t('timeType.pay_at')
+  }
+  const ban_at_time = {
+    type_time: "ban_at",
+    text: t('timeType.ban_at')
+  }
+  const ban_expiration_at_time = {
+    type_time: "ban_expiration_at",
+    text: t('timeType.ban_expiration_at')
+  }
+  const verify_email_at_time = {
+    type_time: "verify_email_at",
+    text: t('timeType.verify_email_at')
+  }
+
+  const dateOfBirth_time = {
+    type_time: "dateOfBirth",
+    text: t('timeType.dateOfBirth')
+  }
+  const dateIssuanceCard_time = {
+    type_time: "dateIssuanceCard",
+    text: t('timeType.dateIssuanceCard')
+  }
   const getQueryUrl = () => {
     if (roleParam) {
       switch (roleParam) {
         case 'role':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
           SetTitel(t('page.role'));
           dispatch(getListRole(t('page.role'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'staff':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time, ban_at_time, ban_expiration_at_time, verify_email_at_time
+          ])
           SetTitel(t('page.staff'));
           dispatch(getListStaff(t('page.staff'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'typeRoom':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
           SetTitel(t('page.typeRoom'));
           dispatch(getListTypeRoom(t('page.typeRoom'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'floor':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
           SetTitel(t('page.floor'));
           dispatch(getListFloor(t('page.floor'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'building':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
           SetTitel(t('page.building'));
           dispatch(getListBuilding(t('page.building'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'service':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
           SetTitel(t('page.service'));
           dispatch(getListService(t('page.service'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'furniture':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
           SetTitel(t('page.furniture'));
           dispatch(getListFurniture(t('page.furniture'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'room':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
           SetTitel(t('page.room'));
           dispatch(getListRoom(t('page.room'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'user':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time, dateOfBirth_time, dateIssuanceCard_time
+          ])
           SetTitel(t('page.user'));
           dispatch(getListUser(t('page.user'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'contract':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time, start_at_timeContract, end_at_timeContract
+          ])
           SetTitel(t('page.contract'));
           dispatch(getListContract(t('page.contract'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'bill':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time, start_at_time, end_at_time, pay_at_time
+          ])
           SetTitel(t('page.bill'));
           dispatch(getListBill(t('page.bill'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'permisstion':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
           SetTitel(t('page.permisstion'));
           dispatch(getListPermisstion(t('page.permisstion'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'acction':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
           SetTitel(t('page.acction'));
           dispatch(getListAcction(t('page.acction'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'permisstionDetail':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
           SetTitel(t('page.permisstionDetail'));
           dispatch(getListPermisstionDetail(t('page.permisstionDetail'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
         case 'setting':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
           SetTitel(t('page.setting'));
           dispatch(getListSetting(t('page.setting'), page, limit, searchOb, filter, exportExcel, filtersbase64));
           break;
@@ -221,12 +318,13 @@ const Tables = () => {
       dispatch(setFilterStatus(true));
     }
   }
+
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4 row">
           <CCardHeader>
-            <small>Danh sách</small>  <strong>{titel}</strong>
+            <small>{t('messageView.manage')}</small>  <strong>{titel}</strong>
           </CCardHeader>
           <div className='row'>
             <div className='p-3 col-xl-6 col-lg-6 col-md-12 col-sm-12 flex_start'>
@@ -268,10 +366,10 @@ const Tables = () => {
                 }
               })()}
 
-              <div className='modal-button flex_center' >
+              <div className='modal-button flex_center' onClick={() => setToggleSearch(!toggleSearch)}>
                 <i class="fa-solid fa-magnifying-glass"></i>
               </div>
-              <div className='modal-button flex_center' >
+              <div className='modal-button flex_center' onClick={() => setToggleFilterTime(!toggleFilterTime)}>
                 <i class="fa-solid fa-filter"></i>
               </div>
               <div className='modal-button flex_center' onClick={returnData}>
@@ -290,37 +388,59 @@ const Tables = () => {
                 <option value="100">100</option>
               </CFormSelect>
             </div>
+           
           </div>
 
+         
+            <div className='row'>
+              {
+                toggleSearch === true
+                &&
+                (
+                  <div className='col-xl-12 col-lg-12 col-md-12 col-sm-12 p-2'>
+                    <CInputGroup className="mb-3">
+                      <CInputGroupText id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></CInputGroupText>
+                      <CFormInput
+                        placeholder={t('messageView.search')}
+                        onChange={handleInputChange}
+                      />
+                    </CInputGroup>
+                  </div>
+              )
+              }
+            {toggleFilterTime
+              &&
+              (
+              <div className='col-12 row'>
+                <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12 p-2'>
+                  <label className='mb-2'> {t('messageView.selectTypeFilter')} : </label>
+                  <CFormSelect
+                    aria-label="Default select example"
+                    onChange={(e) => typeFilterFun(e)}
+                    className="onChange-time-filter"
+                  >
+                    {arrayTimeFilter?.map((item, index) => (
+                      <option key={index} value={item?.type_time}>
+                        {item?.text}
+                      </option>
+                    ))}
+                  </CFormSelect>
 
-          <div className='row'>
-            <div className='col-xl-6 col-lg-6 col-md-6 col-sm-12 p-2'>
-              <CInputGroup className="mb-3">
-                <CInputGroupText id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></CInputGroupText>
-                <CFormInput
-                  placeholder={t('messageView.search')}
-                  onChange={handleInputChange}
-                />
-              </CInputGroup>
+                </div>
+                <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12 p-2'>
+                  <label className='mb-2'> {t('messageView.startTimeFilter')} : </label>
+                  <DatePicker selected={filterStartTime} onChange={(date) => endFilterFun(date)} />
+                </div>
+                <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12 p-2'>
+                  <label className='mb-2'> {t('messageView.endTimeFilter')} : </label>
+                  <DatePicker selected={filterEndTime} onChange={(date) => startFilterFun(date)} />
+                </div>
+              </div>
+              )
+            }
+
             </div>
-            <div className='col-12 row'>
-              <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12 p-2'>
-                <label className='mb-2'> {t('messageView.selectTypeFilter')} : </label>
-                <CFormSelect aria-label="Default select example" onChange={(e) => typeFilterFun(e)} className='onChange-time-filter'>
-                  <option value="created_at"> {t('table.colum.role.created_at')}</option>
-                  <option value="updated_at"> {t('table.colum.role.updated_at')}</option>
-                </CFormSelect>
-              </div>
-              <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12 p-2'>
-                <label className='mb-2'> {t('messageView.startTimeFilter')} : </label>
-                <DatePicker selected={filterStartTime} onChange={(date) => endFilterFun(date)} />
-              </div>
-              <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12 p-2'>
-                <label className='mb-2'> {t('messageView.endTimeFilter')} : </label>
-                <DatePicker selected={filterEndTime} onChange={(date) => startFilterFun(date)} />
-              </div>
-            </div>
-          </div>
+         
           {(() => {
             switch (roleParam) {
               case 'role':

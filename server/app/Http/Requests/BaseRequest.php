@@ -115,7 +115,7 @@ class BaseRequest extends FormRequest
             'search' => 'nullable|string|min:1|max:255',
             'start' => 'nullable',
             'end' => 'nullable',
-            'typeTime' => 'nullable|in:created_at,updated_at',
+            'typeTime' => 'nullable',
             'filtersBase64' => "nullable|string"
         ];
     }

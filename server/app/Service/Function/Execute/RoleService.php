@@ -28,7 +28,8 @@ class RoleService extends BaseService
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
         $filtersBase64 = $this->request->filtersBase64 ?? null;
-        $result = $this->getListBaseFun($this->model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64);
+        $model = $this->model->with(['staffs']);
+        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64);
         $result->each(function ($role) {
             $permissions = $role->permissions();
             $role->permission_detail = $permissions;

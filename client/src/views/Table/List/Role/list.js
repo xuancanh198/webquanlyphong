@@ -276,6 +276,25 @@ function List({ data }) {
                     {formik.errors.name}
                   </Form.Control.Feedback>
                 </Form.Group>
+             
+                {
+                checked === false
+                &&
+                (
+                  <>
+                      <Form.Group as={Col} className='mt-1' md="12" >
+                        <p><Form.Label className='font-weight'>{t('lableView.staff.totalActive') + " / " + t('lableView.staff.total')} :</Form.Label> {dataDeatil?.staffs_active_count + " /" + dataDeatil?.staffs_count}</p>
+                      </Form.Group>
+                      <Form.Group as={Col} className='mt-1' md="12" >
+                        <p><Form.Label className='font-weight'>{t('table.colum.role.created_at')} :</Form.Label> {dataDeatil && dataDeatil.created_at !== null ? convertDateTime(dataDeatil.created_at) : "Không có dữ liệu"}</p>
+                      </Form.Group>
+
+                      <Form.Group as={Col} className='mt-1' md="12">
+                        <p><Form.Label className='font-weight'>{t('table.colum.role.updated_at')} :</Form.Label> {dataDeatil && dataDeatil.updated_at !== null ? convertDateTime(dataDeatil.updated_at) : "Không có dữ liệu"}</p>
+                      </Form.Group>
+                  </>
+                )
+                }
                 <Form.Group as={Col} md="12 mt-4">
                   {checked === false ?
                     <div>
@@ -305,12 +324,12 @@ function List({ data }) {
                               {listPermisstionAll?.map((item, index) => {
                                 return (
                                   <div className='d-flex' key={index}>
-                                    <input 
+                                    <input
                                       checked={
                                         returnResultCount(item?.code) === false
                                           ? false : true
                                       }
-                                    type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
+                                      type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
                                     <label className={`ms-2 ${returnResultCount(item?.code) !== false && (returnResultCount(item?.code) === "full" ? "color-violet" : "color-dark-accent")}`}>
                                       {item?.name}
                                     </label>
@@ -330,7 +349,7 @@ function List({ data }) {
                                           ? false : true
                                       }
                                       type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
-                                    <label className={`ms-2 ${returnResultCount(item?.code) !== false && (returnResultCount(item?.code) === "full" ? "color-violet" : "color-dark-accent" )}`}>
+                                    <label className={`ms-2 ${returnResultCount(item?.code) !== false && (returnResultCount(item?.code) === "full" ? "color-violet" : "color-dark-accent")}`}>
                                       {item?.name}
                                     </label>
                                   </div>
@@ -361,13 +380,6 @@ function List({ data }) {
                   <Form.Control.Feedback type="invalid">
                     {formik.errors.name}
                   </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col} className='mt-3' md="12" >
-                  <p><Form.Label>{t('table.colum.role.created_at')} :</Form.Label> {dataDeatil && dataDeatil.created_at !== null ? convertDateTime(dataDeatil.created_at) : "Không có dữ liệu"}</p>
-                </Form.Group>
-
-                <Form.Group as={Col} className='mt-3' md="12">
-                  <p><Form.Label>{t('table.colum.role.updated_at')} :</Form.Label> {dataDeatil && dataDeatil.updated_at !== null ? convertDateTime(dataDeatil.updated_at) : "Không có dữ liệu"}</p>
                 </Form.Group>
               </Row>
               {checked === false ? null : (

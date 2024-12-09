@@ -9,6 +9,9 @@ import * as XLSX from 'xlsx';
 
 export const getListFunService = (objectGet) => {
   return (dispatch) => {
+    dispatch(setTotal(1))
+    dispatch(getListData([]))
+    dispatch(setLoading(true));
     const searchParam = objectGet.search !== null && objectGet.search.statusToggle === true && objectGet.search.value !== null && typeof objectGet.search.value === 'string' ? `&search=${objectGet.search.value}` : '';
 
     const fitterParam = objectGet.fitler && objectGet.fitler !== null && objectGet.fitler.statusToggle === true ? `&typeTime=${objectGet.fitler.typeTime}&start=${objectGet.fitler.start}&end=${objectGet.fitler.end}` : '';
@@ -47,6 +50,7 @@ export const getListFunService = (objectGet) => {
         console.error(error);
       }) .finally(() => {
         dispatch(setOldUrl());
+        dispatch(setLoading(false));
       });;
   };
 };

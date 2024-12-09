@@ -22,6 +22,7 @@ class StaffResource extends JsonResource
             'email' => $this->email,
             'password_default' => $this->password_default,
             'fullname' => $this->fullname,
+            'permission_detail' => $this->permission_detail,
             'address' => $this->address,
             'note' => $this->note,
             'img' => $this->img,

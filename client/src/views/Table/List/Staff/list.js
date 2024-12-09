@@ -9,7 +9,7 @@ import {
   CTableRow,
 } from '@coreui/react';
 import { stripHtmlTags } from '../../../../service/FunService/funweb';
-import { updateStaff, deleteStaff } from '../../../../service/baseService/cruds';
+import { updateStaff, deleteStaff, getAllPermisstion, getAllAcction, getAllPermisstionDetail } from '../../../../service/baseService/cruds';
 import { getListProvince, getListDistrict, getListward } from '../../../../service/baseService/APIOutsideSystem';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -29,7 +29,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ImageUploading from 'react-images-uploading';
 import { cilUser, cilLockLocked, cilText, cilEnvelopeClosed, cilPhone } from '@coreui/icons';
 import {setFilter, setModalUpdate} from "../../../../redux/accction/listTable";
-
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 function List({ data }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -44,6 +45,10 @@ function List({ data }) {
   const [roleId, setRoleId] = useState(1);
   const [validated, setValidated] = useState(false);
   const [id, setId] = useState(0);
+  const [arrPemisstionDetail, setArrPemisstionDetail] = useState([])
+  const listAcctionAll = useSelector((state) => state.listTable.listAcctionAll);
+  const listPermisstionDetailAll = useSelector((state) => state.listTable.listPermisstionDetailAll);
+  const listPermisstionAll = useSelector((state) => state.listTable.listPermisstionAll);
   const [initialValues, setInitialValues] = useState({
     username: '',
     passwordDefault: '',
@@ -96,6 +101,7 @@ function List({ data }) {
     if (show === true) {
       setDataDeatil("");
       formik.setValues({ name: "" });
+      setArrPemisstionDetail([])
     }
   }
   useEffect(() => {
@@ -112,6 +118,8 @@ function List({ data }) {
         image: dataDeatil.image || null
       });
       setId(dataDeatil.id);
+      const codes = dataDeatil.permission_detail?.map((detail) => detail.code) || [];
+      setArrPemisstionDetail(codes);
     }
   }, [dataDeatil]);
   const handleShow = (item) => {
@@ -127,7 +135,45 @@ function List({ data }) {
   const handleChange = (checked) => {
     setChecked(checked);
   };
-
+  useEffect(() => {
+    formik.setFieldValue('arrPemisstionDetail', arrPemisstionDetail);
+  }, [arrPemisstionDetail]);
+  const changePermisstionDetail = (isCheck, value) => {
+    const result = listPermisstionDetailAll.filter((item) =>
+      item.code.includes(value)
+    );
+    setArrPemisstionDetail((prev) => {
+      if (isCheck) {
+        const newItems = result.filter((item) => !prev.includes(item.code));
+        return [...prev, ...newItems.map((item) => item.code)];
+      } else {
+        return prev.filter((item) => !result.map((r) => r.code).includes(item));
+      }
+    })
+  }
+  const isValueInArray = (value) => {
+    return arrPemisstionDetail.includes(value);
+  };
+  useEffect(() => {
+    dispatch(getAllPermisstion(true, true));
+    dispatch(getAllAcction(true, true));
+    dispatch(getAllPermisstionDetail(true, true));
+  }, [])
+  const returnResultCount = (code) => {
+    const arrPermisstionCount = arrPemisstionDetail.filter((item) =>
+      item.includes(code)
+    ).length;
+    const listPermisstionCount = listPermisstionDetailAll.filter((item) =>
+      item.code.includes(code)
+    ).length;
+    if (arrPermisstionCount === listPermisstionCount) {
+      return "full"
+    }
+    else if ((arrPermisstionCount > 0) && (arrPermisstionCount < listPermisstionCount)) {
+      return "insufficient"
+    }
+    return false;
+  };
   const deleteStaffId = (id) => {
     confirmAlert({
       title: t('action.authentication.delete', { attribute: t('attribute.staff') }),
@@ -569,6 +615,92 @@ function List({ data }) {
                             </Form.Select>
 
                           </Form.Group>
+                        <Form.Group as={Col} md="12 mt-4">
+                          {checked === false ?
+                            <div>
+                              <Form.Label className='font-weight'>  {t('page.permisstionDetail')} :</Form.Label>
+                              <div>
+                                {dataDeatil?.permission_detail?.map((item, index) => {
+                                  return (
+                                    <div className='my-3' key={index}>
+                                      <p>
+                                        {item?.name}
+                                      </p>
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                            </div>
+                            :
+                            <>
+                              <>
+                                <Tabs
+                                  defaultActiveKey="permisstion"
+                                  id="uncontrolled-tab-example"
+                                  className="mb-3"
+                                >
+                                  <Tab eventKey="permisstion" title={t('page.permisstion')}>
+                                    <div>
+                                      {listPermisstionAll?.map((item, index) => {
+                                        return (
+                                          <div className='d-flex' key={index}>
+                                            <input
+                                              checked={
+                                                returnResultCount(item?.code) === false
+                                                  ? false : true
+                                              }
+                                              type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
+                                            <label className={`ms-2 ${returnResultCount(item?.code) !== false && (returnResultCount(item?.code) === "full" ? "color-violet" : "color-dark-accent")}`}>
+                                              {item?.name}
+                                            </label>
+                                          </div>
+                                        )
+                                      })}
+                                    </div>
+                                  </Tab>
+                                  <Tab eventKey="acction" title={t('page.acction')}>
+                                    <div>
+                                      {listAcctionAll?.map((item, index) => {
+                                        return (
+                                          <div className='d-flex' key={index}>
+                                            <input
+                                              checked={
+                                                returnResultCount(item?.code) === false
+                                                  ? false : true
+                                              }
+                                              type='checkbox' onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
+                                            <label className={`ms-2 ${returnResultCount(item?.code) !== false && (returnResultCount(item?.code) === "full" ? "color-violet" : "color-dark-accent")}`}>
+                                              {item?.name}
+                                            </label>
+                                          </div>
+                                        )
+                                      })}
+                                    </div>
+                                  </Tab>
+                                  <Tab eventKey="permisstionDetail" title={t('page.permisstionDetail')}>
+                                    <div>
+                                      {listPermisstionDetailAll?.map((item, index) => {
+                                        return (
+                                          <div className='d-flex' key={index}>
+                                            <input type='checkbox'
+                                              checked={isValueInArray(item?.code)}
+                                              onChange={(e) => changePermisstionDetail(e.target.checked, item?.code)} value={item?.code} />
+                                            <label className='ms-2'>
+                                              {item?.name}
+                                            </label>
+                                          </div>
+                                        )
+                                      })}
+                                    </div>
+                                  </Tab>
+                                </Tabs>
+                              </>
+                            </>
+                          }
+                          <Form.Control.Feedback type="invalid">
+                            {formik.errors.name}
+                          </Form.Control.Feedback>
+                        </Form.Group>
                           <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3'>
                             <Form.Label> {t('lableView.staff.addressDetail')}</Form.Label>
                             <Form.Control

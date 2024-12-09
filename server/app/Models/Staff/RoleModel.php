@@ -4,7 +4,7 @@ namespace App\Models\Staff;
 use App\Models\Permisstion\PermisstionDetailModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Staff\StaffModel;
 class RoleModel extends Model
 {
     use HasFactory;
@@ -29,5 +29,7 @@ class RoleModel extends Model
         $keys = array_keys($activePermissions);
         return PermisstionDetailModel::select('id','name','code')->whereIn('code', $keys)->get();
     }
-
+    public function staffs(){
+        return $this->hasMany(StaffModel::class, 'role_id', 'id');
+    }
 }

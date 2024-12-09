@@ -33,6 +33,7 @@ class StaffRequest extends BaseRequest
             }
             elseif($this->isMethod('put')){
                 $rule['image'] = 'nullable|file|image|max:2048';
+                $rule['arrPemisstionDetail'] = 'required|array|min:1';
                 $rule['passwordDefault'] = 'required|string|min:5|max:255';
                 $rule['username'] .= '|unique:tbl_staff_admin,username,'.$this->id;
                 $rule['email'] .= '|unique:tbl_staff_admin,email,'.$this->id;
@@ -65,6 +66,7 @@ class StaffRequest extends BaseRequest
             'phoneNumberStaff' => trans('message.phoneNumberStaff'),
             'imageStaff' => trans('message.imageStaff'),
             'noteStaff' => trans('message.noteStaff'),
+            'arrPemisstionDetail' => trans('message.userPermisstion'), 
         ]);
     }    
 }

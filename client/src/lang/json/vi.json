@@ -83,7 +83,9 @@
       "district": "Quận, huyện",
       "ward": "Phường, xã",
       "email": "Emai",
-      "phoneNumber": " Số điện thoại"
+      "phoneNumber": " Số điện thoại",
+      "total" : "Tổng số tài khoản",
+      "totalActive": "Tổng số tài khoản đang hoạt động"
     },
     "typeRoom": {
       "name": "Tên loại phòng",
@@ -260,7 +262,11 @@
     "search": "Nhập thông tin cần tìm kiếm",
     "selectTypeFilter": "Chọn loại thời gian lọc",
     "startTimeFilter": "Thời gian bắt đầu",
-    "endTimeFilter": "Thời gian Kết thúc"
+    "endTimeFilter": "Thời gian Kết thúc",
+    "home" :"Trang chủ",
+    "manage" : "Quản lý",
+    "TableList" : "Quản lý",
+    "Dashboard" : "Trang quản trị"
   },
   "lang": {
     "vietnam": "Tiếng Việt",
@@ -268,6 +274,18 @@
   },
   "noData": "Không có dữ liệu",
   "loading": "Đang thực hiện vui lòng chờ !",
+  "timeType" : {
+    "created_at" : "Thời gian tạo",
+    "updated_at" :"Thời gian cập nhật",
+    "start_at" : "Thời gian bắt đầu",
+    "end_at" :"Thời gian hết hạn",
+    "pay_at" :"Thời gian thanh toán",
+    "ban_at" : "Thời gian khóa",
+    "ban_expiration_at" : "Thời gian hết hạn khóa",
+    "verify_email_at" : "Thời gian xác thực email",
+    "dateOfBirth" : "Ngày sinh",
+    "dateIssuanceCard" :"Ngày cấp căn cước"
+  },
   "messageText": {
     "note": "Ghi chú",
     "login": "Đăng nhập để vào trang",
