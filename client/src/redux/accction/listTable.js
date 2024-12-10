@@ -52,6 +52,11 @@ export const setFilter = (items) => ({
     payload: items,
 });
 
+export const setBaseDecode = (items) => ({
+    type: 'SETFILTERBASEDECODE',
+    payload: items,
+});
+
 export const setProvince = (items) => ({
     type: 'SETPROVINCE',
     payload: items,

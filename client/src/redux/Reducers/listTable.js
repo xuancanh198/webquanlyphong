@@ -13,6 +13,7 @@ const initialState = {
   listPermisstionAll: null,
   listAcctionAll: null,
   listPermisstionDetailAll: null,
+  filterBaseDecode : null,
   page: 1,
   limit: 10,
   searchValue: null,
@@ -212,6 +213,11 @@ const listTable = (state = initialState, action) => {
       return {
         ...state,
         prevQuery: action.payload,
+      };
+    case "SETFILTERBASEDECODE" :
+      return {
+        ...state,
+        filterBaseDecode: action.payload,
       };
     default:
       return state;

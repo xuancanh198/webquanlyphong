@@ -51,7 +51,6 @@ class StaffService extends BaseService
         $this->model->address =  $this->request->address;
         $this->model->note =  $this->request->note;
         $this->model->img =  app(Firebase::class)->uploadImage($this->request->file('image'));
-        $this->model->status =  1;
         $this->model->created_at = Carbon::now();
         return $this->model->save();
     }

@@ -85,7 +85,8 @@
       "email": "Emai",
       "phoneNumber": " Số điện thoại",
       "total" : "Tổng số tài khoản",
-      "totalActive": "Tổng số tài khoản đang hoạt động"
+      "totalActive": "Tổng số tài khoản đang hoạt động",
+      "ban_expiration_at" :"Thời gian hết hạn khóa"
     },
     "typeRoom": {
       "name": "Tên loại phòng",
@@ -291,6 +292,17 @@
     "login": "Đăng nhập để vào trang",
     "loginPageMessage": "Bạn phải đăng nhập bằng tài khoản quản trị viên để được vào trang quản trị nếu chưa có tài khoản liên hệ với quản trị để tạo tài khoản",
     "searchTitel": "Nhập {{attribute}} cần tìm",
+    "verifyText" : "Xác thực {{attribute}}",
+    "verifyValue" : {
+      "authenticated" : "Đã xác thực",
+      "notAuthenticated" : "Chưa xác thực"
+    },
+    "statusText" : "Trạng thái tài khoản",
+    "statusValue" : {
+      "active" : "Đang hoạt động",
+      "ban" : "Bị khóa"
+    },
+      "changeValue": "Nhập {{attribute}} ",
     "requiredChange": "Vui lòng chọn {{attribute}} để hiển thị dữ liệu ...",
     "changeQuantityFail": "Số lượng {{attribute}} trong phòng không đủ hoặc bạn chưa chọn ô nhập !"
   }

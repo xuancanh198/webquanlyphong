@@ -42,6 +42,7 @@ import AcctionModal from "./Modal/Acction/modal";
 import PermisstionModal from "./Modal/Permisstion/modal";
 import PermisstionDetailModal from "./Modal/PermisstionDetail/modal";
 import ContractModal from "./Modal/Contract/modal";
+import StaffFilter from "./Filter/Staff"
 import {
   getListRole,
   getListAcction,
@@ -388,10 +389,7 @@ const Tables = () => {
                 <option value="100">100</option>
               </CFormSelect>
             </div>
-           
           </div>
-
-         
             <div className='row'>
               {
                 toggleSearch === true
@@ -435,12 +433,20 @@ const Tables = () => {
                   <label className='mb-2'> {t('messageView.endTimeFilter')} : </label>
                   <DatePicker selected={filterEndTime} onChange={(date) => startFilterFun(date)} />
                 </div>
+                {(() => {
+                  switch (roleParam) {
+                    case 'staff':
+                      return <StaffFilter data={listTabledata} />;
+                    default:
+                      return null;
+                  }
+                })()}
               </div>
               )
             }
-
             </div>
-         
+
+          
           {(() => {
             switch (roleParam) {
               case 'role':

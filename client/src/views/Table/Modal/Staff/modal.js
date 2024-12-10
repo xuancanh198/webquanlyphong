@@ -41,16 +41,6 @@ function Example({ title }) {
 
     const handleClose = () => dispatch(setModalAdd(false));
     const handleShow = () => dispatch(setModalAdd(true));
-    useEffect(() => {
-        const fetchData = async () => {
-            await dispatch(getListProvince());
-            dispatch(getAllRole(true));
-        };
-        if (show === true) {
-            fetchData();
-        }
-
-    }, [dispatch, show]);
 
     useEffect(() => {
         if (province.length > 0) {
