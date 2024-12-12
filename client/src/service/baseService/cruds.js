@@ -18,7 +18,7 @@ import APILink from "../API";
 import { toast } from "react-toastify";
 import {getListFunService, getAllData, addFunService, updateFunService, deleteFunService} from "./baseFuntion";
 
-export const getListRole = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListRole = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -30,6 +30,7 @@ export const getListRole = (titel = null, page = 1, limit = 10, search = null, f
     titelnameExcel : ["STT", "ID", "Tên chức vụ", "Thời gian tạo", "Cập nhật"],
     columExcel :['id','name','created_at','updated_at'],
     titelExcel : titel,
+    filterBaseDecode: filterBaseDecode
   } 
   return (dispatch) => {
     dispatch(getListFunService(objectGet))
@@ -79,7 +80,7 @@ export const deleteRole = (id) => {
   };
 };
 
-export const getListStaff = (titel = null,page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListStaff = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -91,7 +92,10 @@ export const getListStaff = (titel = null,page = 1, limit = 10, search = null, f
     titelnameExcel : ["STT", "ID", "Tên chức vụ", "Thời gian tạo", "Cập nhật"],
     columExcel :['id','name','code','created_at','updated_at'],
     titelExcel : titel,
+    filterBaseDecode: filterBaseDecode,
   } 
+  console.log(objectGet)
+  console.log(filterBaseDecode)
   return (dispatch) => {
     dispatch(getListFunService(objectGet))
   };
@@ -129,7 +133,7 @@ export const deleteStaff= (id) => {
 };
 
 
-export const getListTypeRoom = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListTypeRoom = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -190,7 +194,7 @@ export const deleteTypeRoom = (id) => {
   };
 };
 
-export const getListFloor = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListFloor = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -251,7 +255,7 @@ export const deleteFloor= (id) => {
   };
 };
 
-export const getListBuilding = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListBuilding = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -313,7 +317,7 @@ export const deleteBuilding = (id) => {
   };
 };
 
-export const getListService = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListService = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -375,7 +379,7 @@ export const deleteService = (id) => {
   };
 };
 
-export const getListFurniture = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListFurniture = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -437,7 +441,7 @@ export const deleteFurniture = (id) => {
   };
 };
 
-export const getListRoom = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListRoom = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -502,7 +506,7 @@ export const deleteRoom = (id) => {
 
 
 
-export const getListUser = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListUser = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -566,7 +570,7 @@ export const deleteUser = (id) => {
 
 
 
-export const getListContract = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListContract = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -689,7 +693,7 @@ export const downloadFileContract = (id) => {
       });
   };
 };
-export const getListBill = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListBill = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -759,7 +763,7 @@ export const getListServiceRoomContract = (id) => {
     dispatch(getAllData(objectGet))
   };
 };
-export const getListPermisstion = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListPermisstion = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -822,7 +826,7 @@ export const deletePermisstion = (id) => {
 };
 
 
-export const getListPermisstionDetail = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListPermisstionDetail = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -885,7 +889,7 @@ export const deletePermisstionDetail = (id) => {
   };
 };
 
-export const getListAcction= (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListAcction = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,
@@ -948,7 +952,7 @@ export const deleteAcction = (id) => {
 };
 
 
-export const getListSetting= (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null) => {
+export const getListSetting = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
   const objectGet ={
     page: page,
     limit : limit,

@@ -15,11 +15,11 @@ function Staff() {
     const [arrayFilter, setArrayFilter] = useState([]);
     const arrayAuthentic =[
         {
-            value: "authentic",
+            value: "null",
             text: t('messageText.verifyValue.authenticated'),
         },
         {
-            value: "notAuthenticated",
+            value: "notNull",
             text: t('messageText.verifyValue.notAuthenticated'),
         }
     ]
@@ -38,11 +38,11 @@ function Staff() {
     };
     const arrayActiveStaff = [
         {
-            value: "active",
+            value: "null",
             text: t('messageText.statusValue.active'),
         },
         {
-            value: "ban",
+            value: "notNull",
             text: t('messageText.statusValue.ban'),
         }
     ]
@@ -52,7 +52,7 @@ function Staff() {
     const changeRoleFilter =(value) =>{
         setFilterRole(
             {
-                type : "column",
+                type: "filterColumn",
                 column : "role_id",
                 value : value
             }
@@ -61,7 +61,7 @@ function Staff() {
     const changeEmailFilter = (value) => {
         setFilterEmail(
             {
-                type : "time",
+                type: "checkNull",
                 column: "email",
                 value: value
             }
@@ -70,7 +70,7 @@ function Staff() {
     const changeBanTimeFilter = (value) => {
         setFilterBanAt(
             {
-                type: "time",
+                type: "checkNull",
                 column: "ban_at",
                 value: value
             }

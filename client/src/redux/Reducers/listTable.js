@@ -13,7 +13,7 @@ const initialState = {
   listPermisstionAll: null,
   listAcctionAll: null,
   listPermisstionDetailAll: null,
-  filterBaseDecode : [],
+  filterBaseDecode : null,
   page: 1,
   limit: 10,
   searchValue: null,

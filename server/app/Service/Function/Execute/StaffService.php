@@ -14,6 +14,7 @@ class StaffService extends BaseService
     protected $model;
     protected $request;
     protected $columSearch = ['username', 'phoneNumber', 'email', 'fullname'];
+    protected $columSelect = ['id', 'name', 'code'];
     public function __construct(StaffModel $model, StaffRequest $request)
     {
         $this->model = $model;
@@ -28,9 +29,11 @@ class StaffService extends BaseService
         $typeTime = $this->request->typeTime ?? null;
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
-        $model = $this->model->with('role');
+        $isSelect = $this->request->isSelect ?? false;
         $filtersBase64 = $this->request->filtersBase64 ?? null;
-        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64 );
+        $filterBaseDecode = $this->request->filterBaseDecode ?? null;
+        $model = $this->model->with('role');
+        $result = $this->getListBaseFun($model,$page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64, $isSelect, $this->columSelect, $filterBaseDecode);
         $result->each(function ($staff) {
             $permissions = $staff->permissions();
             $staff->permission_detail = $permissions;

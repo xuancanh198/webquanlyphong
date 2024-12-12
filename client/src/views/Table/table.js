@@ -88,7 +88,7 @@ const Tables = () => {
   const typeFilterTime = useSelector((state) => state.listTable.typeFilterTime);
   const exportExcel = useSelector((state) => state.listTable.exportExcel);
   const filtersbase64 = useSelector((state) => state.listTable.filters);
-  const prevQuery = useSelector((state) => state.listTable.prevQuery);
+  const filterBaseDecode = useSelector((state) => state.listTable.filterBaseDecode);
   const [toggleSearch, setToggleSearch] = useState(false);
   const [toggleFilterTime, setToggleFilterTime] = useState(false);
   const [filter, setFilterTime] = useState(null);
@@ -112,7 +112,7 @@ const Tables = () => {
     if (filterStartTime !== null && filterEndTime !== null && filterStartTime < filterEndTime) {
       dispatch(setFilterStatus(true));
     }
-  }, [roleParam, page, limit, filterStatus, filterEndTime, filterStartTime, filter, searchValue, exportExcel, filtersbase64])
+  }, [roleParam, page, limit, filterStatus, filterEndTime, filterStartTime, filter, searchValue, exportExcel, filtersbase64, filterBaseDecode])
   const created_at_time = {
     type_time: "created_at",
     text: t('timeType.created_at')
@@ -162,6 +162,7 @@ const Tables = () => {
     type_time: "dateIssuanceCard",
     text: t('timeType.dateIssuanceCard')
   }
+  console.log(filterBaseDecode)
   const getQueryUrl = () => {
     if (roleParam) {
       switch (roleParam) {
@@ -170,105 +171,105 @@ const Tables = () => {
             created_at_time, updated_at_time
           ])
           SetTitel(t('page.role'));
-          dispatch(getListRole(t('page.role'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListRole(t('page.role'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'staff':
           setArrayTimeFilter([
             created_at_time, updated_at_time, ban_at_time, ban_expiration_at_time, verify_email_at_time
           ])
           SetTitel(t('page.staff'));
-          dispatch(getListStaff(t('page.staff'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListStaff(t('page.staff'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'typeRoom':
           setArrayTimeFilter([
             created_at_time, updated_at_time
           ])
           SetTitel(t('page.typeRoom'));
-          dispatch(getListTypeRoom(t('page.typeRoom'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListTypeRoom(t('page.typeRoom'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'floor':
           setArrayTimeFilter([
             created_at_time, updated_at_time
           ])
           SetTitel(t('page.floor'));
-          dispatch(getListFloor(t('page.floor'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListFloor(t('page.floor'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'building':
           setArrayTimeFilter([
             created_at_time, updated_at_time
           ])
           SetTitel(t('page.building'));
-          dispatch(getListBuilding(t('page.building'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListBuilding(t('page.building'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'service':
           setArrayTimeFilter([
             created_at_time, updated_at_time
           ])
           SetTitel(t('page.service'));
-          dispatch(getListService(t('page.service'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListService(t('page.service'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'furniture':
           setArrayTimeFilter([
             created_at_time, updated_at_time
           ])
           SetTitel(t('page.furniture'));
-          dispatch(getListFurniture(t('page.furniture'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListFurniture(t('page.furniture'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'room':
           setArrayTimeFilter([
             created_at_time, updated_at_time
           ])
           SetTitel(t('page.room'));
-          dispatch(getListRoom(t('page.room'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListRoom(t('page.room'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'user':
           setArrayTimeFilter([
             created_at_time, updated_at_time, dateOfBirth_time, dateIssuanceCard_time
           ])
           SetTitel(t('page.user'));
-          dispatch(getListUser(t('page.user'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListUser(t('page.user'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'contract':
           setArrayTimeFilter([
             created_at_time, updated_at_time, start_at_timeContract, end_at_timeContract
           ])
           SetTitel(t('page.contract'));
-          dispatch(getListContract(t('page.contract'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListContract(t('page.contract'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'bill':
           setArrayTimeFilter([
             created_at_time, updated_at_time, start_at_time, end_at_time, pay_at_time
           ])
           SetTitel(t('page.bill'));
-          dispatch(getListBill(t('page.bill'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListBill(t('page.bill'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'permisstion':
           setArrayTimeFilter([
             created_at_time, updated_at_time
           ])
           SetTitel(t('page.permisstion'));
-          dispatch(getListPermisstion(t('page.permisstion'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListPermisstion(t('page.permisstion'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'acction':
           setArrayTimeFilter([
             created_at_time, updated_at_time
           ])
           SetTitel(t('page.acction'));
-          dispatch(getListAcction(t('page.acction'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListAcction(t('page.acction'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'permisstionDetail':
           setArrayTimeFilter([
             created_at_time, updated_at_time
           ])
           SetTitel(t('page.permisstionDetail'));
-          dispatch(getListPermisstionDetail(t('page.permisstionDetail'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListPermisstionDetail(t('page.permisstionDetail'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         case 'setting':
           setArrayTimeFilter([
             created_at_time, updated_at_time
           ])
           SetTitel(t('page.setting'));
-          dispatch(getListSetting(t('page.setting'), page, limit, searchOb, filter, exportExcel, filtersbase64));
+          dispatch(getListSetting(t('page.setting'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         default:
           SetTitel('Tiêu đề mặc định');
