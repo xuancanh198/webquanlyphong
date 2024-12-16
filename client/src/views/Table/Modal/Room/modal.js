@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { addRoom, getAllTypeRoom, getAllFloor, getAllBuilding, getAllService, getAllFurniture } from "../../../../service/baseService/cruds";
+import { addRoom } from "../../../../service/baseService/cruds";
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -71,42 +71,7 @@ function Example({ title }) {
             setFloor(listFloor[0].id);
         }
     }, [listFloor]);
-    useEffect(() => {
-        if (show === true) {
-            if (
-                listFurnituresAll === null &&
-                listServiceAll === null &&
-                listTypeRoomAll === null &&
-                listBuildingAll === null &&
-                listFloor === null
-            ) {
-                Promise.all([
-                    dispatch(getAllTypeRoom(true, true)),
-                    dispatch(getAllFloor(true, true)),
-                    dispatch(getAllBuilding(true, true)),
-                    dispatch(getAllService(true, true)),
-                    dispatch(getAllFurniture(true, true)),
-                ])
-            } else {
-                if (listTypeRoomAll === null) {
-                    dispatch(getAllTypeRoom(true, true));
-                }
-                if (listFloor === null) {
-                    dispatch(getAllFloor(true, true));
-                }
-                if (listBuildingAll === null) {
-                    dispatch(getAllBuilding(true));
-                }
-                if (listServiceAll === null) {
-                    dispatch(getAllService(true, true));
-                }
-                if (listFurnituresAll === null) {
-                    dispatch(getAllFurniture(true, true));
-                }
-            }
-        }
-    }, [dispatch, show]);
-    
+
     useEffect(() => {
         formik.setValues({
             ...formik.values,

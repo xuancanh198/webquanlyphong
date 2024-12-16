@@ -288,6 +288,8 @@
     "dateIssuanceCard" :"Ngày cấp căn cước"
   },
   "messageText": {
+    "account" : "Tài khoản",
+    "changeAll" : "Chọn tất cả",
     "note": "Ghi chú",
     "login": "Đăng nhập để vào trang",
     "loginPageMessage": "Bạn phải đăng nhập bằng tài khoản quản trị viên để được vào trang quản trị nếu chưa có tài khoản liên hệ với quản trị để tạo tài khoản",
@@ -301,6 +303,11 @@
     "statusValue" : {
       "active" : "Đang hoạt động",
       "ban" : "Bị khóa"
+    },
+    "statusValueUser": {
+      "active": "Đang thuê",
+      "notActive": "Hết hạn hợp đồng",
+      "ban": "Bị khóa"
     },
       "changeValue": "Nhập {{attribute}} ",
     "requiredChange": "Vui lòng chọn {{attribute}} để hiển thị dữ liệu ...",

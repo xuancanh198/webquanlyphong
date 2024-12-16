@@ -37,7 +37,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { stripHtmlTags } from "../../../../service/FunService/funweb";
-import {formatPrice} from "../../../../service/FunService/funweb"
+import { formatPrice } from "../../../../service/FunService/funweb"
 function List({ data }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -71,7 +71,7 @@ function List({ data }) {
     floorId: 1,
     typeRoomId: 1,
     note: 1,
-    price:1
+    price: 1
   });
 
   const listFurnituresAll = useSelector((state) => state.listTable.listFurnituresAll);
@@ -79,7 +79,7 @@ function List({ data }) {
   const listTypeRoomAll = useSelector((state) => state.listTable.listTypeRoomAll);
   const listBuildingAll = useSelector((state) => state.listTable.listBuildingAll);
   const listFloor = useSelector((state) => state.listTable.listFloorAll);
-
+  const [imageListArray, setImageListArray] = useState([])
   const handleClose = () => dispatch(setModalUpdate(false));
   const handleShow = (item) => {
     setDataDeatil(item)
@@ -125,6 +125,7 @@ function List({ data }) {
       });
       setId(dataDeatil.id);
       setFurnitureArray(dataDeatil.furniture_room);
+      setImageListArray(dataDeatil?.img)
       setService(dataDeatil.service_room.map(item => ({
         serviceId: item.service.id,
         id: item.id
@@ -164,40 +165,13 @@ function List({ data }) {
     }
   }, [listFloor]);
   useEffect(() => {
-    if (show === true) {
-        if (
-            listFurnituresAll === null &&
-            listServiceAll === null &&
-            listTypeRoomAll === null &&
-            listBuildingAll === null &&
-            listFloor === null
-        ) {
-            Promise.all([
-                dispatch(getAllTypeRoom(true, true)),
-                dispatch(getAllFloor(true, true)),
-                dispatch(getAllBuilding(true, true)),
-                dispatch(getAllService(true, true)),
-                dispatch(getAllFurniture(true, true)),
-            ])
-        } else {
-            if (listTypeRoomAll === null) {
-                dispatch(getAllTypeRoom(true, true));
-            }
-            if (listFloor === null) {
-                dispatch(getAllFloor(true, true));
-            }
-            if (listBuildingAll === null) {
-                dispatch(getAllBuilding(true));
-            }
-            if (listServiceAll === null) {
-                dispatch(getAllService(true, true));
-            }
-            if (listFurnituresAll === null) {
-                dispatch(getAllFurniture(true, true));
-            }
-        }
-    }
-}, [dispatch, show]);
+
+    dispatch(getAllTypeRoom(true, true));
+      dispatch(getAllFloor(true, true));
+      dispatch(getAllBuilding(true, true));
+      dispatch(getAllService(true, true));
+      dispatch(getAllFurniture(true, true));
+}, []);
   useEffect(() => {
     setInitialValues(prevValues => ({
       ...prevValues,
@@ -368,7 +342,7 @@ function List({ data }) {
       );
     }
   };
-  
+
   const isChecked = (id) => {
     return furniture.some(f => Number(f.furnitureId) === Number(id));
   };
@@ -592,7 +566,7 @@ function List({ data }) {
                           <div className="upload__image-wrapper">
                             {imageList.length === 0 ? (
                               <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
-                                {dataDeatil && dataDeatil !== null && dataDeatil.img_room && dataDeatil.img_room.map((image, index) => (
+                                {imageListArray?.map((image, index) => (
                                   <SwiperSlide key={index} className='img-slider'>
                                     <div className='img-form-div'>
                                       <img src={image.imgLink} alt="" width="100" className='img-form form-img-div' />

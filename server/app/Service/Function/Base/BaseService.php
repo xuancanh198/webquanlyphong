@@ -54,19 +54,27 @@ class BaseService
             } catch (\Throwable $e) {
             }
         }
+        
         if ($filterBaseDecode !== null) {
-            try {
+           try {
                 $filterDecode = json_decode(base64_decode($filterBaseDecode));
                 foreach ($filterDecode as $item) {
-                    if ($item->type === LableSystem::FILTER_TYPE_CHECK_NULL) {
-                        if ($item->value === LableSystem::FILTER_VALUE_NULL) {
+                    if ($item?->type === LableSystem::FILTER_TYPE_CHECK_NULL) {
+                        if ($item?->value === LableSystem::FILTER_VALUE_NULL) {
                             $query->whereNull($item->column);
-                        } elseif ($item->value === LableSystem::FILTER_VALUE_NOT_NULL) {
+                        } elseif ($item?->value === LableSystem::FILTER_VALUE_NOT_NULL) {
                             $query->whereNotNull($item->column);
                         }
-                    } elseif ($item->type === LableSystem::FILTER_TYPE_COLUMN) {
+                    } elseif ($item?->type === LableSystem::FILTER_TYPE_COLUMN){
                         $query->where($item->column, $item->value);
-                    }
+                    } elseif ($item?->type === LableSystem::FILTER_TYPE_RELATIONSHIP && $item?->relationship) {
+                        $query->whereHas($item->relationship, function ($query) use ($item) {
+                            $query->whereIn($item->column,$item->value); 
+                        });
+                     } 
+                     elseif ($item?->type === LableSystem::FILTER_TYPE_RELATIONSHIP && $item?->relationship) {
+                        $query->where($item->column, (int) $item->value);
+                     }
                 }
             } catch (\Throwable $e) {
             }

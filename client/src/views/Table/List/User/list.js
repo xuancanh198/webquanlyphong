@@ -9,7 +9,7 @@ import {
   CTableRow,
 } from '@coreui/react';
 import { stripHtmlTags, convertDateTimeUS, convertDateTime } from '../../../../service/FunService/funweb';
-import { updateUser, deleteUser } from '../../../../service/baseService/cruds';
+import { updateUser, deleteUser, getAllRoom } from '../../../../service/baseService/cruds';
 import { getListProvince, getListDistrict, getListward } from '../../../../service/baseService/APIOutsideSystem';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -35,10 +35,8 @@ function List({ data }) {
   const dispatch = useDispatch();
   const show = useSelector((state) => state.listTable.modalUpdate);
   const [dataDeatil, setDataDeatil] = useState(null);
-  const [statusToggle, setStatusToggle] = useState(false);
   const [editorData, setEditorData] = useState('');
   const [note, setNote] = useState('')
-  const [togglePassword, settogglePassword] = useState(false);
   const [images, setImages] = useState([]);
   const [address, setAddress] = useState('');
   const [validated, setValidated] = useState(false);
@@ -69,14 +67,9 @@ function List({ data }) {
   let filters = useSelector((state) => state.listTable.filters);
   const maxNumber = 1;
   useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(getListProvince());
-    };
-    if (show === true) {
-      fetchData();
-    }
-
-  }, [dispatch, page, limit, show]);
+       dispatch(getListProvince());
+    dispatch(getAllRoom(true, true));
+  }, []);
 
   useEffect(() => {
     formik.setValues({

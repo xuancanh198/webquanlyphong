@@ -43,6 +43,8 @@ import PermisstionModal from "./Modal/Permisstion/modal";
 import PermisstionDetailModal from "./Modal/PermisstionDetail/modal";
 import ContractModal from "./Modal/Contract/modal";
 import StaffFilter from "./Filter/Staff"
+import RoomFilter from "./Filter/Room"
+import UserFilter from "./Filter/User"
 import {
   getListRole,
   getListAcction,
@@ -162,7 +164,6 @@ const Tables = () => {
     type_time: "dateIssuanceCard",
     text: t('timeType.dateIssuanceCard')
   }
-  console.log(filterBaseDecode)
   const getQueryUrl = () => {
     if (roleParam) {
       switch (roleParam) {
@@ -391,63 +392,68 @@ const Tables = () => {
               </CFormSelect>
             </div>
           </div>
-            <div className='row'>
-              {
-                toggleSearch === true
-                &&
-                (
-                  <div className='col-xl-12 col-lg-12 col-md-12 col-sm-12 p-2'>
-                    <CInputGroup className="mb-3">
-                      <CInputGroupText id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></CInputGroupText>
-                      <CFormInput
-                        placeholder={t('messageView.search')}
-                        onChange={handleInputChange}
-                      />
-                    </CInputGroup>
-                  </div>
+          <div className='row'>
+            {
+              toggleSearch === true
+              &&
+              (
+                <div className='col-xl-12 col-lg-12 col-md-12 col-sm-12 p-2'>
+                  <CInputGroup className="mb-3">
+                    <CInputGroupText id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></CInputGroupText>
+                    <CFormInput
+                      placeholder={t('messageView.search')}
+                      onChange={handleInputChange}
+                    />
+                  </CInputGroup>
+                </div>
               )
-              }
+            }
             {toggleFilterTime
               &&
               (
-              <div className='col-12 row'>
-                <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12 p-2'>
-                  <label className='mb-2'> {t('messageView.selectTypeFilter')} : </label>
-                  <CFormSelect
-                    aria-label="Default select example"
-                    onChange={(e) => typeFilterFun(e)}
-                    className="onChange-time-filter"
-                  >
-                    {arrayTimeFilter?.map((item, index) => (
-                      <option key={index} value={item?.type_time}>
-                        {item?.text}
-                      </option>
-                    ))}
-                  </CFormSelect>
+                <div className='col-12 row'>
+                  <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12 p-2'>
+                    <label className='mb-2'> {t('messageView.selectTypeFilter')} : </label>
+                    <CFormSelect
+                      aria-label="Default select example"
+                      onChange={(e) => typeFilterFun(e)}
+                      className="onChange-time-filter"
+                    >
+                      {arrayTimeFilter?.map((item, index) => (
+                        <option key={index} value={item?.type_time}>
+                          {item?.text}
+                        </option>
+                      ))}
+                    </CFormSelect>
 
+                  </div>
+                  <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12 p-2'>
+                    <label className='mb-2'> {t('messageView.startTimeFilter')} : </label>
+                    <DatePicker selected={filterStartTime} onChange={(date) => endFilterFun(date)} />
+                  </div>
+                  <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12 p-2'>
+                    <label className='mb-2'> {t('messageView.endTimeFilter')} : </label>
+                    <DatePicker selected={filterEndTime} onChange={(date) => startFilterFun(date)} />
+                  </div>
+                  {(() => {
+                    switch (roleParam) {
+                      case 'staff':
+                        return <StaffFilter />;
+                      case 'room':
+                        return <RoomFilter />;
+                      case 'user':
+                        return <UserFilter />;
+                        
+                      default:
+                        return null;
+                    }
+                  })()}
                 </div>
-                <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12 p-2'>
-                  <label className='mb-2'> {t('messageView.startTimeFilter')} : </label>
-                  <DatePicker selected={filterStartTime} onChange={(date) => endFilterFun(date)} />
-                </div>
-                <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12 p-2'>
-                  <label className='mb-2'> {t('messageView.endTimeFilter')} : </label>
-                  <DatePicker selected={filterEndTime} onChange={(date) => startFilterFun(date)} />
-                </div>
-                {(() => {
-                  switch (roleParam) {
-                    case 'staff':
-                      return <StaffFilter data={listTabledata} />;
-                    default:
-                      return null;
-                  }
-                })()}
-              </div>
               )
             }
-            </div>
+          </div>
 
-          
+
           {(() => {
             switch (roleParam) {
               case 'role':
