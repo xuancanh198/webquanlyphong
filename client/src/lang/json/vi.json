@@ -234,6 +234,7 @@
       "name": "Tên quyền chi tiết",
       "code": "Mã quyền chi tiết",
       "url": "Đường dẫn",
+      "status" : "Trạng thái",
       "created_at": "Thời gian tạo",
       "updated_at": "Thời gian cập nhật"
     },
@@ -296,6 +297,10 @@
     "loginPageMessage": "Bạn phải đăng nhập bằng tài khoản quản trị viên để được vào trang quản trị nếu chưa có tài khoản liên hệ với quản trị để tạo tài khoản",
     "searchTitel": "Nhập {{attribute}} cần tìm",
     "verifyText" : "Xác thực {{attribute}}",
+    "permisstionDetailStatus" :{
+        "active": "Còn hiệu lực",
+        "notActive": "Hết hạn hợp đồng"
+    },
     "verifyValue" : {
       "authenticated" : "Đã xác thực",
       "notAuthenticated" : "Chưa xác thực"

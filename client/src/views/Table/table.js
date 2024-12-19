@@ -47,6 +47,7 @@ import RoomFilter from "./Filter/Room"
 import UserFilter from "./Filter/User"
 import ContractFilter from "./Filter/Contract"
 import BillFilter from "./Filter/Bill"
+import PermisstionDetailFilter from "./Filter/PermisstionDetail"
 import {
   getListRole,
   getListAcction,
@@ -449,7 +450,8 @@ const Tables = () => {
                         return <ContractFilter/>
                       case "bill":
                         return <BillFilter />
-                        
+                      case "permisstionDetail":
+                        return <PermisstionDetailFilter />
                       default:
                         return null;
                     }

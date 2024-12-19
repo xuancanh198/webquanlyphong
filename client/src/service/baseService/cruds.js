@@ -858,6 +858,7 @@ export const getListPermisstionDetail = (titel = null, page = 1, limit = 10, sea
     titelnameExcel: ['Stt', 'id đồ đạc vật dụng', 'tên đồ đạc vật dụng', 'mã đồ đạc vật dụng', 'giá mua đồ đạc vật dụng', 'thời gian tạo', ' thời gian cập nhật'],
     columExcel: ['id', 'name', 'code', 'price', 'created_at', 'updated_at'],
     titelExcel: titel,
+    filterBaseDecode: filterBaseDecode
   }
   return (dispatch) => {
     dispatch(getListFunService(objectGet))
@@ -984,6 +985,7 @@ export const getListSetting = (titel = null, page = 1, limit = 10, search = null
     titelnameExcel: ["STT", "ID", "Tên chức vụ", "Thời gian tạo", "Cập nhật"],
     columExcel: ['id', 'name', 'created_at', 'updated_at'],
     titelExcel: titel,
+    filterBaseDecode: filterBaseDecode
   }
   return (dispatch) => {
     dispatch(getListFunService(objectGet))

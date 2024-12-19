@@ -434,6 +434,9 @@ useEffect(() => {
                   &&
                   (
                     <>
+                    <Form.Group as={Col} md="12" className={checked === false ? null : 'mt-2 '}>
+                      <p><Form.Label>{t('lableView.permisstionDetail.status')} :</Form.Label> {dataDeatil?.status === 1 ? t('messageText.statusValue.active') : t('messageText.statusValue.ban')}</p>
+                    </Form.Group>
                       <Form.Group as={Col} md="12" className={checked === false ? null : 'mt-2 '}>
                         <p><Form.Label>{t('lableView.permisstionDetail.created_at')} :</Form.Label> {dataDeatil && dataDeatil.created_at !== null ? convertDateTime(dataDeatil.created_at) : "Không có dữ liệu"}</p>
                       </Form.Group>
