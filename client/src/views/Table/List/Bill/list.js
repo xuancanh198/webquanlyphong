@@ -26,7 +26,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ImageUploading from 'react-images-uploading';
 import { cilUser, cilX, cilNotes } from '@coreui/icons';
 import { setFilter, setModalUpdate } from "../../../../redux/accction/listTable";
-import {updateBill, deleteBill, downloadFileContract, getListBill } from "../../../../service/baseService/cruds";
+import { updateBill, deleteBill, downloadFileContract, getAllUser, getAllRoom, getAllStaff, getAllBuilding } from "../../../../service/baseService/cruds";
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -44,6 +44,12 @@ function List({ data }) {
   const [quantityService, setQuantityService] = useState([]);
   const [note, setNote] = useState('')
   const [id, setId] = useState(0);
+  useEffect(()=>{
+    dispatch(getAllUser(true, true));
+    dispatch(getAllRoom(true, true));
+    dispatch(getAllStaff(true, true));
+    dispatch(getAllBuilding(true, true));
+  },[])
   const [initialValues, setInitialValues] = useState({
     priceTime: '',
     deposit: "",
@@ -172,7 +178,6 @@ function List({ data }) {
     }
     dispatch(setFilter(btoa(JSON.stringify(filters))));
   }
-  console.log(quantityService)
   const addQuantityService = (value, item) => {
     const newObject = {
       serviceId: item?.service?.id,

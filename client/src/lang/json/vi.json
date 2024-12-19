@@ -290,6 +290,7 @@
   "messageText": {
     "account" : "Tài khoản",
     "changeAll" : "Chọn tất cả",
+    "staffCreate" : " Nhập nhân viên tạo",
     "note": "Ghi chú",
     "login": "Đăng nhập để vào trang",
     "loginPageMessage": "Bạn phải đăng nhập bằng tài khoản quản trị viên để được vào trang quản trị nếu chưa có tài khoản liên hệ với quản trị để tạo tài khoản",
@@ -299,7 +300,22 @@
       "authenticated" : "Đã xác thực",
       "notAuthenticated" : "Chưa xác thực"
     },
+    "contractStatus" : {
+      "active" : "Còn hiệu lực",
+      "notActive" : "Hết hạn hợp đồng"
+    },
+    "BillStatus" : {
+      "notPaid": "Chưa thanh toán",
+      "payed": "Đã thanh toán"
+    },
+    "BillPayMethodText" : "Phương thức thanh toán",
+    "BillPayMethod": {
+      "cashPayment": "Thanh toán tiền mặt",
+      "bankTransfer": "Thanh toán qua thẻ ngân hàng",
+      "paymentViaWallet" : "Thanh toán qua ví điện tử"
+    },
     "statusText" : "Trạng thái tài khoản",
+    "statusTextAttribute": "Trạng thái {{attribute}} ",
     "statusValue" : {
       "active" : "Đang hoạt động",
       "ban" : "Bị khóa"

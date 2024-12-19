@@ -11,7 +11,7 @@ function User() {
     const listRoomAll = useSelector((state) => state.listTable.listRoomAll);
     const [filterEmail, setFilterEmail] = useState(null);
     const [filterBanAt, setFilterBanAt] = useState(null);
-    const [filterRole, setFilterRole] = useState(null);
+    const [filterRoom, setFilterRoom] = useState(null);
     const [arrayFilter, setArrayFilter] = useState([]);
     
     const arrayAuthentic = [
@@ -54,11 +54,11 @@ function User() {
     useEffect(() => {
         arrayFilter?.length > 0 && dispatch(setBaseDecode(btoa(JSON.stringify(arrayFilter))))
     }, [arrayFilter])
-    const changeRoleFilter = (value) => {
-        setFilterRole(
+    const changeRoomFilter = (value) => {
+        setFilterRoom(
             {
-                type: "filterColumn",
-                column: "role_id",
+                type: "method",
+                column: "findUsersByRoomId",
                 value: value
             }
         )
@@ -92,14 +92,14 @@ function User() {
         }
     }, [filterBanAt])
     useEffect(() => {
-        if (filterRole !== null && filterRole?.value !== null) {
-            addFilter(filterRole)
+        if (filterRoom !== null && filterRoom?.value !== null) {
+            addFilter(filterRoom)
         }
-    }, [filterRole])
+    }, [filterRoom])
     return (
         <>
             <div className='col-xl-4 col-lg-6 col-md-12 col-sm-12 pt-3 pb-3 flex_end'>
-                <CFormSelect aria-label="Default select example" className='w-full' onChange={(e) => changeRoleFilter(e.target.value)}>
+                <CFormSelect aria-label="Default select example" className='w-full' onChange={(e) => changeRoomFilter(e.target.value)}>
                     <option>{t('messageText.changeValue', { attribute: t('page.room') })}</option>
                     {listRoomAll?.map((item, index) => {
                         return (

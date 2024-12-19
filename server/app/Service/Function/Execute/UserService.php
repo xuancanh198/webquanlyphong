@@ -14,7 +14,7 @@ class UserService extends BaseService
     protected $model;
     protected $request;
     protected $columSearch = ['username', 'phoneNumber', 'email', 'fullname'];
-    protected $columSelect = ['id', 'name', 'code'];
+    protected $columSelect = ['id', 'fullname', 'username'];
     public function __construct(UserModel $model, UserRequest $request)
     {
         $this->model = $model;

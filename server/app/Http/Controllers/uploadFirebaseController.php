@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Service\Function\Action\Firebase;
-
+use App\Models\Category;
 class uploadFirebaseController extends Controller
 {
     protected $firebaseService;
@@ -27,4 +27,11 @@ class uploadFirebaseController extends Controller
 
         return response()->json(['message' => 'No image file found!'], 400);
     }
+
+
+
+
+     public function findCategory($id){
+      $data =   Category::find($id)->getAllChildren();
+     }
 }

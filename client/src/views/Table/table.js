@@ -45,6 +45,8 @@ import ContractModal from "./Modal/Contract/modal";
 import StaffFilter from "./Filter/Staff"
 import RoomFilter from "./Filter/Room"
 import UserFilter from "./Filter/User"
+import ContractFilter from "./Filter/Contract"
+import BillFilter from "./Filter/Bill"
 import {
   getListRole,
   getListAcction,
@@ -443,6 +445,10 @@ const Tables = () => {
                         return <RoomFilter />;
                       case 'user':
                         return <UserFilter />;
+                      case  "contract" : 
+                        return <ContractFilter/>
+                      case "bill":
+                        return <BillFilter />
                         
                       default:
                         return null;

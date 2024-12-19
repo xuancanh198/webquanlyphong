@@ -15,6 +15,8 @@ class BillService extends BaseService
     protected $model;
     protected $request;
     protected $columSearch = ['code'];
+    protected $columSelect = ['id', 'code', 'price'];
+
     protected $columCode = 'code';
     public function __construct(BilModel $model, BillRequest $request)
     {
@@ -30,8 +32,9 @@ class BillService extends BaseService
         $typeTime = $this->request->typeTime ?? null;
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
+        $isSelect = $this->request->isSelect ?? false;
         $filtersBase64 = $this->request->filtersBase64 ?? null;
-        
+        $filterBaseDecode = $this->request->filterBaseDecode ?? null;
         $model = $this->model->with([
             'detail.service' => function ($query) {
                 $query->select('id', 'name', 'price', 'unit');
@@ -55,7 +58,7 @@ class BillService extends BaseService
                 $query->select('id', 'name', 'code', 'address');
             },
         ]);
-        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64);
+        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64, $isSelect, $this->columSelect, $filterBaseDecode);
         return $result;
     }
     public function createAction()

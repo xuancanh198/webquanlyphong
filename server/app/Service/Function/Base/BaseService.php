@@ -25,6 +25,7 @@ class BaseService
         $query = $model->newQuery();
 
         if ($isSelect === true) {
+           
             try {
                 $query->select($columSelect);
             } catch (\Throwable $e) {
@@ -54,9 +55,8 @@ class BaseService
             } catch (\Throwable $e) {
             }
         }
-        
         if ($filterBaseDecode !== null) {
-           try {
+             try {
                 $filterDecode = json_decode(base64_decode($filterBaseDecode));
                 foreach ($filterDecode as $item) {
                     if ($item?->type === LableSystem::FILTER_TYPE_CHECK_NULL) {
@@ -65,16 +65,21 @@ class BaseService
                         } elseif ($item?->value === LableSystem::FILTER_VALUE_NOT_NULL) {
                             $query->whereNotNull($item->column);
                         }
-                    } elseif ($item?->type === LableSystem::FILTER_TYPE_COLUMN){
+                    } elseif ($item?->type === LableSystem::FILTER_TYPE_COLUMN) {
                         $query->where($item->column, $item->value);
                     } elseif ($item?->type === LableSystem::FILTER_TYPE_RELATIONSHIP && $item?->relationship) {
                         $query->whereHas($item->relationship, function ($query) use ($item) {
-                            $query->whereIn($item->column,$item->value); 
+                            $query->whereIn($item->column, $item->value);
                         });
-                     } 
-                     elseif ($item?->type === LableSystem::FILTER_TYPE_RELATIONSHIP && $item?->relationship) {
+                    } elseif ($item?->type === LableSystem::FILTER_TYPE_RELATIONSHIP && $item?->relationship) {
                         $query->where($item->column, (int) $item->value);
-                     }
+                    } elseif ($item?->type === LableSystem::FILTER_TYPE_METHOD) {
+                        $method = $item->column;
+                        $query->$method((int) $item->value);
+                    } elseif ($item?->type === LableSystem::FILTER_CHECK_TIME_NOW) {
+                    $query->where($item->column, $item->value, Carbon::now());
+                  
+                    }
                 }
             } catch (\Throwable $e) {
             }
@@ -88,7 +93,6 @@ class BaseService
             } catch (\Throwable $e) {
             }
         }
-
         try {
             $result = $query->paginate($limit, ['*'], 'page', $page);
             return $result;
@@ -125,7 +129,7 @@ class BaseService
         $numbers = rand(100000, 999999);
         $code = $letters . $numbers;
 
-        while ($model::where( $colum, $code)->exists()) {
+        while ($model::where($colum, $code)->exists()) {
             $letters = Str::upper(Str::random(6));
             $numbers = rand(100000, 999999);
             $code = $letters . $numbers;

@@ -35,4 +35,14 @@ class ContractModel extends Model
     public function service(){
         return $this->hasMany(ServiceContractModel::class,'contractId', 'id');
     }
+    public function scopeQueryUser($query, $userId)
+    {
+        return $query->where(function ($q) use ($userId) {
+            $q->where('userId', $userId)
+                ->orWhereHas('customer', function ($subQuery) use ($userId) {
+                    $subQuery->where('userId', $userId);
+                });
+        });
+    }
+
 }

@@ -11,6 +11,7 @@ import {
   setListServiceRoom,
   setAcctionAll,
   setPermisstionAll,
+  setStaffAll,
   setPermisstionDetailAll
 } from "../../redux/accction/listTable";
 import { setLoading } from "../../redux/accction/reducers";
@@ -98,6 +99,22 @@ export const getListStaff = (titel = null, page = 1, limit = 10, search = null, 
     dispatch(getListFunService(objectGet))
   };
 };
+export const getAllStaff = (exportExcel = false, isSelectAll = false, page = 1, limit = 10, search = null, filterBaseDecode = null) => {
+  const objectGet = {
+    getList: setStaffAll,
+    exportExcel: exportExcel,
+    routerLink: 'staff/staff',
+    isSelect: isSelectAll,
+    page: exportExcel === true ? null : page,
+    limit: exportExcel === true ? null : limit,
+    search: (search !== null && search.trim().length > 0) ? search : null,
+    filterBaseDecode: filterBaseDecode
+  }
+  return (dispatch) => {
+    dispatch(getAllData(objectGet))
+  };
+};
+
 export const addStaff = (data, resetForm) => {
   const objectCreate = {
     routerLink: 'staff/staff',
@@ -458,7 +475,7 @@ export const getListRoom = (titel = null, page = 1, limit = 10, search = null, f
   };
 };
 
-export const getAllRoom = (exportExcel = false, isSelectAll = false, page = 1, limit = 10, search = null) => {
+export const getAllRoom = (exportExcel = false, isSelectAll = false, page = 1, limit = 10, search = null, filterBaseDecode = null) => {
   const objectGet = {
     getList: setRoomAll,
     exportExcel: exportExcel,
@@ -466,7 +483,8 @@ export const getAllRoom = (exportExcel = false, isSelectAll = false, page = 1, l
     isSelect: isSelectAll,
     page: exportExcel === true ? null : page,
     limit: exportExcel === true ? null : limit,
-    search: (search !== null && search.trim().length > 0) ? search : null
+    search: (search !== null && search.trim().length > 0) ? search : null,
+    filterBaseDecode: filterBaseDecode
   }
   return (dispatch) => {
     dispatch(getAllData(objectGet))
@@ -582,6 +600,7 @@ export const getListContract = (titel = null, page = 1, limit = 10, search = nul
     titelnameExcel: ['Stt', 'id đồ đạc vật dụng', 'tên đồ đạc vật dụng', 'mã đồ đạc vật dụng', 'giá mua đồ đạc vật dụng', 'thời gian tạo', ' thời gian cập nhật'],
     columExcel: ['id', 'name', 'code', 'price', 'created_at', 'updated_at'],
     titelExcel: titel,
+    filterBaseDecode: filterBaseDecode
   }
   return (dispatch) => {
     dispatch(getListFunService(objectGet))
@@ -705,6 +724,7 @@ export const getListBill = (titel = null, page = 1, limit = 10, search = null, f
     titelnameExcel: ["STT", "ID", "Tên chức vụ", "Thời gian tạo", "Cập nhật"],
     columExcel: ['id', 'name', 'created_at', 'updated_at'],
     titelExcel: titel,
+    filterBaseDecode: filterBaseDecode
   }
   return (dispatch) => {
     dispatch(getListFunService(objectGet))

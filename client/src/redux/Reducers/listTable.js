@@ -9,6 +9,7 @@ const initialState = {
   listRoomAll: null,
   listUserAll: null,
   listServiceRoom: null,
+  listStaffAll: null,
   listFurnitureRoom: null,
   listPermisstionAll: null,
   listAcctionAll: null,
@@ -153,6 +154,12 @@ const listTable = (state = initialState, action) => {
         ...state,
         listUserAll: action.payload,
       };
+    case 'SETSTAFFALL':
+      return {
+        ...state,
+        listStaffAll: action.payload,
+      };
+      
     case 'SETSERVICEALL':
       return {
         ...state,

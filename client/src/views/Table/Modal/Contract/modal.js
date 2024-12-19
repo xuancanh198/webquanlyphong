@@ -56,38 +56,6 @@ function Example({ title }) {
         );
         setChangeUserId(null);
     }
-    useEffect(() => {
-        const fetchData = async () => {
-            if (show === true) {
-                if (listUserAll === null && listRoomAll === null) {
-                    try {
-                        await Promise.all([
-                            dispatch(getAllUser(false, true, pageUser, 20, searchUser)),
-                            dispatch(getAllRoom(false, true, pageRoom, 20, searchRoom))
-                        ]);
-                    } catch (error) {
-                        console.error('Error fetching data:', error);
-                    }
-                } else {
-                    if (listUserAll === null) {
-                        try {
-                            await dispatch(getAllUser(false, true, pageUser, 20, searchUser));
-                        } catch (error) {
-                            console.error('Error fetching user data:', error);
-                        }
-                    }
-                    if (listRoomAll === null) {
-                        try {
-                            await dispatch(getAllRoom(false, true, pageRoom, 20, searchRoom));
-                        } catch (error) {
-                            console.error('Error fetching room data:', error);
-                        }
-                    }
-                }
-            }
-        };
-        fetchData();
-    }, [show, dispatch]);
 
     useEffect(() => {
         if (listUserAll !== null) {

@@ -31,4 +31,12 @@ class BilModel extends Model
     public function staff(){
         return $this->belongsTo(StaffModel::class,'staffId');
     }
+    public function scopeQueryBuilding($query, $BuildingId){
+        return $query->where(function ($q) use ($BuildingId) {
+            $q->where('buildingId', $BuildingId)
+                ->orWhereHas('room', function ($subQuery) use ($BuildingId) {
+                    $subQuery->where('buildingId', $BuildingId);
+                });
+        });
+    }
 }

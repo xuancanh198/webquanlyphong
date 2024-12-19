@@ -26,7 +26,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ImageUploading from 'react-images-uploading';
 import { cilUser, cilX, cilNotes } from '@coreui/icons';
 import { setFilter, setModalUpdate } from "../../../../redux/accction/listTable";
-import { getAllRoom, getAllUser,  getListServiceRoom, getListFurnitureRoom,  updateContract, deleteContract, downloadFileContract} from "../../../../service/baseService/cruds";
+import { getAllRoom, getAllUser, getListServiceRoom, getListFurnitureRoom, updateContract, deleteContract, downloadFileContract } from "../../../../service/baseService/cruds";
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -88,37 +88,11 @@ function List({ data }) {
     setChangeUserId(null);
   }
   useEffect(() => {
-    const fetchData = async () => {
-      if (show === true) {
-        if (listUserAll === null && listRoomAll === null) {
-          try {
-            await Promise.all([
-              dispatch(getAllUser(false, true, pageUser, 20, searchUser)),
-              dispatch(getAllRoom(false, true, pageRoom, 20, searchRoom))
-            ]);
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          }
-        } else {
-          if (listUserAll === null) {
-            try {
-              await dispatch(getAllUser(false, true, pageUser, 20, searchUser));
-            } catch (error) {
-              console.error('Error fetching user data:', error);
-            }
-          }
-          if (listRoomAll === null) {
-            try {
-              await dispatch(getAllRoom(false, true, pageRoom, 20, searchRoom));
-            } catch (error) {
-              console.error('Error fetching room data:', error);
-            }
-          }
-        }
-      }
-    };
-    fetchData();
-  }, [show, dispatch]);
+
+    dispatch(getAllUser(false, true, pageUser, 20, searchUser)),
+      dispatch(getAllRoom(false, true, pageRoom, 20, searchRoom))
+
+  }, []);
 
   useEffect(() => {
     if (listUserAll !== null) {
@@ -160,15 +134,15 @@ function List({ data }) {
           formData.append('image', values[key]);
         }
       }
-      
+
       else if (key === 'customers' && values[key]) {
         custormers.forEach((customer) => {
-        const newObject = {
-         id : customer.id,
-          user_id : customer.label,
-           fullname : customer.value,
-        }
-          formData.append('customers[]',JSON.stringify(newObject));
+          const newObject = {
+            id: customer.id,
+            user_id: customer.label,
+            fullname: customer.value,
+          }
+          formData.append('customers[]', JSON.stringify(newObject));
         });
       }
       else if (key === 'service' && values[key]) {
@@ -225,44 +199,44 @@ function List({ data }) {
     enableReinitialize: true,
     validationSchema: Yup.object({
       priceTime: Yup.number()
-      .required(t('validation.attribute.required', { attribute: t('lableView.contract.priceTime') }))
-      .min(1, t('validation.attribute.min', { attribute: t('lableView.contract.priceTime'), min: 1 }))
-      .integer(t('validation.attribute.integer', { attribute: t('lableView.contract.priceTime') }))
-      .typeError(t('validation.attribute.integer', { attribute: t('lableView.contract.priceTime') })),
-  deposit: Yup.number()
-      .required(t('validation.attribute.required', { attribute: t('lableView.contract.deposit') }))
-      .min(1, t('validation.attribute.min', { attribute: t('lableView.contract.deposit'), min: 1 }))
-      .integer(t('validation.attribute.integer', { attribute: t('lableView.contract.deposit') }))
-      .typeError(t('validation.attribute.integer', { attribute: t('lableView.contract.deposit') })),
-  roomId: Yup.number()
-      .required(t('validation.attribute.required', { attribute: t('lableView.contract.room') }))
-      .min(1, t('validation.attribute.min', { attribute: t('lableView.contract.room'), min: 1 }))
-      .integer(t('validation.attribute.integer', { attribute: t('lableView.contract.room') }))
-      .typeError(t('validation.attribute.integer', { attribute: t('lableView.contract.room') })),
+        .required(t('validation.attribute.required', { attribute: t('lableView.contract.priceTime') }))
+        .min(1, t('validation.attribute.min', { attribute: t('lableView.contract.priceTime'), min: 1 }))
+        .integer(t('validation.attribute.integer', { attribute: t('lableView.contract.priceTime') }))
+        .typeError(t('validation.attribute.integer', { attribute: t('lableView.contract.priceTime') })),
+      deposit: Yup.number()
+        .required(t('validation.attribute.required', { attribute: t('lableView.contract.deposit') }))
+        .min(1, t('validation.attribute.min', { attribute: t('lableView.contract.deposit'), min: 1 }))
+        .integer(t('validation.attribute.integer', { attribute: t('lableView.contract.deposit') }))
+        .typeError(t('validation.attribute.integer', { attribute: t('lableView.contract.deposit') })),
+      roomId: Yup.number()
+        .required(t('validation.attribute.required', { attribute: t('lableView.contract.room') }))
+        .min(1, t('validation.attribute.min', { attribute: t('lableView.contract.room'), min: 1 }))
+        .integer(t('validation.attribute.integer', { attribute: t('lableView.contract.room') }))
+        .typeError(t('validation.attribute.integer', { attribute: t('lableView.contract.room') })),
 
-  userId: Yup.number()
-      .required(t('validation.attribute.required', { attribute: t('lableView.room.user') }))
-      .min(1, t('validation.attribute.min', { attribute: t('lableView.room.user'), min: 1 }))
-      .integer(t('validation.attribute.integer', { attribute: t('lableView.room.user') }))
-      .typeError(t('validation.attribute.integer', { attribute: t('lableView.room.user') })),
-  code: Yup.string()
-      .required(t('validation.attribute.required', { attribute: t('lableView.room.code') }))
-      .min(1, t('validation.attribute.min', { attribute: t('lableView.room.code'), min: 1 }))
-      .max(255, t('validation.attribute.max', { attribute: t('lableView.room.code'), max: 255 }))
-      .matches(/^[a-zA-Z0-9]+$/, t('validation.attribute.matches', { attribute: t('lableView.room.code') })),
-  // image: Yup.mixed()
-  //     .required(t('validation.attribute.required', { attribute: t('lableView.contract.image') }))
-  //     .nullable(),
-  // customers: Yup.array()
-  //     .min(1, t('validation.attribute.minItems', { attribute: t('lableView.contract.customers'), min: 1 }))
-  //     .required(t('validation.attribute.required', { attribute: t('lableView.contract.customers') })),
-  // service: Yup.array()
-  //     .min(1, t('validation.attribute.minItems', { attribute: t('lableView.contract.service'), min: 1 }))
-  //     .required(t('validation.attribute.required', { attribute: t('lableView.contract.service') })),
+      userId: Yup.number()
+        .required(t('validation.attribute.required', { attribute: t('lableView.room.user') }))
+        .min(1, t('validation.attribute.min', { attribute: t('lableView.room.user'), min: 1 }))
+        .integer(t('validation.attribute.integer', { attribute: t('lableView.room.user') }))
+        .typeError(t('validation.attribute.integer', { attribute: t('lableView.room.user') })),
+      code: Yup.string()
+        .required(t('validation.attribute.required', { attribute: t('lableView.room.code') }))
+        .min(1, t('validation.attribute.min', { attribute: t('lableView.room.code'), min: 1 }))
+        .max(255, t('validation.attribute.max', { attribute: t('lableView.room.code'), max: 255 }))
+        .matches(/^[a-zA-Z0-9]+$/, t('validation.attribute.matches', { attribute: t('lableView.room.code') })),
+      // image: Yup.mixed()
+      //     .required(t('validation.attribute.required', { attribute: t('lableView.contract.image') }))
+      //     .nullable(),
+      // customers: Yup.array()
+      //     .min(1, t('validation.attribute.minItems', { attribute: t('lableView.contract.customers'), min: 1 }))
+      //     .required(t('validation.attribute.required', { attribute: t('lableView.contract.customers') })),
+      // service: Yup.array()
+      //     .min(1, t('validation.attribute.minItems', { attribute: t('lableView.contract.service'), min: 1 }))
+      //     .required(t('validation.attribute.required', { attribute: t('lableView.contract.service') })),
 
-  // furniture: Yup.array()
-  //     .min(1, t('validation.attribute.minItems', { attribute: t('lableView.contract.furniture'), min: 1 }))
-  //     .required(t('validation.attribute.required', { attribute: t('lableView.contract.furniture') })),
+      // furniture: Yup.array()
+      //     .min(1, t('validation.attribute.minItems', { attribute: t('lableView.contract.furniture'), min: 1 }))
+      //     .required(t('validation.attribute.required', { attribute: t('lableView.contract.furniture') })),
     }),
     onSubmit: (values, { resetForm }) => {
       updateContractFun(values, resetForm);
@@ -282,21 +256,21 @@ function List({ data }) {
   };
 
   let triggerImageUpload = null;
-  const addItemFurnitures = (e, item, type =false) => {
+  const addItemFurnitures = (e, item, type = false) => {
     const isChecked = e.target.checked;
     const newObject = {
       quantity: 1,
-      furnitureId: item.furnitureId ||  item.furniture.id,
-      id : type === true ? item.id : null,
-      name :  item.name||  item.furniture.name,
-      maxQuantity : item.quantity
+      furnitureId: item.furnitureId || item.furniture.id,
+      id: type === true ? item.id : null,
+      name: item.name || item.furniture.name,
+      maxQuantity: item.quantity
     };
-   
+
     if (isChecked) {
       setQuantityFurniture((prev) => {
         const updatedPrev = prev || [];
         const exists = updatedPrev.some(item => Number(item.furnitureId) === Number(newObject.furnitureId));
-        if (exists) {      
+        if (exists) {
           return updatedPrev;
         } else {
           return [...updatedPrev, newObject];
@@ -319,7 +293,7 @@ function List({ data }) {
   const handleQuantityChangeFurniture = (item, value, type = false) => {
 
     const numericValue = Number(value);
-     const maxQuantity = Number(type === true ? item.quantity : item.maxQuantity);
+    const maxQuantity = Number(type === true ? item.quantity : item.maxQuantity);
     if (numericValue > maxQuantity) {
       toast.error(t('messageText.changeQuantityFail', { attribute: t('lableView.contract.furniture') }));
       setQuantityFurniture((prevFurnitures) => {
@@ -338,7 +312,7 @@ function List({ data }) {
           const furnitureExists = prevFurnitures.some(furniture => Number(furniture.furnitureId) === Number(item.furnitureId));
           if (furnitureExists) {
             return prevFurnitures.map(furniture =>
-              Number(furniture.furnitureId) === Number( item.furnitureId)
+              Number(furniture.furnitureId) === Number(item.furnitureId)
                 ? { ...furniture, quantity: numericValue }
                 : furniture
             );
@@ -351,15 +325,15 @@ function List({ data }) {
     }
   };
 
-  const addItemServices = (e, item , type = false) => {
+  const addItemServices = (e, item, type = false) => {
     const isChecked = e.target.checked;
     const newObject = {
       quantity: item.quantity || 1,
-      serviceId: item.serviceId ||  item.service.id,
-      id : type === true ? item.id : null,
-      name : item.name || item.service.name,
+      serviceId: item.serviceId || item.service.id,
+      id: type === true ? item.id : null,
+      name: item.name || item.service.name,
     };
-   
+
     if (isChecked) {
       setQuantityService((prev) => {
         const updatedPrev = prev || [];
@@ -451,7 +425,7 @@ function List({ data }) {
           name: furnitureItem?.furniture?.name,
           id: furnitureItem?.id,
           quantity: furnitureItem?.quantity,
-          maxQuantity : furnitureItem?.max_quantity
+          maxQuantity: furnitureItem?.max_quantity
         }))
       );
       setCustormers(
@@ -461,7 +435,7 @@ function List({ data }) {
           id: custormerItem?.id,
         }))
       );
-  
+
     }
   }, [dataDeatil]);
   const handleShow = (item) => {
@@ -569,12 +543,12 @@ function List({ data }) {
                 <label> {t('actionView.update')}</label>
               </div>
               <div className='d-flex'>
-              <div className='flex_center icon-delete' onClick={() => deleteContractId(dataDeatil.id)}>
-                <i class="fa-solid fa-trash"></i>
-              </div>
-              <div className='flex_center icon-delete ms-3' onClick={() => dispatch(downloadFileContract(dataDeatil.id))}>
-              <CIcon className='' icon={cilNotes} size="l" />
-              </div>
+                <div className='flex_center icon-delete' onClick={() => deleteContractId(dataDeatil.id)}>
+                  <i class="fa-solid fa-trash"></i>
+                </div>
+                <div className='flex_center icon-delete ms-3' onClick={() => dispatch(downloadFileContract(dataDeatil.id))}>
+                  <CIcon className='' icon={cilNotes} size="l" />
+                </div>
               </div>
             </div>
             {dataDeatil !== null
@@ -825,29 +799,29 @@ function List({ data }) {
                           )}
                         <div className='list-user d-flex flex-wrap mt-4 gap-3'>
                           {checked === false ?
-                          dataDeatil?.custormer?.length > 0 && dataDeatil?.custormer?.map((item, index) => {
-                            return (
-                              <div key={index} className='item-user pt-3 pb-3 ps-4 pe-4'>
-                                <Link>
-                                  {item?.user?.fullname}
-                                </Link>
-                               
-                              </div>
-                            )
-                          })
-                          :
-                          
-                          custormers?.length > 0 && custormers?.map((item, index) => {
-                            return (
-                              <div key={index} className='item-user pt-3 pb-3 ps-4 pe-4'>
-                                <Link>
-                                  {item.value}
-                                </Link>
-                                {checked === true &&
-                                  (<CIcon icon={cilX} className="close-icon" onClick={() => removeCustomrers(item)} />)}
-                              </div>
-                            )
-                          })
+                            dataDeatil?.custormer?.length > 0 && dataDeatil?.custormer?.map((item, index) => {
+                              return (
+                                <div key={index} className='item-user pt-3 pb-3 ps-4 pe-4'>
+                                  <Link>
+                                    {item?.user?.fullname}
+                                  </Link>
+
+                                </div>
+                              )
+                            })
+                            :
+
+                            custormers?.length > 0 && custormers?.map((item, index) => {
+                              return (
+                                <div key={index} className='item-user pt-3 pb-3 ps-4 pe-4'>
+                                  <Link>
+                                    {item.value}
+                                  </Link>
+                                  {checked === true &&
+                                    (<CIcon icon={cilX} className="close-icon" onClick={() => removeCustomrers(item)} />)}
+                                </div>
+                              )
+                            })
                           }
                         </div>
                       </Form.Group>
@@ -869,7 +843,7 @@ function List({ data }) {
                                         {t('lableView.furniture.price') + " : " + formatPrice(item?.furniture?.price)} <br />
                                         {t('quantity') + " : " + item?.quantity}
                                       </p>
-                                      
+
                                     </div>
                                   </div>
                                 )
@@ -894,17 +868,17 @@ function List({ data }) {
                                         className="input-quantity"
                                         value={getQuantityFurniture(item?.furnitureId)}
                                         min={0}
-                                       
+
                                         step={1}
                                         onChange={(value) => handleQuantityChangeFurniture(item, value)}
-                                        />
+                                      />
                                     </div>
                                   ))
                                 )}
 
                                 {listFurnitureRoom && listFurnitureRoom?.length > 0 && (
                                   listFurnitureRoom
-                                   ?.filter(item => !quantityFurniture.some(s => s.furnitureId === item.furniture.id))
+                                    ?.filter(item => !quantityFurniture.some(s => s.furnitureId === item.furniture.id))
                                     ?.map((item) => (
                                       <div key={item.furniture.id} className="quantity-item-custorm">
                                         <input
@@ -916,7 +890,7 @@ function List({ data }) {
                                           className="input-quantity"
                                           value={getQuantityFurniture(item?.furniture?.id)}
                                           min={0}
-                                      
+
                                           step={1}
                                           onChange={(value) => handleQuantityChangeFurniture(item, value, true)}
                                         />
@@ -950,7 +924,7 @@ function List({ data }) {
                                         {t('lableView.service.price') + " : " + formatPrice(item?.service?.price) + " / " + t("lableView.service.unitValue." + item.service.unit)} <br />
                                         {t('quantity') + " : " + item?.quantity}
                                       </p>
-                                    
+
                                     </div>
                                   </div>
                                 )
@@ -962,8 +936,8 @@ function List({ data }) {
                           (
                             <>
                               <div className="d-flex flex-wrap gap-3">
-                              {quantityService !== null && quantityService.map((item, index) => (
-                                    <div key={item.id} className="quantity-item-custorm">
+                                {quantityService !== null && quantityService.map((item, index) => (
+                                  <div key={item.id} className="quantity-item-custorm">
                                     <input
                                       type="checkbox"
                                       onChange={(e) => addItemServices(e, item, true)}

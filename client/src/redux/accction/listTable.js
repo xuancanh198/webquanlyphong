@@ -96,6 +96,10 @@ export const setFurnitureAll = (items) => ({
     type: 'SETFURNITUREALL',
     payload: items,
 });
+export const setStaffAll = (items) => ({
+    type: 'SETSTAFFALL',
+    payload: items,
+});
 export const setServiceAll = (items) => ({
     type: 'SETSERVICEALL',
     payload: items,

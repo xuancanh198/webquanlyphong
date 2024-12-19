@@ -16,5 +16,6 @@ final class LableSystem extends Enum
     const FILTER_VALUE_NOT_NULL = "notNull";
     const FILTER_TYPE_COLUMN = "filterColumn";
     const FILTER_TYPE_RELATIONSHIP = "filterRelationship";
-    const FILTER_TYPE_CHECK_STATUS = "checkStatus";
+    const FILTER_TYPE_METHOD = "method";
+    const FILTER_CHECK_TIME_NOW = "checkTimeNow";
 }
