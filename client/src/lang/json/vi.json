@@ -69,6 +69,12 @@
     }
   },
   "lableView": {
+    "role": {
+      "name": "Tên chức vụ",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật",
+      "action": "Hành động"
+    },
     "staff": {
       "username": "Tên đăng nhập",
       "rolename": "Tên chức vụ",
@@ -86,7 +92,9 @@
       "phoneNumber": " Số điện thoại",
       "total" : "Tổng số tài khoản",
       "totalActive": "Tổng số tài khoản đang hoạt động",
-      "ban_expiration_at" :"Thời gian hết hạn khóa"
+      "ban_expiration_at" :"Thời gian hết hạn khóa",
+        "created_at": "Thời gian tạo",
+        "updated_at": "Thời gian cập nhật"
     },
     "typeRoom": {
       "name": "Tên loại phòng",
@@ -289,8 +297,10 @@
     "dateIssuanceCard" :"Ngày cấp căn cước"
   },
   "messageText": {
+    "yourInfoText" : "Thông tin tài khoản của bạn",
     "account" : "Tài khoản",
     "changeAll" : "Chọn tất cả",
+    "MyAccount" : "Tài khoản của tôi",
     "staffCreate" : " Nhập nhân viên tạo",
     "note": "Ghi chú",
     "login": "Đăng nhập để vào trang",

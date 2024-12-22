@@ -34,4 +34,11 @@ class Controller extends BaseController
             ]),
         ]);
     }
+    public function returnData( $result, $status = 'success')
+    {
+        return response()->json([
+            'status' => $status,
+            'result' => $result,
+        ]);
+    }
 }

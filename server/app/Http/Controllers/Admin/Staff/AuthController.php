@@ -34,4 +34,19 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
+    public function getMyInfoAccount()
+    {
+        $staff = Auth::user()->load([
+            'role' => function ($query) {
+                $query->select('id', 'name'); 
+            }
+        ]);
+
+        $permissions = $staff->permissions();
+        $staff->permission_detail = $permissions;
+
+        return $this->returnData($staff);
+    }
+
+
 }

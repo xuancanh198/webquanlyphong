@@ -34,6 +34,7 @@ class StaffModel extends Authenticatable
         'created_at',
         'updated_at',
     ];
+    protected $hidden = ['role_id','password'];
     public function role(){
         return  $this->belongsTo(RoleModel::class, 'role_id');
     }

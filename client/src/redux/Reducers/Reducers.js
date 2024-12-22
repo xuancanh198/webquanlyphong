@@ -5,9 +5,15 @@ const initialState = {
   lang: "vi",
   loadding: false,
   isLogin : Cookies.get('token') === null ? false : true,
+  infoStaff : null
 };
 const Reducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'SETINFOSTAFF':
+      return {
+        ...state,
+        infoStaff: action.payload,
+      };
     case 'SETLANG':
       return {
         ...state,

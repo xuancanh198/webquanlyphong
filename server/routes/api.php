@@ -24,6 +24,7 @@ Route::middleware(['admin.middleware'])->group(function () {
         Route::post('/login', [AuthController::class, 'login']);
         Route::group(['middleware' => 'auth:admin'], function () {
             Route::middleware(['admin.checkPermisstion'])->group(function () {
+                Route::get('/my-user-account', [AuthController::class, 'getMyInfoAccount']);
                 Route::group(['prefix' => 'system'], function () {
                     Route::group(['prefix' => 'setting'], function () {
                         Route::get('', [SettingController::class, 'index']);

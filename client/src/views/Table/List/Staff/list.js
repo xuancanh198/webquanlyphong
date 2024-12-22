@@ -38,9 +38,7 @@ function List({ data }) {
   const dispatch = useDispatch();
   const show = useSelector((state) => state.listTable.modalUpdate);
   const [dataDeatil, setDataDeatil] = useState(null);
-  const [statusToggle, setStatusToggle] = useState(false);
   const [editorData, setEditorData] = useState('');
-  const [note, setNote] = useState('')
   const [togglePassword, settogglePassword] = useState(false);
   const [images, setImages] = useState([]);
   const [address, setAddress] = useState('');

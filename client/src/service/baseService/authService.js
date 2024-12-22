@@ -2,7 +2,7 @@ import APILink from "../API";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
-import { setLoading} from "../../redux/accction/reducers";
+import { setLoading, setInfoStaff } from "../../redux/accction/reducers";
 
 export const loginFun = (value, navigate) => {
   return (dispatch) => {
@@ -25,4 +25,22 @@ export const loginFun = (value, navigate) => {
     });
   }
   
+}
+export const getMyInfoStaff = () => {
+  return (dispatch) => {
+    dispatch(setLoading(true));
+    APILink.get('admin/my-user-account')
+      .then((response) => {
+        if (response.data.status === "success") {
+          dispatch(setInfoStaff(response.data.result))
+        } 
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
+  }
+
 }

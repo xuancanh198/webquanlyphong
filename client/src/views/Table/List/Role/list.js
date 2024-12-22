@@ -236,7 +236,6 @@ function List({ data }) {
           <Modal.Header closeButton>
             <Modal.Title>
               {checked === false ? t('actionView.detail') : t('actionView.update')}
-
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
