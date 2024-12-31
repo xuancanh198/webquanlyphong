@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use App\Service\Function\Action\Firebase;
 use App\Models\Staff\RoleModel;
 use App\Service\Function\ServiceFunction\ConvertData;
+use Illuminate\Support\Facades\Auth;
+
 class StaffService extends BaseService
 {
     protected $model;
@@ -44,6 +46,7 @@ class StaffService extends BaseService
     {
         $RoleModel = RoleModel::find($this->request->roleId);
         $this->model->role_id =  $this->request->roleId;
+        $this->model->buildingId =  Auth::user()->buildingId;
         $this->model->fullname =  $this->request->fullname;
         $this->model->username =  $this->request->username;
         $this->model->password =  bcrypt($this->request->password);

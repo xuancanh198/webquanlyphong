@@ -131,7 +131,7 @@ function Example({ title }) {
 
     const formik = useFormik({
         initialValues: {
-            address: address,
+            address: "",
             note: note,
             image: null,
             long: "",
@@ -152,8 +152,8 @@ function Example({ title }) {
                 .max(255, t('validation.attribute.min', { attribute: t('lableView..building.name'), max: 50 }))
                 .matches(/^[\p{L}\s.']+$/u, t('validation.attribute.matches', { attribute: t('lableView.building.name') }))
                 .required(t('validation.attribute.required', { attribute: t('lableView.building.name') })),
-            addressDetail: Yup.string()
-                .required(t('validation.attribute.required', { attribute: t('lableView.building.addressDetail') })),
+            // addressDetail: Yup.string()
+            //     .required(t('validation.attribute.required', { attribute: t('lableView.building.addressDetail') })),
             numberFloor: Yup.number()
                 .typeError(t('validation.attribute.integer', { attribute: t('lableView.building.numberFloor') }))
                 .min(1, t('validation.attribute.minValue', { attribute: t('lableView.building.numberFloor'), min: 1 }))
@@ -310,7 +310,19 @@ function Example({ title }) {
                                         {formik.errors.numbeRoomsRent}
                                     </Form.Control.Feedback>
                                 </Form.Group>
-                                <Form.Group as={Col} xl="4" lg="6" md="6" sm="12" className='mb-3 mt-3'>
+                                <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3'>
+                                    <Form.Label>{t('lableView.building.address')}</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="address"
+                                        value={formik.values.address}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        isInvalid={formik.touched.address && formik.errors.address}
+                                    />
+                                </Form.Group>
+
+                                {/* <Form.Group as={Col} xl="4" lg="6" md="6" sm="12" className='mb-3 mt-3'>
                                     <Form.Label>{t('lableView.staff.province')}</Form.Label>
                                     <Form.Select aria-label="Default select example" name='province' onChange={(e) => provinceFun(e)}>
                                         {province && province.map((item) => (
@@ -351,7 +363,7 @@ function Example({ title }) {
                                     <Form.Control.Feedback type="invalid">
                                         {formik.errors.addressDetail}
                                     </Form.Control.Feedback>
-                                </Form.Group>
+                                </Form.Group> */}
                                 <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3'>
                                     <div
                                         className='btn_upload_img'

@@ -101,7 +101,7 @@ function Example({ title }) {
             username: '',
             password: "",
             fullname: "",
-            address: address,
+            address: "",
             roleId: roleId,
             email: "",
             phoneNumber: "",
@@ -341,7 +341,22 @@ function Example({ title }) {
                                     </div>
 
                                 </Form.Group>
-                                <Form.Group as={Col} xl="4" lg="6" md="6" sm="12" className='mb-3 mt-3'>
+                                <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3'>
+                                    <Form.Label>{t('lableView.staff.address')}</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="address"
+                                        value={formik.values.address}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        isInvalid={formik.touched.address && formik.errors.address}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.address}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+
+                                {/* <Form.Group as={Col} xl="4" lg="6" md="6" sm="12" className='mb-3 mt-3'>
                                     <Form.Label>{t('lableView.staff.province')}</Form.Label>
                                     <Form.Select aria-label="Default select example" name='province' onChange={(e) => provinceFun(e)}>
                                         {province && province.map((item) => (
@@ -378,7 +393,7 @@ function Example({ title }) {
                                         onChange={(e) => setAddressDetail(e.target.value)}
                                         onBlur={formik.handleBlur}
                                     />
-                                </Form.Group>
+                                </Form.Group> */}
 
                                 <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3'>
                                     <div

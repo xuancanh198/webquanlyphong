@@ -8,7 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Staff\RoleModel;
 use App\Models\Permisstion\PermisstionDetailModel;
+use App\Models\Room\BuildingModel;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class StaffModel extends Authenticatable
 {
@@ -78,7 +80,13 @@ class StaffModel extends Authenticatable
         return $result;
     }
 
-
+    public function building() {
+        return $this->belongsTo(BuildingModel::class, 'buildingId');
+    }
+    public function scopeBuilding($query)
+    {
+        return $query->where('buildingId', Auth::user()->buildingId);
+    }
     public function hasPermission(string $code): bool
     {
         $permissions = $this->getPermissions(); 

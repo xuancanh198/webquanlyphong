@@ -18,7 +18,7 @@ use App\Http\Controllers\Admin\User\BillController;
 use App\Http\Controllers\Admin\Staff\AuthController;
 use App\Http\Controllers\Admin\Staff\StaffController;
 use App\Http\Controllers\Admin\System\SettingController;
-
+use App\Http\Controllers\User\AccountController;
 Route::middleware(['admin.middleware'])->group(function () {
     Route::group(['prefix' => 'admin'], function () {
         Route::post('/login', [AuthController::class, 'login']);
@@ -131,4 +131,10 @@ Route::middleware(['admin.middleware'])->group(function () {
             });
         });
     });
+        Route::group(['prefix' => 'user'], function () {
+            Route::group(['middleware' => 'auth:user'], function () {
+            Route::post('/login', [AccountController::class, 'login']);
+
+            });
+        });
 });
