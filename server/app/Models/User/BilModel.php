@@ -9,11 +9,17 @@ use App\Models\User\UserModel;
 use App\Models\Room\RoomModel;
 use App\Models\User\ContractModel;;
 use App\Models\Staff\StaffModel;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
 class BilModel extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
     protected $table = "tbl_bill";
     protected $primary = 'id';
+    protected static $logName = 'bill';
+    protected static $logOnlyDirty = true;
     protected $fillable = ['code', 'staffId', 'roomId', 'totalMoney', 'status','contractId', 'userId', 'image','formPayment', 'started_at','ends_at','pay_at','note','created_at','updated_at'];
     protected $hidden = [ 'staffId', 'roomId','userId'];
     public function detail(){
@@ -38,5 +44,46 @@ class BilModel extends Model
                     $subQuery->where('buildingId', $BuildingId);
                 });
         });
+    }
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('adminAction')
+            ->logOnly([
+            'code',
+            'staffId',
+            'roomId',
+            'totalMoney',
+            'status',
+            'contractId',
+            'userId',
+            'image',
+            'formPayment',
+            'started_at',
+            'ends_at',
+            'pay_at',
+            'note',
+            ])
+            ->logOnlyDirty();
+    }
+
+    public static function tapActivity(Activity $activity, string $eventName)
+    {
+        $mess = "";
+        if ($eventName === 'updated' && isset($activity->causer_id)) {
+            if (Auth::user()->id === $activity->subject->id) {
+                $mess = "Người dùng : " . Auth::user()->username . " đã cập nhật thông tin của chính mình";
+            } else {
+                $mess = "Nhân viên : " . Auth::user()->username . " đã cập nhật thông tin của tài khoản người dùng : " . $activity->subject->username;
+            }
+        }
+
+
+        $activity->description = match ($eventName) {
+            'created' => "Nhân viên " . Auth::user()->username . " đã được tạo mới tài khoản nhân viên " . $activity->subject->username,
+            'updated' => $mess,
+            'deleted' => "Nhân viên " . Auth::user()->username . " đã được xóa tài khoản nhân viên " . $activity->subject->username,
+            default => $activity->description,
+        };
     }
 }
