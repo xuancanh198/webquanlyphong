@@ -13,14 +13,13 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
-
-
+use App\Enums\ActiveLog;
 class UserModel extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, LogsActivity;
     protected $table = "tbl_user";
     protected $primary = 'id';
-    protected static $logName = 'adminAction';
+    protected static $logName = ActiveLog::USER_VALUE;
     protected static $logOnlyDirty = true;
     protected $fillable = ['username', 'password', 'fullname', 'defaultPassword', 'email', 'dateOfBirth', 'phoneNumber', 'address','dateIssuanceCard','placeIssue','identificationCard','imgLink','isVerifiedInfor','status','note','created_at','updated_at'];
     public function scopeFindUsersByRoomId($query, $roomId)
@@ -45,10 +44,11 @@ class UserModel extends Authenticatable
     //     public function contracts(){
     //         return $this->hasMany(ContractModel::class, 'userId');
     //     } 
+    
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->useLogName('adminAction')
+            ->useLogName(ActiveLog::TYPE_LOG_ADMIN)
             ->logOnly([
             'username',
             'password',
@@ -68,7 +68,10 @@ class UserModel extends Authenticatable
             ])
             ->logOnlyDirty();
     }
-
+    public function getAuthPassword()
+    {
+        return $this->clave;
+    }
     public static function tapActivity(Activity $activity, string $eventName)
     {
         $mess = "";
@@ -87,5 +90,7 @@ class UserModel extends Authenticatable
             'deleted' => "Nhân viên " . Auth::user()->username . " đã được xóa tài khoản nhân viên " . $activity->subject->username,
             default => $activity->description,
         };
+        $activity->subject_type = self::$logName;
+
     }
 }

@@ -14,6 +14,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\ActiveLog;
+
 class ContractModel extends Model
 {
     use HasFactory, LogsActivity;
@@ -21,7 +23,7 @@ class ContractModel extends Model
     protected $primary = 'id';
     protected $fillable = ['code', 'staffId', 'roomId', 'priceTime', 'deposit', 'userId', 'img', 'startTime','endTime','note','created_at','updated_at'];
     protected $hidden = [ 'staffId', 'roomId','userId'];
-    protected static $logName = 'contract';
+    protected static $logName = ActiveLog::CONTRACT_VALUE;
     protected static $logOnlyDirty = true;
 
     public function user(){
@@ -54,7 +56,7 @@ class ContractModel extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->useLogName('adminAction')
+            ->useLogName(ActiveLog::TYPE_LOG_ADMIN)
             ->logOnly(['code', 'staffId', 'roomId', 'priceTime', 'deposit', 'userId', 'img', 'startTime', 'endTime', 'note', 'created_at', 'updated_at' ])
             ->logOnlyDirty();
     }
@@ -68,5 +70,7 @@ class ContractModel extends Model
             'deleted' => "Nhân viên " . Auth::user()->username . " đã được xóa hợp đồng" . $activity->subject->code,
             default => $activity->description,
         };
+        $activity->subject_type = self::$logName;
+
     }
 }

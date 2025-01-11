@@ -126,5 +126,6 @@ return [
     'updateAction' => 'Cập nhật',
     'deleteAction' => 'Xóa',
     'invalid_excel_value' => 'Giá trị Excel phải là kiểu boolean và giá trị phải là true.',
-
+    'sendEmailSuccess' => "Gửi email thành công !",
+    "loginSuccess" => "Đăng nhập thành công"
 ];

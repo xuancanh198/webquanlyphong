@@ -24,6 +24,7 @@ import ServiceList from "./List/Service/list";
 import AcctionList from "./List/Acction/list";
 import BillList from "./List/Bill/list";
 import FloorList from "./List/Floor/list";
+import LogActive from "./List/LogActive/list";
 import SettingList from "./List/Setting/list";
 import RoomList from "./List/Room/list";
 import ContractList from "./List/Contract/list";
@@ -46,6 +47,7 @@ import StaffFilter from "./Filter/Staff"
 import RoomFilter from "./Filter/Room"
 import UserFilter from "./Filter/User"
 import ContractFilter from "./Filter/Contract"
+import LogActiceFilter from "./Filter/LogActice"
 import BillFilter from "./Filter/Bill"
 import PermisstionDetailFilter from "./Filter/PermisstionDetail"
 import {
@@ -63,7 +65,8 @@ import {
   getListPermisstion,
   getListSetting,
   getListPermisstionDetail,
-  getListBill
+  getListBill,
+  getListActiveLog
 } from "../../service/baseService/cruds";
 import { useSelector, useDispatch } from 'react-redux';
 import { setTypeFilter, setpage, setLimit, setFilterStatus, setStartFilter, setEndFilter, setSearchVluae, setSeachStatus, setEcelDowload, setFilter } from "../../redux/accction/listTable";
@@ -275,6 +278,13 @@ const Tables = () => {
           SetTitel(t('page.setting'));
           dispatch(getListSetting(t('page.setting'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
+        case 'activeLog':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
+          SetTitel(t('page.activeLog'));
+          dispatch(getListActiveLog(t('page.activeLog'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
+          break;
         default:
           SetTitel('Tiêu đề mặc định');
           break;
@@ -452,6 +462,9 @@ const Tables = () => {
                         return <BillFilter />
                       case "permisstionDetail":
                         return <PermisstionDetailFilter />
+                      case "activeLog":
+                        return <LogActiceFilter />
+                        
                       default:
                         return null;
                     }
@@ -494,6 +507,8 @@ const Tables = () => {
                 return <AcctionList data={listTabledata} />;
               case 'setting':
                 return <SettingList data={listTabledata} />;
+              case 'activeLog':
+                return <LogActive data={listTabledata} />;
               default:
                 return null;
             }

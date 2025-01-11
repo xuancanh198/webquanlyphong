@@ -8,18 +8,20 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\ActiveLog;
+
 class FurnitureModel extends Model
 {
     use HasFactory;
     protected $table = "tbl_furnitures";
     protected $primary = 'id';
     protected $fillable = ['code', 'name','price', 'created_at', 'updated_at'];
-    protected static $logName = 'furniture';
+    protected static $logName = ActiveLog::ROLE_VALUE;
     protected static $logOnlyDirty = true;
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->useLogName('adminAction')
+            ->useLogName(ActiveLog::TYPE_LOG_ADMIN)
             ->logOnly([
                 'code',
                 'name',
@@ -37,5 +39,6 @@ class FurnitureModel extends Model
             'deleted' => "Nhân viên " . Auth::user()->username . " đã được xóa đồ đạc " . $activity->subject->name,
             default => $activity->description,
         };
+        $activity->subject_type = self::$logName;
     }
 }

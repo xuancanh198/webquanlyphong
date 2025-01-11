@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
+use App\Enums\ActiveLog;
 
 class StaffModel extends Authenticatable
 {
@@ -41,7 +42,7 @@ class StaffModel extends Authenticatable
     ];
     protected $hidden = ['role_id', 'password'];
 
-    protected static $logName = 'adminAction';
+    protected static $logName = ActiveLog::STAFF_VALUE;
     protected static $logOnlyDirty = true;
 
     public function role()
@@ -119,7 +120,7 @@ class StaffModel extends Authenticatable
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->useLogName('adminAction')
+            ->useLogName(ActiveLog::TYPE_LOG_ADMIN)
             ->logOnly([
                 'role_id',
                 'username',
@@ -158,6 +159,7 @@ class StaffModel extends Authenticatable
             'deleted' => "Nhân viên " . Auth::user()->username . " đã được xóa tài khoản nhân viên " . $activity->subject->username,
             default => $activity->description,
         };
+        $activity->subject_type = self::$logName;
     }
 
 }

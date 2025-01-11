@@ -10,6 +10,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\ActiveLog;
+
 class PermisstionDetailModel extends Model
 {
     use HasFactory, LogsActivity;
@@ -17,7 +19,7 @@ class PermisstionDetailModel extends Model
     protected $primary = 'id';
     protected $fillable = ['permissionId', 'acctionId','name','code','url', 'status','created_at', 'updated_at'];
 
-    protected static $logName = 'permission_detail';
+    protected static $logName = ActiveLog::PERMISSTION_DETAIL_VALUE;
     protected static $logOnlyDirty = true;
     public function acction(){
         return $this->belongsTo(ActionModel::class, 'acctionId', 'id');
@@ -28,7 +30,7 @@ class PermisstionDetailModel extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->useLogName('adminAction')
+            ->useLogName(ActiveLog::TYPE_LOG_ADMIN)
             ->logOnly([
             'permissionId',
             'acctionId',
@@ -49,5 +51,6 @@ class PermisstionDetailModel extends Model
             'deleted' => "Nhân viên " . Auth::user()->username . " đã được xóa quyền chi tiết " . $activity->subject->name,
             default => $activity->description,
         };
+        $activity->subject_type = self::$logName;
     }
 }

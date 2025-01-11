@@ -121,6 +121,11 @@ const NavConfig = () => {
           name: t('page.setting'),
           to: '/page?query=setting',
         },
+        {
+          component: CNavItem,
+          name: t('page.activeLog'),
+          to: '/page?query=activeLog',
+        },
       ],
     },
   ];

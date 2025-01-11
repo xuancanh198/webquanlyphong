@@ -1034,3 +1034,31 @@ export const deleteSetting = (id) => {
     dispatch(deleteFunService(routerLink, id, getListSetting));
   };
 };
+
+
+
+export const getListActiveLog = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
+  const objectGet = {
+    page: page,
+    limit: limit,
+    search: search,
+    fitler: fitler,
+    exportExcel: exportExcel,
+    filtersBase64: filtersBase64,
+    routerLink: 'system/active-log',
+    titelnameExcel: ["STT", "ID", "Tên chức vụ", "Thời gian tạo", "Cập nhật"],
+    columExcel: ['id', 'name', 'created_at', 'updated_at'],
+    titelExcel: titel,
+    filterBaseDecode: filterBaseDecode
+  }
+  return (dispatch) => {
+    dispatch(getListFunService(objectGet))
+  };
+};
+
+export const deleteActiveLog = (id) => {
+  const routerLink = "system/active-log";
+  return (dispatch) => {
+    dispatch(deleteFunService(routerLink, id, getListActiveLog));
+  };
+};

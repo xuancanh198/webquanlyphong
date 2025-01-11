@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Service\Function\UserAction\AuthUserFuntion;
+use App\Http\Requests\LoginUserRequest;
+use App\Enums\Login;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
 {
+
     public function login(Request $request)
     {
 
@@ -19,7 +23,7 @@ class AccountController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
-            $tokenResult = $user->createToken('Token user', ['user']);
+            $tokenResult = $user->createToken('Token admin', ['admin']);
             $accessToken = $tokenResult->accessToken;
             $token = $tokenResult->token;
             $token->expires_at = now()->addDays(7);
@@ -32,5 +36,28 @@ class AccountController extends Controller
         }
 
         return response()->json(['message' => 'Invalid credentials'], 401);
+    }
+    // public function login(LoginUserRequest $request)
+    // {
+    //     $res = null;
+    //     $typeLogin = $request->typeLogin;
+    //     if($typeLogin === Login::LOGINUSERBYEMAIL) {
+    //       $res =  app(AuthUserFuntion::class)->loginByEmail($request);
+    //     }
+    //     if($typeLogin === Login::LOGINUSERBYPASSWORD){
+    //         $res =  app(AuthUserFuntion::class)->loginByUsername($request);
+    //     }
+    //     return response()->json($res);
+    // }
+    public function authenticOTP(Request $request) {
+        $res = null;
+        $typeLogin = $request->typeLogin;
+        if ($typeLogin === Login::LOGINUSERBYEMAIL) {
+            $res =  app(AuthUserFuntion::class)->authentionOTPEmail($request);
+        }
+            return response()->json([
+            'status' => $res['status'], 
+            'message' => $res['message'],
+        ], $res['code']);
     }
 }

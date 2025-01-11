@@ -10,7 +10,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Auth;
-
+use App\Enums\ActiveLog;
 class RoleModel extends Model
 {
     use HasFactory, LogsActivity;
@@ -18,6 +18,8 @@ class RoleModel extends Model
     protected $table = "tbl_role";
     protected $primary = 'id';
     protected $fillable = ['name', 'role_detail', 'created_at', 'updated_at'];
+    protected static $logName = ActiveLog::ROLE_VALUE;
+    protected static $logOnlyDirty = true;
 
     public function permissions()
     {
@@ -43,13 +45,10 @@ class RoleModel extends Model
         return $this->hasMany(StaffModel::class, 'role_id', 'id');
     }
 
-    protected static $logName = 'role';
-    protected static $logOnlyDirty = true;
-
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->useLogName('adminAction')
+            ->useLogName(ActiveLog::TYPE_LOG_ADMIN)
             ->logOnly([
             'name',
             'role_detail',
@@ -66,6 +65,7 @@ class RoleModel extends Model
             'deleted' => "Nhân viên " . Auth::user()->username . " đã được xóa  chức vụ " . $activity->subject->name,
             default => $activity->description,
         };
+        $activity->subject_type = self::$logName;
     }
 
 }

@@ -10,6 +10,7 @@ const initialState = {
   listUserAll: null,
   listServiceRoom: null,
   listStaffAll: null,
+  listActiveLog : null,
   listFurnitureRoom: null,
   listPermisstionAll: null,
   listAcctionAll: null,
@@ -43,6 +44,11 @@ const listTable = (state = initialState, action) => {
       return {
         ...state,
         listData: action.payload,
+      };
+    case 'SETACTIVELOG':
+      return {
+        ...state,
+        listActiveLog: action.payload,
       };
     case 'SETPAGE':
       return {

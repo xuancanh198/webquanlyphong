@@ -8,18 +8,20 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\ActiveLog;
+
 class TypeRoomModel extends Model
 {
     use HasFactory;
     protected $table = "tbl_type_room";
     protected $primary = 'id';
     protected $fillable = ['code', 'name', 'created_at', 'updated_at'];
-    protected static $logName = 'building';
+    protected static $logName = ActiveLog::TYPEROOM_VALUE;
     protected static $logOnlyDirty = true;
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->useLogName('adminAction')
+            ->useLogName(ActiveLog::TYPE_LOG_ADMIN)
             ->logOnly([
                 'code',
                 'name',
@@ -36,5 +38,7 @@ class TypeRoomModel extends Model
             'deleted' => "Nhân viên " . Auth::user()->username . " đã được xóa  loại phòng " . $activity->subject->name,
             default => $activity->description,
         };
+        $activity->subject_type = self::$logName;
+
     }
 }

@@ -14,4 +14,8 @@ export const setInfoStaff = (items) => ({
     type: 'SETINFOSTAFF',
     payload: items,
 });
+export const setActiveLog = (items) => ({
+    type: 'SETACTIVELOG',
+    payload: items,
+});
 

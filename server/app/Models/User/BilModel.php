@@ -13,12 +13,14 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
+use App\Enums\ActiveLog;
+
 class BilModel extends Model
 {
     use HasFactory, LogsActivity;
     protected $table = "tbl_bill";
     protected $primary = 'id';
-    protected static $logName = 'bill';
+    protected static $logName = ActiveLog::BILL_VALUE;
     protected static $logOnlyDirty = true;
     protected $fillable = ['code', 'staffId', 'roomId', 'totalMoney', 'status','contractId', 'userId', 'image','formPayment', 'started_at','ends_at','pay_at','note','created_at','updated_at'];
     protected $hidden = [ 'staffId', 'roomId','userId'];
@@ -48,7 +50,7 @@ class BilModel extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->useLogName('adminAction')
+            ->useLogName(ActiveLog::TYPE_LOG_ADMIN)
             ->logOnly([
             'code',
             'staffId',
@@ -85,5 +87,6 @@ class BilModel extends Model
             'deleted' => "Nhân viên " . Auth::user()->username . " đã được xóa tài khoản nhân viên " . $activity->subject->username,
             default => $activity->description,
         };
+        $activity->subject_type = self::$logName;
     }
 }

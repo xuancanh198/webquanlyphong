@@ -2,24 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Twilio\Rest\Client;
+use Illuminate\Support\Facades\Cache;
+
 class testSmsController extends Controller
 {
-    protected $twilio;
-
-    public function __construct(Client $twilio)
-    {
-        $this->twilio = $twilio;
-    }
-
+   
     public function sendSms()
     {
-        $this->twilio->messages->create("+84334206603", [
-            'from' => env('TWILIO_TEST_FROM'), 
-            'body' => "Xin chào",
-        ]);
+        Cache::put('user_1', ['name' => 'John', 'age' => 30], 3600);
 
-        return response()->json(['success' => true]);
+        // Lấy dữ liệu từ cache Redis
+        $user = Cache::get('user_1');
+
+        return response()->json($user);
     }
 }
