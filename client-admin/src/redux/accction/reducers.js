@@ -18,4 +18,8 @@ export const setActiveLog = (items) => ({
     type: 'SETACTIVELOG',
     payload: items,
 });
+export const setIsUpdateModal = (items) => ({
+    type: 'SETISMODALUPDATE',
+    payload: items,
+});
 

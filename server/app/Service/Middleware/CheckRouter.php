@@ -8,9 +8,9 @@ class CheckRouter
     public function execute($request){
         $prefix = $request->segment(2);
         if ($prefix === 'admin') {
-            Auth::guard('admin')->check();
+            Auth::shouldUse('admin');
         } elseif ($prefix === 'user') {
-            Auth::guard('user')->check();
+            Auth::shouldUse('user');
         }
     }
 }

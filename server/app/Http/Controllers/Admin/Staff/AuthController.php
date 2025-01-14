@@ -6,12 +6,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\Passport;
+use App\Http\Requests\UserAutRequest;
+use App\Models\Staff\StaffModel;
+use App\Service\Function\Action\Firebase;
 
 class AuthController extends Controller
 {
+    protected $request;
+    public function __construct(UserAutRequest $request)
+    {
+        $this->request = $request;
+    }
     public function login(Request $request)
     {
-
         $credentials = $request->validate([
             'username' => 'required',
             'password' => 'required',
@@ -38,7 +45,7 @@ class AuthController extends Controller
     {
         $staff = Auth::user()->load([
             'role' => function ($query) {
-                $query->select('id', 'name'); 
+                $query->select('id', 'name');
             }
         ]);
 
@@ -47,6 +54,21 @@ class AuthController extends Controller
 
         return $this->returnData($staff);
     }
-
-
+    public function updateInfo()
+    {
+        $staff = StaffModel::where('email', $this->request->email)->orWhere('phoneNumber', $this->request->phoneNumber)->firstOrFail();
+        $staff->email = $this->request->email;
+        $staff->fullname = $this->request->fullname;
+        $staff->phoneNumber  = $this->request->phoneNumber;
+        $staff->address = $this->request->address;
+        if ($this->request->hasFile('image')) {
+            $staff->img = app(Firebase::class)->uploadImage($this->request->file('image'));
+        }
+        $update = $staff->save();
+        return $this->returnMessage(
+            $update ?  trans('message.updateSuccess') :
+                trans('message.updateFail'),
+            $update ? "success" : "fail"
+        );
+    }
 }

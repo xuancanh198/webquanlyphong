@@ -12,5 +12,5 @@ use BenSampo\Enum\Enum;
 final class StaffsEnum extends Enum
 {
     const SUPPER_ADMIN_ID = 1;
-     
+    const SUPPER_ROLE_DEFAULt = 1;
 }

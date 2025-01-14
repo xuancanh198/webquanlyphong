@@ -35,7 +35,7 @@ class StaffService extends BaseService
         $filtersBase64 = $this->request->filtersBase64 ?? null;
         $filterBaseDecode = $this->request->filterBaseDecode ?? null;
         $model = $this->model->with('role');
-        $result = $this->getListBaseFun($model,$page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64, $isSelect, $this->columSelect, $filterBaseDecode);
+        $result = $this->getListBaseFun($model->getInBuilding(),$page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64, $isSelect, $this->columSelect, $filterBaseDecode);
         $result->each(function ($staff) {
             $permissions = $staff->permissions();
             $staff->permission_detail = $permissions;

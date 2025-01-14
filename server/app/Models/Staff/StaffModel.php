@@ -14,33 +14,14 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use App\Enums\ActiveLog;
-
+use App\Enums\StaffsEnum;
 class StaffModel extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, LogsActivity;
 
-    protected $table = "tbl_staff_admin";
+    protected $table = "tbl_user";
     protected $primary = 'id';
-    protected $fillable = [
-        'role_id',
-        'username',
-        'password',
-        'phoneNumber',
-        'email',
-        'password_default',
-        'fullname',
-        'address',
-        'note',
-        'img',
-        'status',
-        'role_detail',
-        'ban_at',
-        'ban_expiration_at',
-        'verify_email_at',
-        'created_at',
-        'updated_at',
-    ];
-    protected $hidden = ['role_id', 'password'];
+    protected $fillable = ['username', 'password', 'fullname', 'defaultPassword', 'email', 'dateOfBirth', 'phoneNumber', 'address', 'dateIssuanceCard', 'placeIssue', 'identificationCard', 'imgLink', 'isVerifiedInfor', 'status', 'note', 'created_at', 'updated_at'];    protected $hidden = ['role_id', 'password'];
 
     protected static $logName = ActiveLog::STAFF_VALUE;
     protected static $logOnlyDirty = true;
@@ -111,7 +92,12 @@ class StaffModel extends Authenticatable
     {
         return $query->whereNull('ban_at');
     }
-
+    public function scopeGetInBuilding($query){
+        if(Auth::user()->buildingId !== StaffsEnum::SUPPER_ROLE_DEFAULt){
+            return $query->where('buildingId', Auth::user()->buildingId);
+        }
+        return $query;
+    }
     public function scopeVerifyEmailActive($query)
     {
         return $query->whereNotNull('verify_email_at');

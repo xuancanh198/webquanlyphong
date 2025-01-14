@@ -42,5 +42,32 @@ export const getMyInfoStaff = () => {
         dispatch(setLoading(false));
       });
   }
+}
+export const updateInfoAuth = (data, configStatus = false) =>{
+  const config = configStatus ? {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  } : null;
+  return (dispatch) => {
+    dispatch(setLoading(true));
+    const url = `admin/update-staff-account`;
 
+    const request = configStatus
+      ? APILink.post(`${url}?_method=PUT`, data, config)
+      : APILink.put(url, data, config);
+
+    request
+      .then((response) => {
+        if (response.data.status === "success") {
+          toast.success(response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
+  }
 }

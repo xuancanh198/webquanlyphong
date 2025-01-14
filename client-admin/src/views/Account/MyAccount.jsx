@@ -4,7 +4,7 @@ import {
 } from '@coreui/react'
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { getMyInfoStaff } from "../../service/baseService/authService";
+import { getMyInfoStaff, updateInfoAuth } from "../../service/baseService/authService";
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -15,13 +15,14 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ImageUploading from 'react-images-uploading';
 import CIcon from '@coreui/icons-react';
-import { getListProvince, getListDistrict, getListward } from '../../service/baseService/APIOutsideSystem';
-
-import { cilUser, cilLockLocked, cilText, cilEnvelopeClosed, cilPhone } from '@coreui/icons';
+import { cilText, cilEnvelopeClosed, cilPhone } from '@coreui/icons';
+import { data } from 'autoprefixer';
+import { setIsUpdateModal } from "../../redux/accction/reducers"
 const MyAccount = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const infoStaff = useSelector((state) => state.reducers.infoStaff);
+    const isModalUpdate = useSelector((state) => state.reducers.isModalUpdate);
     const [validated, setValidated] = useState(false);
     const [images, setImages] = useState([]);
     const maxNumber = 1;
@@ -37,32 +38,27 @@ const MyAccount = () => {
         note: '',
         image: null
     });
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+
+    useEffect(() => {
+        if (infoStaff && infoStaff !== null) {
+        setInitialValues({
+            fullname: infoStaff.fullname || '',
+            address: infoStaff.address || '',
+            email: infoStaff.email || '',
+            phoneNumber: infoStaff.phoneNumber || '',  
+            image: infoStaff.image || null
+          });
+        }
+    }, [infoStaff]);
     useEffect(() => {
         if (infoStaff === null) {
             dispatch(getMyInfoStaff())
         }
-         dispatch(getListProvince());
     }, []);
-    const province = useSelector((state) => state.listTable.province);
-    const district = useSelector((state) => state.listTable.district);
-    const ward = useSelector((state) => state.listTable.ward);
     const formik = useFormik({
         initialValues: initialValues,
         enableReinitialize: true,
         validationSchema: Yup.object({
-            username: Yup.string()
-                .min(5, t('validation.attribute.min', { attribute: t('lableView.staff.username'), min: 5 }))
-                .max(255, t('validation.attribute.min', { attribute: t('lableView.staff.username'), max: 255 }))
-                .matches(/^[a-zA-Z0-9]*$/, t('validation.attribute.matches', { attribute: t('lableView.staff.username') }))
-                .required(t('validation.attribute.required', { attribute: t('lableView.staff.username') })),
-            passwordDefault: Yup.string()
-                .min(5, t('validation.attribute.min', { attribute: t('lableView.staff.passwordDefault'), min: 2 }))
-                .max(255, t('validation.attribute.min', { attribute: t('lableView.staff.passwordDefault'), max: 50 }))
-                .matches(/^[a-zA-Z0-9]*$/, t('validation.attribute.matches', { attribute: t('lableView.staff.passwordDefault'), excludeEmptyString: true, }))
-                .required(t('validation.attribute.required', { attribute: t('lableView.staff.passwordDefault') })),
             fullname: Yup.string()
                 .min(5, t('validation.attribute.min', { attribute: t('lableView.staff.fullname'), min: 2 }))
                 .max(255, t('validation.attribute.min', { attribute: t('lableView.staff.fullname'), max: 50 }))
@@ -76,16 +72,13 @@ const MyAccount = () => {
                 .min(10, t('validation.attribute.min', { attribute: t('lableView.staff.phoneNumber'), min: 10 }))
                 .max(15, t('validation.attribute.max', { attribute: t('lableView.staff.phoneNumber'), max: 15 }))
                 .required(t('validation.attribute.required', { attribute: t('lableView.staff.phoneNumber') })),
-            roleId: Yup.string()
-                .matches(/^[0-9]*$/, t('validation.attribute.matches', { attribute: t('lableView.staff.roleId') }))
-                .min(1, t('validation.attribute.min', { attribute: t('lableView.staff.roleId'), min: 1 }))
-                .required(t('validation.attribute.required', { attribute: t('lableView.staff.roleId') }))
+           
         }),
         onSubmit: (values, { resetForm }) => {
             if (images === null || images.length === 0) {
-                ///dispatch(updateStaff(id, values, resetForm))
+                dispatch(updateInfoAuth(values, true))
             } else {
-                // updateStaffFun(values, resetForm);
+                dispatch(updateInfoAuth(values))
             }
         }
     });
@@ -102,7 +95,7 @@ const MyAccount = () => {
 
     return (
         <>
-            <Modal show={show} onHide={handleClose} className='actice-1200 flex_center'>
+            <Modal show={isModalUpdate} onHide={() => dispatch(setIsUpdateModal(false))} className='actice-1200 flex_center'>
                 <Modal.Header closeButton>
                     <Modal.Title>Modal heading</Modal.Title>
                 </Modal.Header>
@@ -150,7 +143,7 @@ const MyAccount = () => {
 
                             </Form.Group>
                             <Form.Group as={Col} xl="9" md="12" className='mb-3 mt-3 row'>
-                                <Form.Group as={Col} xl="6" lg="6" md="6" sm="12" className='mb-3 mt-3 '>
+                                <Form.Group as={Col} xl="4" lg="6" md="6" sm="12" className='mb-1 mt-1'>
                                     <div className='css-animation'>
                                         <div className='font-icon flex_center'>
                                             <CIcon icon={cilText} size="l" />
@@ -170,28 +163,7 @@ const MyAccount = () => {
                                         </Form.Control.Feedback>
                                     </div>
                                 </Form.Group>
-                                <Form.Group as={Col} xl="6" lg="6" md="6" sm="12" className='mb-3 mt-3'>
-                                    <div className=' css-animation'>
-                                        <div className='font-icon flex_center'>
-                                            <CIcon className='' icon={cilUser} size="l" />
-                                        </div>
-                                        <Form.Control
-                                            type="text"
-                                            name="username"
-                                            value={formik.values.username}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            isInvalid={formik.touched.username && formik.errors.username}
-                                            required
-                                        />
-                                        <Form.Label> {t('lableView.staff.username')}</Form.Label>
-                                        <Form.Control.Feedback type="invalid">
-                                            {formik.errors.username}
-                                        </Form.Control.Feedback>
-                                    </div>
-                                </Form.Group>
-
-                                <Form.Group as={Col} xl="6" lg="6" md="6" sm="12" className='mb-3 mt-3'>
+                                <Form.Group as={Col} xl="4" lg="6" md="6" sm="12" className='mb-1 mt-1'>
                                     <div className=' css-animation'>
                                         <div className='font-icon flex_center'>
                                             <CIcon className='' icon={cilEnvelopeClosed} size="l" />
@@ -212,7 +184,7 @@ const MyAccount = () => {
                                         </Form.Control.Feedback>
                                     </div>
                                 </Form.Group>
-                                <Form.Group as={Col} xl="6" lg="6" md="6" sm="12" className='mb-3 mt-3 '>
+                                <Form.Group as={Col} xl="4" lg="6" md="6" sm="12" className='mb-1 mt-1'>
                                     <div className='css-animation'>
                                         <div className='font-icon flex_center'>
                                             <CIcon icon={cilPhone} size="l" />
@@ -233,53 +205,21 @@ const MyAccount = () => {
                                     </div>
 
                                 </Form.Group>
-                                <Form.Group as={Col} xl="4" lg="6" md="6" sm="12" className='mb-3 mt-3'>
-                                    <Form.Label>{t('lableView.staff.province')}</Form.Label>
-                                    <Form.Select aria-label="Default select example" name='province' onChange={(e) => provinceFun(e)}>
-                                        {province && province.map((item) => (
-                                            <option key={item.province_id} value={item.province_id}>{item.province_name}</option>
-                                        ))}
-                                    </Form.Select>
-
-                                </Form.Group>
-
-                                <Form.Group as={Col} xl="4" lg="6" md="6" sm="12" className='mb-3 mt-3'>
-                                    <Form.Label> {t('lableView.staff.district')}</Form.Label>
-                                    <Form.Select aria-label="Default select example" name='district' onChange={(e) => districtFun(e)}>
-                                        {district && district.map((item) => (
-                                            <option key={item.district_id} value={item.district_id}>{item.district_name}</option>
-                                        ))}
-                                    </Form.Select>
-
-                                </Form.Group>
-                                <Form.Group as={Col} xl="4" lg="6" md="6" sm="12" className='mb-3 mt-3'>
-                                    <Form.Label> {t('lableView.staff.ward')}</Form.Label>
-                                    <Form.Select aria-label="Default select example" name='ward' onChange={(e) => wardFun(e)}>
-                                        {ward && ward.map((item) => (
-                                            <option key={item.ward_id} value={item.ward_id}>{item.ward_name}</option>
-                                        ))}
-                                    </Form.Select>
-                                </Form.Group>
-                                <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3'>
-                                    <Form.Label> {t('lableView.staff.addressDetail')}</Form.Label>
+                               
+                                <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-1 mt-1'>
+                                    <Form.Label> {t('lableView.staff.address')}</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        value={formik.values.addressDetail}
+                                        value={formik.values.address}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
-                                        isInvalid={formik.touched.addressDetail && formik.errors.addressDetail}
+                                        isInvalid={formik.touched.address && formik.errors.address}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        {formik.errors.addressDetail}
+                                        {formik.errors.address}
                                     </Form.Control.Feedback>
                                 </Form.Group>
-
-                                <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3'>
-                                    <p>Nếu không chỉnh sửa địa chỉ, sẽ giữ nguyên địa chỉ cũ là :  {infoStaff && infoStaff !== null && infoStaff.address ? infoStaff.address : ""}   </p>
-                                </Form.Group>
-
-
-                                <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3'>
+                                <Form.Group as={Col} xl="4" lg="12" md="12" sm="12" className='mb-1 mt-1'>
                                     <div
                                         className='btn_upload_img'
                                         style={triggerImageUpload?.isDragging ? { color: 'red' } : undefined}
@@ -295,7 +235,7 @@ const MyAccount = () => {
                             <Button variant='primary' type='submit' className='m-2'>
                                 {t('actionView.update')}
                             </Button>
-                            <Button variant='secondary' className='m-2' onClick={handleClose}>
+                            <Button variant='secondary' className='m-2' onClick={() => dispatch(setIsUpdateModal(false))}>
                                 {t('actionView.close')}
                             </Button>
                         </div>
@@ -308,7 +248,7 @@ const MyAccount = () => {
                     infoStaff &&
                     (<Row className="row">
                         <Row className="mb-3 mt-3 justify-content-end">
-                            <div className="flex_center icon-delete" onClick={handleShow}>
+                            <div className="flex_center icon-delete" onClick={() => dispatch(setIsUpdateModal(true))}>
                                 <i class="fa-solid fa-user-pen"></i>
                             </div>
                         </Row>

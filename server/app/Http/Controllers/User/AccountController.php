@@ -8,22 +8,24 @@ use App\Http\Requests\LoginUserRequest;
 use App\Enums\Login;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Hash;
+use App\Models\User\UserModel;
 class AccountController extends Controller
 {
 
     public function login(Request $request)
     {
 
-        $credentials = $request->validate([
+         $credentials = $request->validate([
             'username' => 'required',
             'password' => 'required',
         ]);
-
+        
+        
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-
-            $tokenResult = $user->createToken('Token admin', ['admin']);
+            dd($user);
+            $tokenResult = $user->createToken('Token user', ['user']);
             $accessToken = $tokenResult->accessToken;
             $token = $tokenResult->token;
             $token->expires_at = now()->addDays(7);
@@ -31,7 +33,7 @@ class AccountController extends Controller
             return response()->json([
                 'status' => 'success',
                 'token' => $accessToken,
-                'type' => 'admin'
+                'type' => 'user'
             ], 200);
         }
 

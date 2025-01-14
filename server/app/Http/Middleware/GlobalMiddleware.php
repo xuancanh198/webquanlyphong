@@ -33,6 +33,7 @@ class GlobalMiddleware
                 return $next($request);
             }
         }
+       
     //    $result =  $this->checkToken->execute($request);
     //    if($result === 401){
     //     return response()->json([

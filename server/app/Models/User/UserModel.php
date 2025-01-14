@@ -14,6 +14,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use App\Enums\ActiveLog;
+use App\Enums\StaffsEnum;
+
 class UserModel extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, LogsActivity;
@@ -72,6 +74,13 @@ class UserModel extends Authenticatable
     {
         return $this->clave;
     }
+    // public function scopeGetInBuildingIdInStaff($query)
+    // {
+    //     if (Auth::user()->buildingId !== StaffsEnum::SUPPER_ROLE_DEFAULt) {
+    //         return $query->where('buildingId', Auth::user()->buildingId);
+    //     }
+    //     return $query;
+    // }
     public static function tapActivity(Activity $activity, string $eventName)
     {
         $mess = "";

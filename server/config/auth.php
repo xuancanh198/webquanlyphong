@@ -1,37 +1,34 @@
 <?php
-
 return [
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'admins',
+        'guard' => 'web', 
+        'passwords' => 'api',
     ],
+
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'admins',
+            'provider' => 'users',
         ],
         'api' => [
             'driver' => 'passport',
+            'provider' => 'admin',
+        ],
+        'admin' => [ 
+            'driver' => 'passport',
             'provider' => 'admins',
         ],
-        'admin' => [
-            'driver' => 'passport', 
-            'provider' => 'admins',
-        ],
-
         'user' => [
             'driver' => 'passport',
             'provider' => 'users',
         ],
-
     ],
+
     'providers' => [
-        
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User\UserModel::class,
         ],
-
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Staff\StaffModel::class,
@@ -49,9 +46,7 @@ return [
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
-        ],  
+        ],
     ],
-
     'password_timeout' => 10800,
-
 ];

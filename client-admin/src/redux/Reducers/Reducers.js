@@ -5,7 +5,8 @@ const initialState = {
   lang: "vi",
   loadding: false,
   isLogin : Cookies.get('token') === null ? false : true,
-  infoStaff : null
+  infoStaff : null, 
+  isModalUpdate : false
 };
 const Reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -28,6 +29,11 @@ const Reducer = (state = initialState, action) => {
       return {
         ...state,
         isLogin: action.payload,
+      };
+    case "SETISMODALUPDATE":
+      return {
+        ...state,
+        isModalUpdate: action.payload,
       };
     default:
       return state;
