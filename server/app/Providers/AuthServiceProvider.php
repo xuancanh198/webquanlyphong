@@ -25,7 +25,7 @@ class AuthServiceProvider extends ServiceProvider
         ]);
     
         Passport::setDefaultScope([
-            'user', // Scope mặc định
+            'user', 
         ]);
     }
 }

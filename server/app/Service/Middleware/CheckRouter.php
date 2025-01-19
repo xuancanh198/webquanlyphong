@@ -8,9 +8,11 @@ class CheckRouter
     public function execute($request){
         $prefix = $request->segment(2);
         if ($prefix === 'admin') {
-            Auth::guard('admin')->check();
+            config(['auth.defaults.guard' => 'admin']);
+            config(['auth.defaults.passwords' => 'admin']);
         } elseif ($prefix === 'user') {
-            Auth::guard('user')->check();
+            config(['auth.defaults.guard' => 'user']);
+            config(['auth.defaults.passwords' => 'user']);
         }
     }
 }

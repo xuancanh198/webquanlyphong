@@ -14,6 +14,7 @@ class UserService extends BaseService
     protected $model;
     protected $request;
     protected $columSearch = ['username', 'phoneNumber', 'email', 'fullname'];
+    protected $columSelect = ['id', 'fullname', 'username'];
     public function __construct(UserModel $model, UserRequest $request)
     {
         $this->model = $model;
@@ -28,8 +29,10 @@ class UserService extends BaseService
         $typeTime = $this->request->typeTime ?? null;
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
+        $isSelect = $this->request->isSelect ?? false;
         $filtersBase64 = $this->request->filtersBase64 ?? null;
-        $result = $this->getListBaseFun($this->model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64);
+        $filterBaseDecode = $this->request->filterBaseDecode ?? null;
+        $result = $this->getListBaseFun($this->model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,$filtersBase64, $isSelect, $this->columSelect, $filterBaseDecode);
         return $result;
     }
     public function createAction()

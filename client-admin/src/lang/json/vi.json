@@ -1,0 +1,363 @@
+{
+  "quantity": "Số lượng",
+  "page": {
+    "home": "Trang chủ",
+    "role": "Chức vụ",
+    "staff": "Nhân viên",
+    "room": "Phòng",
+    "typeRoom": "loại phòng",
+    "floor": "tầng",
+    "building": "tòa nhà",
+    "service": "dịch vụ",
+    "furniture": "đồ đạc, vật dụng",
+    "user": "Khách thuê",
+    "login": "Đăng nhập",
+    "missPassWord": "Quên mật khẩu",
+    "contract": "Hợp đồng",
+    "bill": "Hóa đơn",
+    "permisstion": "Quyền",
+    "acction": "Hành động",
+    "system": "Hệ thống",
+    "permisstionDetail": "Quyền chi tiết",
+    "setting": "Cài đặt",
+    "activeLog": "Lịch sử hệ thống"
+  },
+  "validation": {
+    "attribute": {
+      "min": "{{attribute}} phải có ít nhất {{min}} ký tự",
+      "max": "{{attribute}} không được vượt quá {{max}} ký tự",
+      "minValue": "{{attribute}} phải có ít nhất {{min}}",
+      "matches": "{{attribute}} không được chứa ký tự đặc biệt",
+      "integer": "{{attribute}} phải là dạng sô nguyên",
+      "required": "Vui lòng nhập {{attribute}}",
+      "positive": "{{attribute}} phải là số nguyên dương"
+    }
+  },
+  "attribute": {
+    "role": "chức vụ",
+    "roleName": "Tên chức vụ",
+    "staff": "nhân viên",
+    "building": "tòa nhà"
+  },
+  "action": {
+    "authentication": {
+      "delete": "Xác thực xóa {{attribute}}"
+    },
+    "message": {
+      "delete": "Bạn có muốn xóa {{attribute}} này không ?"
+    },
+    "attribute": {
+      "role": "vai trò"
+    }
+  },
+  "message": {
+    "authentication": {
+      "delete": "Bạn có muốn xóa {{attribute}} này không?"
+    },
+    "attribute": {
+      "role": "vai trò"
+    }
+  },
+  "table": {
+    "colum": {
+      "viewDetail": "Xem chi tiết",
+      "role": {
+        "name": "Tên chức vụ",
+        "created_at": "Thời gian tạo",
+        "updated_at": "Thời gian cập nhật",
+        "action": "Hành động"
+      }
+    }
+  },
+  "lableView": {
+    "activeLog": {
+      "log_type": {
+        "adminAction": "Log admin",
+        "userAction": "Log user"
+      },
+      "log_name": "Loại log",
+      "description": "Mô tả",
+      "subject_type": "Loại",
+      "event": "Sự kiện",
+      "properties": "Dữ liệu cũ",
+      "created_at": "Thời gian tạo"
+    },
+    "role": {
+      "name": "Tên chức vụ",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật",
+      "action": "Hành động"
+    },
+    "staff": {
+      "username": "Tên đăng nhập",
+      "rolename": "Tên chức vụ",
+      "password": "Mật khẩu",
+      "passwordDefault": "Mật khẩu mặc định",
+      "fullname": "Họ và tên",
+      "addressDetail": "Địa chỉ chi tiết",
+      "address": "Địa chỉ",
+      "note": "Ghi chú",
+      "img": "Ảnh đại diện",
+      "province": "Tỉnh , thành phố",
+      "district": "Quận, huyện",
+      "ward": "Phường, xã",
+      "email": "Emai",
+      "phoneNumber": " Số điện thoại",
+      "total": "Tổng số tài khoản",
+      "totalActive": "Tổng số tài khoản đang hoạt động",
+      "ban_expiration_at": "Thời gian hết hạn khóa",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
+    },
+    "typeRoom": {
+      "name": "Tên loại phòng",
+      "code": "Mã loại phòng",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
+    },
+    "floor": {
+      "name": "Tên tầng",
+      "code": "Mã tầng",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
+    },
+    "building": {
+      "name": "Tên tòa nhà",
+      "code": "Mã tòa nhà",
+      "numberFloor": "Tổng số tầng",
+      "numbeRoomsRent": "Tổng số phòng",
+      "address": "Địa chỉ",
+      "note": "Ghi chú",
+      "img": "Ảnh đại diện",
+      "province": "Tỉnh , thành phố",
+      "district": "Quận, huyện",
+      "ward": "Phường, xã",
+      "addressDetail": "Địa chỉ chi tiết",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
+    },
+    "service": {
+      "name": "Tên dịch vụ",
+      "code": "Mã dịch vụ",
+      "price": "Giá dịch vụ",
+      "unit": "Đơn vị tính theo",
+      "unitValue": {
+        "people": "Người",
+        "room": "Phòng",
+        "number": "Số",
+        "block": "Khối",
+        "vehicle": "Phương tiệns"
+      },
+      "quantity": "Số lượng thực tính",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
+    },
+    "furniture": {
+      "name": "Tên đồ đạc, vật dụng",
+      "code": "Mã đồ đạc, vật dụng",
+      "price": "Giá đồ đạc, vật dụng",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
+    },
+    "room": {
+      "name": "Tên phòng",
+      "code": "Mã phòng",
+      "typeRoom": "Loại phòng",
+      "floor": "tầng",
+      "image": "Ảnh phòng",
+      "building": "tòa nhà",
+      "length": "chiều dài",
+      "height": "Chiều cao",
+      "width": "chiều rộng",
+      "note": "ghi chú",
+      "acreage": "Diện tích",
+      "service": "dịch vụ",
+      "furniture": "đồ đạc",
+      "status": "Trạng thái",
+      "price": "Giá thuê",
+      "statusValue": {
+        "online": "Đang hoạt động cho thuê",
+        "off": "Đang tạm thời đóng"
+      },
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
+    },
+    "user": {
+      "username": "Tên đăng nhập",
+      "rolename": "Tên chức vụ",
+      "password": "Mật khẩu",
+      "identificationCard": "Số căn cước công dân",
+      "fullname": "Họ và tên",
+      "addressDetail": "Địa chỉ chi tiết",
+      "address": "Địa chỉ",
+      "note": "Ghi chú",
+      "img": "Ảnh đại diện",
+      "province": "Tỉnh , thành phố",
+      "district": "Quận, huyện",
+      "ward": "Phường, xã",
+      "email": "Emai",
+      "phoneNumber": " Số điện thoại",
+      "dateOfBirth": "Ngày sinh",
+      "dateIssuanceCard": "Ngày cấp căn cước",
+      "placeIssue": "Nơi cấp căn cước"
+    },
+    "login": {
+      "username": "Tên đăng nhập",
+      "password": "Mật khẩu"
+    },
+    "contract": {
+      "code": "Mã hợp đồng",
+      "room": "Phòng cho thuê",
+      "priceTime": "Giá lúc cho thuê",
+      "deposit": "Tiền cọc",
+      "userepresentative": "Người kí hợp đồng",
+      "img": "Ảnh hợp đồng",
+      "startTime": "Thời gian bắt đầu hiệu lực",
+      "endTime": "Thời gian hết hạn hiệu lực",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật",
+      "note": "Ghi chú",
+      "custorm": "Tên thành viên trong phòng",
+      "user": "tên người kí",
+      "checkIsNow": "Thời hạn hợp đồng",
+      "checkIsNowStatus": {
+        "has": "Còn thời giạn",
+        "hasnot": "Đã hết hạn hợp đồng"
+      },
+      "serivce": "Dịch vụ trong phòng",
+      "furniture": "Đồ đạc trong phòng"
+    },
+    "bill": {
+      "code": "Mã hóa đơn",
+      "totalMoney": "Tổng tiền",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật",
+      "start_at": "Thời gian bắt đầu",
+      "pay_at": "Thời gian thanh toán",
+      "end_at": "Thời gian hết hạn",
+      "status": "Trạng thái hóa đơn",
+      "formPayment": "Phường thức thanh toán",
+      "user": "Người nhận hóa đơn",
+      "staff": "Nhân viên tạo hóa đơn",
+      "intoMoney": "Thành tiền",
+      "checkIsNowStatus": {
+        "has": "Đã thanh toán ",
+        "hasnot": "Chưa thanh toán"
+      }
+    },
+    "permisstion": {
+      "name": "Tên quyền",
+      "code": "Mã quyền",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
+    },
+    "permisstionDetail": {
+      "name": "Tên quyền chi tiết",
+      "code": "Mã quyền chi tiết",
+      "url": "Đường dẫn",
+      "status": "Trạng thái",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
+    },
+    "acction": {
+      "name": "Tên hành động",
+      "code": "Mã hành động",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
+    },
+    "setting": {
+      "key": "Tên giá trị",
+      "value": "Giá trị",
+      "note": "ghi chú",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật"
+    }
+  },
+  "actionView": {
+    "create": "Thêm mới",
+    "update": "Cập nhật",
+    "delete": "Xóa",
+    "detail": "Xem chi tiết",
+    "close": "đóng",
+    "upload": "tải ảnh lên",
+    "deleted" : "Xóa",
+    "created" : "Tạo mới",
+    "updated": "Cập nhật"
+  },
+  "messageView": {
+    "search": "Nhập thông tin cần tìm kiếm",
+    "selectTypeFilter": "Chọn loại thời gian lọc",
+    "startTimeFilter": "Thời gian bắt đầu",
+    "endTimeFilter": "Thời gian Kết thúc",
+    "home": "Trang chủ",
+    "manage": "Quản lý",
+    "TableList": "Quản lý",
+    "Dashboard": "Trang quản trị"
+  },
+  "lang": {
+    "vietnam": "Tiếng Việt",
+    "english": "Tiếng Anh"
+  },
+  "noData": "Không có dữ liệu",
+  "loading": "Đang thực hiện vui lòng chờ !",
+  "timeType": {
+    "created_at": "Thời gian tạo",
+    "updated_at": "Thời gian cập nhật",
+    "start_at": "Thời gian bắt đầu",
+    "end_at": "Thời gian hết hạn",
+    "pay_at": "Thời gian thanh toán",
+    "ban_at": "Thời gian khóa",
+    "ban_expiration_at": "Thời gian hết hạn khóa",
+    "verify_email_at": "Thời gian xác thực email",
+    "dateOfBirth": "Ngày sinh",
+    "dateIssuanceCard": "Ngày cấp căn cước"
+  },
+  "messageText": {
+    "yourInfoText": "Thông tin tài khoản của bạn",
+    "account": "Tài khoản",
+    "changeAll": "Chọn tất cả",
+    "MyAccount": "Tài khoản của tôi",
+    "staffCreate": " Nhập nhân viên tạo",
+    "note": "Ghi chú",
+    "login": "Đăng nhập để vào trang",
+    "loginPageMessage": "Bạn phải đăng nhập bằng tài khoản quản trị viên để được vào trang quản trị nếu chưa có tài khoản liên hệ với quản trị để tạo tài khoản",
+    "searchTitel": "Nhập {{attribute}} cần tìm",
+    "verifyText": "Xác thực {{attribute}}",
+    "permisstionDetailStatus": {
+      "active": "Còn hiệu lực",
+      "notActive": "Hết hạn hợp đồng"
+    },
+    "verifyValue": {
+      "authenticated": "Đã xác thực",
+      "notAuthenticated": "Chưa xác thực"
+    },
+    "contractStatus": {
+      "active": "Còn hiệu lực",
+      "notActive": "Hết hạn hợp đồng"
+    },
+    "BillStatus": {
+      "notPaid": "Chưa thanh toán",
+      "payed": "Đã thanh toán"
+    },
+    "BillPayMethodText": "Phương thức thanh toán",
+    "BillPayMethod": {
+      "cashPayment": "Thanh toán tiền mặt",
+      "bankTransfer": "Thanh toán qua thẻ ngân hàng",
+      "paymentViaWallet": "Thanh toán qua ví điện tử"
+    },
+    "statusText": "Trạng thái tài khoản",
+    "statusTextAttribute": "Trạng thái {{attribute}} ",
+    "statusValue": {
+      "active": "Đang hoạt động",
+      "ban": "Bị khóa"
+    },
+    "statusValueUser": {
+      "active": "Đang thuê",
+      "notActive": "Hết hạn hợp đồng",
+      "ban": "Bị khóa"
+    },
+    "changeValue": "Nhập {{attribute}} ",
+    "requiredChange": "Vui lòng chọn {{attribute}} để hiển thị dữ liệu ...",
+    "changeQuantityFail": "Số lượng {{attribute}} trong phòng không đủ hoặc bạn chưa chọn ô nhập !"
+  }
+}

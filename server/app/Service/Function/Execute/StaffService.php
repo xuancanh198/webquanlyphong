@@ -9,11 +9,14 @@ use Carbon\Carbon;
 use App\Service\Function\Action\Firebase;
 use App\Models\Staff\RoleModel;
 use App\Service\Function\ServiceFunction\ConvertData;
+use Illuminate\Support\Facades\Auth;
+
 class StaffService extends BaseService
 {
     protected $model;
     protected $request;
     protected $columSearch = ['username', 'phoneNumber', 'email', 'fullname'];
+    protected $columSelect = ['id', 'fullname', 'username'];
     public function __construct(StaffModel $model, StaffRequest $request)
     {
         $this->model = $model;
@@ -28,9 +31,11 @@ class StaffService extends BaseService
         $typeTime = $this->request->typeTime ?? null;
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
-        $model = $this->model->with('role');
+        $isSelect = $this->request->isSelect ?? false;
         $filtersBase64 = $this->request->filtersBase64 ?? null;
-        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64 );
+        $filterBaseDecode = $this->request->filterBaseDecode ?? null;
+        $model = $this->model->with('role');
+        $result = $this->getListBaseFun($model->getInBuilding(),$page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64, $isSelect, $this->columSelect, $filterBaseDecode);
         $result->each(function ($staff) {
             $permissions = $staff->permissions();
             $staff->permission_detail = $permissions;
@@ -41,6 +46,7 @@ class StaffService extends BaseService
     {
         $RoleModel = RoleModel::find($this->request->roleId);
         $this->model->role_id =  $this->request->roleId;
+        $this->model->buildingId =  Auth::user()->buildingId;
         $this->model->fullname =  $this->request->fullname;
         $this->model->username =  $this->request->username;
         $this->model->password =  bcrypt($this->request->password);

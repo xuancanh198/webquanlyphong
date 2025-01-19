@@ -11,6 +11,8 @@ class BillController extends Controller
 {
     protected $service;
     protected $request;
+    protected $columSearch = ['code'];
+    protected $columCode = 'code';
     public function __construct(BillService $service, BillRequest $request)
     {
         $this->service = $service;

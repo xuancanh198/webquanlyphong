@@ -2,8 +2,8 @@
 
 return [
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'admins',
+        'guard' => 'admin',
+        'passwords' => 'api',
     ],
     'guards' => [
         'web' => [
@@ -15,18 +15,17 @@ return [
             'provider' => 'admins',
         ],
         'admin' => [
-            'driver' => 'passport', 
+            'driver' => 'session', 
             'provider' => 'admins',
         ],
 
         'user' => [
-            'driver' => 'passport',
+            'driver' => 'session',
             'provider' => 'users',
         ],
 
     ],
     'providers' => [
-        
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User\UserModel::class,

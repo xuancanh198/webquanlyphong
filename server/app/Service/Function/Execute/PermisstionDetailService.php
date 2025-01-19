@@ -27,8 +27,9 @@ class PermisstionDetailService extends BaseService
         $typeTime = $this->request->typeTime ?? null;
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
-        $filtersBase64 = $this->request->filtersBase64 ?? null;
         $isSelect = $this->request->isSelect ?? false;
+        $filtersBase64 = $this->request->filtersBase64 ?? null;
+        $filterBaseDecode = $this->request->filterBaseDecode ?? null;
         $model = $isSelect === false ? $this->model->with([
         'acction' => function ($query) {
             $query->select('id', 'name','code'); 
@@ -36,7 +37,7 @@ class PermisstionDetailService extends BaseService
         'permission' => function ($query) {
             $query->select('id', 'name','code'); 
         } ]) : $this->model;
-        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64, $isSelect, $this->columSelect);
+        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64, $isSelect, $this->columSelect, $filterBaseDecode);
         return $result;
     }
     public function createAction()

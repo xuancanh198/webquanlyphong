@@ -15,6 +15,7 @@ class ContractService extends BaseService
     protected $model;
     protected $request;
     protected $columSearch = ['code'];
+    protected $columSelect = ['id', 'code', 'username'];
     public function __construct(ContractModel $model, ContractRequest $request)
     {
         $this->model = $model;
@@ -29,7 +30,9 @@ class ContractService extends BaseService
         $typeTime = $this->request->typeTime ?? null;
         $start = $this->request->start ?? null;
         $end = $this->request->end ?? null;
+        $isSelect = $this->request->isSelect ?? false;
         $filtersBase64 = $this->request->filtersBase64 ?? null;
+        $filterBaseDecode = $this->request->filterBaseDecode ?? null;
         $model = $this->model->with([
             'customer.user' => function ($query) {
                 $query->select('id', 'fullname');
@@ -57,7 +60,7 @@ class ContractService extends BaseService
             },
         ]);
 
-        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64);
+        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64, $isSelect, $this->columSelect, $filterBaseDecode);
         return $result;
     }
     public function createAction()

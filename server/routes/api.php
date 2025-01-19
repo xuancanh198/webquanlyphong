@@ -18,12 +18,14 @@ use App\Http\Controllers\Admin\User\BillController;
 use App\Http\Controllers\Admin\Staff\AuthController;
 use App\Http\Controllers\Admin\Staff\StaffController;
 use App\Http\Controllers\Admin\System\SettingController;
+use App\Http\Controllers\User\AccountController;
 
 Route::middleware(['admin.middleware'])->group(function () {
-    Route::group(['prefix' => 'admin'], function () {
+    Route::group(['prefix' => 'admin',], function () {
         Route::post('/login', [AuthController::class, 'login']);
-        Route::group(['middleware' => 'auth:admin'], function () {
             Route::middleware(['admin.checkPermisstion'])->group(function () {
+            Route::get('/my-user-account', [AuthController::class, 'getMyInfoAccount']);
+            Route::put('/update-staff-account', [AuthController::class, 'updateInfo']);
                 Route::group(['prefix' => 'system'], function () {
                     Route::group(['prefix' => 'setting'], function () {
                         Route::get('', [SettingController::class, 'index']);
@@ -128,6 +130,14 @@ Route::middleware(['admin.middleware'])->group(function () {
                     });
                 });
             });
+
+    });
+    Route::group(['prefix' => 'user'], function () {
+        Route::post('/login', [AccountController::class, 'login']);
+        Route::get('/auth', [AccountController::class, 'myAuth']);
+
+        Route::group(['middleware' => 'auth:user'], function () {
+            Route::get('/my-account', [AccountController::class, 'getMyUser']);
         });
     });
 });

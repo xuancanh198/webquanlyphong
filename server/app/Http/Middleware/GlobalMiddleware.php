@@ -17,10 +17,11 @@ class GlobalMiddleware
     protected $checkToken;
     protected   $excludePaths = ['login', 'register', 'reset-password'];
 
-    public function __construct(CheckLang $checkLang, CheckRouter $checkRouter )
+    public function __construct(CheckLang $checkLang, CheckRouter $checkRouter, CheckToken $checkToken )
     {
         $this->checkLang = $checkLang;
         $this->checkRouter = $checkRouter;
+        $this->checkToken = $checkToken;
     }
 
     public function handle($request, Closure $next)
@@ -33,13 +34,14 @@ class GlobalMiddleware
                 return $next($request);
             }
         }
-    //    $result =  $this->checkToken->execute($request);
-    //    if($result === 401){
-    //     return response()->json([
-    //         'status' => 'error',
-    //         'message' => 'Unauthorized access. Invalid token.'
-    //     ], 401);
-    //    }
+       
+       $result =  $this->checkToken->execute($request);
+       if($result === false){
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Unauthorized access. Invalid token.'
+        ], 401);
+       }
         return $next($request);
     }
 }

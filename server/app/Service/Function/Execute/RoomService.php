@@ -31,6 +31,7 @@ class RoomService extends BaseService
         $end = $this->request->end ?? null;
         $isSelect = $this->request->isSelect ?? false;
         $filtersBase64 = $this->request->filtersBase64 ?? null;
+        $filterBaseDecode = $this->request->filterBaseDecode ?? null;
         $model = $this->model;
         if ($isSelect !== true) {
             $model = $model->with([
@@ -52,7 +53,7 @@ class RoomService extends BaseService
                 }
             ]);
         }
-        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64 , $isSelect, $this->columSelect );
+        $result = $this->getListBaseFun($model,$page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64, $isSelect, $this->columSelect, $filterBaseDecode);
         return $result;
     }
     public function createAction()

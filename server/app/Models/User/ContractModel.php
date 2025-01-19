@@ -10,13 +10,22 @@ use App\Models\Room\RoomModel;
 use App\Models\User\Contract\FurnitureContractModel;
 use App\Models\User\Contract\ServiceContractModel;
 use App\Models\User\Contract\UserContractModel;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
+use Illuminate\Support\Facades\Auth;
+use App\Enums\ActiveLog;
+
 class ContractModel extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
     protected $table = "tbl_contract";
     protected $primary = 'id';
     protected $fillable = ['code', 'staffId', 'roomId', 'priceTime', 'deposit', 'userId', 'img', 'startTime','endTime','note','created_at','updated_at'];
     protected $hidden = [ 'staffId', 'roomId','userId'];
+    protected static $logName = ActiveLog::CONTRACT_VALUE;
+    protected static $logOnlyDirty = true;
+
     public function user(){
         return $this->belongsTo(UserModel::class,'userId');
     }
@@ -34,5 +43,34 @@ class ContractModel extends Model
     }
     public function service(){
         return $this->hasMany(ServiceContractModel::class,'contractId', 'id');
+    }
+    public function scopeQueryUser($query, $userId)
+    {
+        return $query->where(function ($q) use ($userId) {
+            $q->where('userId', $userId)
+                ->orWhereHas('customer', function ($subQuery) use ($userId) {
+                    $subQuery->where('userId', $userId);
+                });
+        });
+    }
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName(ActiveLog::TYPE_LOG_ADMIN)
+            ->logOnly(['code', 'staffId', 'roomId', 'priceTime', 'deposit', 'userId', 'img', 'startTime', 'endTime', 'note', 'created_at', 'updated_at' ])
+            ->logOnlyDirty();
+    }
+
+    public static function tapActivity(Activity $activity, string $eventName)
+    {
+
+        $activity->description = match ($eventName) {
+            'created' => "Nhân viên " . Auth::user()->username . " đã được tạo mới  hợp đồng" . $activity->subject->code,
+            'updated' => "Nhân viên " . Auth::user()->username . " đã được cập nhật hợp đồng " . $activity->subject->code,
+            'deleted' => "Nhân viên " . Auth::user()->username . " đã được xóa hợp đồng" . $activity->subject->code,
+            default => $activity->description,
+        };
+        $activity->subject_type = self::$logName;
+
     }
 }
