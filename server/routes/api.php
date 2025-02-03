@@ -134,10 +134,8 @@ Route::middleware(['admin.middleware'])->group(function () {
     });
     Route::group(['prefix' => 'user'], function () {
         Route::post('/login', [AccountController::class, 'login']);
-        Route::get('/auth', [AccountController::class, 'myAuth']);
 
-        Route::group(['middleware' => 'auth:user'], function () {
             Route::get('/my-account', [AccountController::class, 'getMyUser']);
-        });
+            Route::post('/send-otp', [AccountController::class, 'authenticOTP']);
     });
 });

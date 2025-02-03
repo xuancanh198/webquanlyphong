@@ -12,6 +12,8 @@ import ProtectedRoute from "./middleware/AuthRouter";
 import Cookies from 'js-cookie';
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'));
 const Login = React.lazy(() => import('./views/pages/login/Login'));
+
+const LoginUser = React.lazy(() => import('./views/User/login/Login'));
 const Register = React.lazy(() => import('./views/pages/register/Register'));
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'));
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'));
@@ -59,7 +61,7 @@ const App = () => {
             ?
             (
               <>
-                <Route path="/login" element={<ProtectedRoute element={<Login />} isLoginPage />} />
+                <Route path="/login" element={<ProtectedRoute element={<LoginUser />} isLoginPage />} />
               </>
 
             ) :

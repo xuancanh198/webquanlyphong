@@ -6,8 +6,12 @@ export const setLoading = (items) => ({
     type: 'SETLOADING',
     payload: items,
 });
-export const setIsLogin = (items) => ({
-    type: 'SETISLOGIN',
+export const setIsLoginUser = (items) => ({
+    type: 'SETISLOGINUSER',
+    payload: items,
+});
+export const setIsLoginAdmin = (items) => ({
+    type: 'SETISLOGINADMIN',
     payload: items,
 });
 export const setInfoStaff = (items) => ({
@@ -25,6 +29,10 @@ export const setIsUpdateModal = (items) => ({
 
 export const setIsAdmin = (items) => ({
     type: 'SETISADMIN',
+    payload: items,
+});
+export const setIsOpenOTPModal = (items) => ({
+    type: 'SETISOPENMODALOTPUSER',
     payload: items,
 });
 

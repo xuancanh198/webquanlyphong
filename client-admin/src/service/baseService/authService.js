@@ -1,19 +1,18 @@
 import APILink from "../API";
-import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
-import { setLoading, setInfoStaff, setIsAdmin, setIsLogin } from "../../redux/accction/reducers";
-
+import { setLoading, setInfoStaff, setIsAdmin, setIsLoginAdmin, setIsLoginUser, setIsOpenOTPModal } from "../../redux/accction/reducers";
+import { LOGIN_USER_BY_PASSWORD, LOGIN_USER_BY_EMAIL, LOGIN_USER_BY_PHONE } from "../../Constants/Login"
 export const loginFun = (value, navigate) => {
   return (dispatch) => {
     dispatch(setLoading(true));
     APILink.post('admin/login', value)
       .then((response) => {
         if (response.data.status === "success") {
-            Cookies.set('token', response.data.token, { expires: 30, secure: true, sameSite: 'Strict' });
+          Cookies.set('token_admin', response.data.token, { expires: 30, secure: true, sameSite: 'Strict' });
           Cookies.set('type', response.data.type, { expires: 30, secure: true, sameSite: 'Strict' });
-          dispatch(setIsAdmin(response.data.type))
-          dispatch(setIsLogin(true))
+          dispatch(setIsAdmin(true))
+          dispatch(setIsLoginAdmin(true))
           toast.success(response.data.message);
           navigate('/admin/')
         }else{
@@ -28,6 +27,59 @@ export const loginFun = (value, navigate) => {
     });
   }
   
+}
+export const loginUserFun = (value, navigate, type = LOGIN_USER_BY_PASSWORD) => {
+  return (dispatch) => {
+    dispatch(setLoading(true));
+    APILink.post('user/login', value)
+      .then((response) => {
+        if (response.data.status === "success") {
+          if (type === LOGIN_USER_BY_PASSWORD){
+            navigate('/');
+            Cookies.set('token_user', response.data.token, { expires: 30, secure: true, sameSite: 'Strict' });
+
+          } else if (type === LOGIN_USER_BY_EMAIL || type === LOGIN_USER_BY_PHONE){
+            dispatch(setIsOpenOTPModal(true))
+            Cookies.set('token_otp_user', response.data.token, { expires: 30, secure: true, sameSite: 'Strict' });
+          }
+          Cookies.set('type', response.data.type, { expires: 30, secure: true, sameSite: 'Strict' });
+          dispatch(setIsAdmin(false))
+          dispatch(setIsLoginUser(true))
+          toast.success(response.data.message);
+         
+        } else {
+          toast.error(response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
+  }
+
+}
+export const sendOTPLoginUser = (data, navigate, type = LOGIN_USER_BY_EMAIL) => {
+  return (dispatch) => {
+    dispatch(setLoading(true));
+    APILink.post('user/send-otp', data)
+      .then((response) => {
+        if (response.data.status === "success") {
+          navigate('/');
+          toast.success(response.data.message);
+          Cookies.set('token_user', response.data.token, { expires: 30, secure: true, sameSite: 'Strict' });
+          dispatch(setIsAdmin(false))
+          dispatch(setIsLoginUser(true))
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
+  }
 }
 export const getMyInfoStaff = () => {
   return (dispatch) => {

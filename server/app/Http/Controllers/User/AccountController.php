@@ -32,7 +32,8 @@ class AccountController extends Controller
             $res =  app(AuthUserFuntion::class)->authentionOTPEmail($request);
         }
             return response()->json([
-            'status' => $res['status'], 
+            'status' => $res['status'],
+            'token' => $res['token'], 
             'message' => $res['message'],
         ], $res['code']);
     }

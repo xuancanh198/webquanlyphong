@@ -12,7 +12,6 @@ class CheckToken
     public function execute($request)
     {
         $token = $request->bearerToken();
-
         if ($token) {
             try {
                 $decoded = $this->decodeJWT($token);

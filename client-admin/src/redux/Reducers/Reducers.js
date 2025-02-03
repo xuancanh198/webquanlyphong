@@ -5,8 +5,10 @@ const initialState = {
   theme: 'light',
   lang: "vi",
   loadding: false,
-  isLogin: Cookies.get('token') !== null, 
-  isAdmin: false,
+  isLoginUser: Cookies.get('token_user') &&  Cookies.get('token_user') !== null, 
+  isLoginAdmin: Cookies.get('token_admin') && Cookies.get('token_admin') !== null, 
+  isAdmin: location.pathname.includes("admin") ? true : false,
+  isOpenModalOTPUser: Cookies.get('token_otp_user') && Cookies.get('token_otp_user') !== null,
   infoStaff: null,
   isModalUpdate: false,
 };
@@ -28,10 +30,15 @@ const Reducer = (state = initialState, action) => {
         ...state,
         loadding: action.payload, 
       };
-    case "SETISLOGIN":
+    case "SETISLOGINUSER":
       return {
         ...state,
-        isLogin: action.payload,
+        isLoginUser: action.payload,
+      };
+    case "SETISLOGINADMIN":
+      return {
+        ...state,
+        isLoginAdmin: action.payload,
       };
     case "SETISMODALUPDATE":
       return {
@@ -42,6 +49,11 @@ const Reducer = (state = initialState, action) => {
       return {
         ...state,
         isAdmin: action.payload,
+      };
+    case "SETISOPENMODALOTPUSER":
+      return {
+        ...state,
+        isOpenModalOTPUser: action.payload,
       };
     default:
       return state;

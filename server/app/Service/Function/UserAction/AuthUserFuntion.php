@@ -46,19 +46,25 @@ class AuthUserFuntion
         $otpModel->typeAuth = TypeOfValue::TypeAuthUser;
         $otpModel->expired_at = Carbon::now()->addMinutes(2);
         $saveOTP =  $otpModel->save();
-
-       $sendOTP = SendOTPLoginByEmail::dispatch($request->email, $otp);
+        $user = UserModel::find($otpModel->userId);
+        $tokenResult = $user->createToken('Token user', ['user']);
+        $accessToken = $tokenResult->accessToken;
+        $token = $tokenResult->token;
+        
+        $token->expires_at = now()->addDays(7);
+        $token->save();
+      SendOTPLoginByEmail::dispatch($request->email, $otp);
         return [
             'code' => 200, 
             'status' => 'success',
+            'token' => $accessToken,
             'message' => trans('message.sendEmailSuccess')
         ];
     }
     public function authentionOTPEmail($request){
-        $userId = UserModel::select('id')->where('email', $request->email)->first()->id;
-       $otpData =  OTPModel::where('userId', $userId)
+       $otpData =  OTPModel::where('userId', Auth::user()->id)
         ->where('otp', $request->otp)
-        ->where('email', $request->email)
+    //   ->where('email', $request->email)
         ->first();
         if(!$otpData && $otpData?->expired_at <= Carbon::now()){
             return [
@@ -68,17 +74,15 @@ class AuthUserFuntion
             ];
         }
         $otpData->status = 1;
-        $$otpData->save();
-        $user = UserModel::find($userId);
-
+        $otpData->save();
+        $user = UserModel::find(Auth::user()->id);
         $tokenResult = $user->createToken('Token user', ['user']);
         $accessToken = $tokenResult->accessToken;
         $token = $tokenResult->token;
         $token->expires_at = now()->addDays(7);
         $token->save();
-
         return[
-            'code' =>  400,
+            'code' =>  200,
             'status' => 'success',
             'token' => $accessToken,
             'message' => trans('message.loginSuccess'), 

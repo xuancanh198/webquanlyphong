@@ -203,7 +203,10 @@
     },
     "login": {
       "username": "Tên đăng nhập",
-      "password": "Mật khẩu"
+      "password": "Mật khẩu",
+      "email" : "Emai",
+      "phoneNumber" : " Số điện thoại", 
+      "otp" : "otp"
     },
     "contract": {
       "code": "Mã hợp đồng",
@@ -320,6 +323,9 @@
     "staffCreate": " Nhập nhân viên tạo",
     "note": "Ghi chú",
     "login": "Đăng nhập để vào trang",
+    "sendOTP" : "Gửi OTP",
+    "sumbitOTPText" : "Nhập OTP",
+    "sumbitOTP" : "Vui lòng nhập mã otp để đăng nhập",
     "loginPageMessage": "Bạn phải đăng nhập bằng tài khoản quản trị viên để được vào trang quản trị nếu chưa có tài khoản liên hệ với quản trị để tạo tài khoản",
     "searchTitel": "Nhập {{attribute}} cần tìm",
     "verifyText": "Xác thực {{attribute}}",

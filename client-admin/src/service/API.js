@@ -1,42 +1,55 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import {setIsLogin} from "../redux/accction/reducers";
+import { setIsLoginUser, setIsLoginAdmin } from "../redux/accction/reducers";
 import store from '../redux/store';
-import { useNavigate } from 'react-router-dom';
+
 const APILink = axios.create({
-  baseURL: "http://localhost:8000/api/"
+  baseURL: "http://localhost:8000/api/",
 });
 
-APILink.interceptors.request.use(  (config) => {
-    const token = Cookies.get('token');
-    console.log(token)
-    if (token && token !== null) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+APILink.interceptors.request.use(
+  (config) => {
+    const isAdmin = window.location.pathname.includes("admin");
+    let token;
+
+    if (isAdmin) {
+      token = Cookies.get("token_admin");
+    } else {
+      token = Cookies.get("token_user") || Cookies.get("token_otp_user");
+    }
+
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 APILink.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
     if (error.response) {
-      const { status, data } = error.response;
+      const { status } = error.response;
+
       if (status === 401) {
-        store.dispatch(setIsLogin(false));
-        Cookies.remove('token');
-        const navigate = useNavigate();
+        const isAdmin = window.location.pathname.includes("admin");
+        const dispatch = store.dispatch;
+
+        if (isAdmin) {
+          dispatch(setIsLoginAdmin(false));
+          Cookies.remove("token_admin");
+        } else {
+          dispatch(setIsLoginUser(false));
+          Cookies.remove("token_user");
+        }
+
         setTimeout(() => {
-          navigate('/'); 
+          window.location.href = "/";
         }, 1000);
       }
-    } 
-    
+    }
+
     return Promise.reject(error);
   }
 );

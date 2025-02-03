@@ -410,3 +410,17 @@ body {
 .button-show-modal{
   max-width: 200px !important;
 }
+.box-login{
+  width: 40px;
+  cursor: pointer;
+  height: 40px;
+  border: 1px solid #303f9f;
+  display:  flex;
+  justify-content: center;
+  align-items: center;
+  color: #303f9f;
+}
+.box-login.active{
+  background-color: var(--dark-primary-color);
+  color: white;
+}
