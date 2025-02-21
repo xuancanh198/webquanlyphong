@@ -27,9 +27,9 @@ const Login = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [type, setType] = useState(LOGIN_USER_BY_EMAIL)
+  const [type, setType] = useState(LOGIN_USER_BY_PASSWORD)
   const [togglePassword, settogglePassword] = useState(false);
-  const [initialValues, setInitialValues] = useState(arrTypeLogin[1].initialValues)
+  const [initialValues, setInitialValues] = useState(arrTypeLogin[0].initialValues)
   const isOpenModalOTPUser = useSelector((state) => state.reducers.isOpenModalOTPUser);
   const validationSchema = Yup.object().shape({
     // username: Yup.string().required('Username is required'),
@@ -55,6 +55,7 @@ const Login = () => {
               <CCard className="p-4 col-xl-6 col-lg-6 col-md-12 col-sm-12">
                 <Formik
                   initialValues={initialValues}
+                  enableReinitialize={true}
                   validationSchema={validationSchema}
                   onSubmit={handleSubmit}
                 >

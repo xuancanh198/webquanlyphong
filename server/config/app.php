@@ -196,6 +196,7 @@ return [
         Laravel\Passport\PassportServiceProvider::class,
         App\Providers\FirebaseServiceProvider::class,
         App\Providers\TwilioServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class
     ],
 
     /*

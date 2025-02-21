@@ -13,6 +13,7 @@ const ProtectedRoute = ({ element, redirectPath = "/login", isLoginPage = false 
   const token_otp_user = Cookies.get('token_otp_user');
   const location = useLocation();
   const dispatch = useDispatch();
+  console.log(token_user, token_otp_user)
 
   const isAdmin = location.pathname.includes("admin");
   if (isAdmin) {
@@ -20,16 +21,17 @@ const ProtectedRoute = ({ element, redirectPath = "/login", isLoginPage = false 
     if (isLoginPage && token_admin) {
       return <Navigate to={"/admin"} />;
     }
-    if ((!isLoginPage && !token_admin) || isLoginAdmin === false) {
+    else if ((!isLoginPage && !token_admin) || isLoginAdmin === false) {
       return <Navigate to={isAdmin ? '/admin/login' : redirectPath} />;
     }
   } else {
+   
     dispatch(setIsAdmin(false))
     if (isLoginPage && token_user) {
       return <Navigate to={"/"} />;
     }
-    if ((!isLoginPage && (!token_user || !token_otp_user)) || (isLoginUser === false || isOpenModelOTPUser === false) ) {
-      return <Navigate to={isAdmin ? '/login' : redirectPath} />;
+    else if ((!isLoginPage && (!token_user)) || isLoginUser === false) {
+      return <Navigate to={'/login' } />;
     }
   }
 

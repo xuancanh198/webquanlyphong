@@ -1,24 +1,21 @@
 <?php
 
-namespace App\Service\Function\Execute;
+namespace App\Repositories\Room\Service;
 
-use App\Models\Room\TypeRoomModel;
-use App\Http\Requests\TypeRoomRequest;
-use App\Service\Function\Base\BaseService;
+use App\Models\Room\ServiceModel;
 use Carbon\Carbon;
+use App\Repositories\BaseRepositories;
 
-class TypeRoomService extends BaseService
+class ServiceRepositories extends BaseRepositories implements ServiceInterface
 {
     protected $model;
-    protected $request;
     protected $columSearch = ['name', 'code'];
-    public function __construct(TypeRoomModel $model, TypeRoomRequest $request)
+
+    public function __construct(ServiceModel $model)
     {
         $this->model = $model;
-        $this->request = $request;
     }
-    public function getList()
-    {
+    public function getList($request){
         $page = $this->request->page ?? 1;
         $limit = $this->request->limit ?? 10;
         $excel = $this->request->excel ?? null;
@@ -30,24 +27,32 @@ class TypeRoomService extends BaseService
         $result = $this->getListBaseFun($this->model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64);
         return $result;
     }
-    public function createAction()
+    public function create($request)
     {
-        $this->model->name =  $this->request->name;
-        $this->model->code =  $this->request->code;
+        $this->model->name =  $request->name;
+        $this->model->code =  $request->code;
+        $this->model->price =  $request->price;
+        $this->model->unit = $request->unit;
+        $this->model->quantity =  $request->quantity;
         $this->model->created_at = Carbon::now();
         return $this->model->save();
     }
-    public function updateAction($id)
+
+    public function update($request, $id)
     {
         $data = $this->model->find($id);
-        $data->name = $this->request->name;
-        $data->code = $this->request->code;
+        $data->name = $request->name;
+        $data->code = $request->code;
+        $data->price = $request->price;
+        $data->unit = $request->unit;
+        $data->quantity = $request->quantity;
         $data->updated_at = Carbon::now();
         return $data->save();
     }
-    public function deleteAction($id)
+
+    public function delete($id)
     {
-        $data= $this->model->find($id);
+        $data = $this->model->find($id);
         return $data->delete();
     }
 }

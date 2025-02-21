@@ -31,8 +31,17 @@ export const setIsAdmin = (items) => ({
     type: 'SETISADMIN',
     payload: items,
 });
+export const setDataUser = (items) => ({
+    type: 'SETDATAUSER',
+    payload: items,
+});
 export const setIsOpenOTPModal = (items) => ({
     type: 'SETISOPENMODALOTPUSER',
+    payload: items,
+});
+
+export const setTypeModalAuthDashboard = (items) => ({
+    type: 'SETTYPEMODALAUTHDASHBOOARD',
     payload: items,
 });
 

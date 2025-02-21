@@ -24,6 +24,13 @@ class Controller extends BaseController
             'result' => $result,
         ]);
     }
+    public function returnResponseStatus($message, $status = 'success')
+    {
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+        ]);
+    }
     public function returnResponseBase($resource, $requets, $result)
     {
         if ($requets->excel !== true) {

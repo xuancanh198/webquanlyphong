@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Room;
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\BuidlingService;
+use App\Service\Function\Execute\Room\Buidling\BuidlingInterface;
 use App\Http\Resources\BuildingResource;
 use App\Http\Requests\BuildingRequest;
 class BuildingController extends Controller
 {
     protected $service;
     protected $request;
-    public function __construct(BuidlingService $service, BuildingRequest $request)
+    public function __construct(BuidlingInterface $service, BuildingRequest $request)
     {
         $this->service = $service;
         $this->request = $request;

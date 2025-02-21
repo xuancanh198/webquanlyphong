@@ -1,4 +1,5 @@
 {
+  "quantity": "Quantity",
   "page": {
     "home": "Home",
     "role": "Role",
@@ -8,34 +9,45 @@
     "floor": "Floor",
     "building": "Building",
     "service": "Service",
-    "furniture": "Furniture"
+    "furniture": "Furniture",
+    "user": "Tenant",
+    "login": "Login",
+    "missPassWord": "Forgot Password",
+    "contract": "Contract",
+    "bill": "Bill",
+    "permisstion": "Permission",
+    "acction": "Action",
+    "system": "System",
+    "permisstionDetail": "Detailed Permission",
+    "setting": "Settings",
+    "activeLog": "System Log History"
   },
   "validation": {
     "attribute": {
-      "min": "{{attribute}} must be at least {{min}} characters",
+      "min": "{{attribute}} must have at least {{min}} characters",
       "max": "{{attribute}} must not exceed {{max}} characters",
       "minValue": "{{attribute}} must be at least {{min}}",
       "matches": "{{attribute}} must not contain special characters",
       "integer": "{{attribute}} must be an integer",
       "required": "Please enter {{attribute}}",
-      "positive": "{{attribute}} must be a positive number"
+      "positive": "{{attribute}} must be a positive integer"
     }
   },
   "attribute": {
-    "role": "Role",
+    "role": "role",
     "roleName": "Role Name",
-    "staff": "Staff",
-    "building": "Building"
+    "staff": "staff",
+    "building": "building"
   },
   "action": {
     "authentication": {
-      "delete": "Authenticate deletion of {{attribute}}"
+      "delete": "Confirm deletion of {{attribute}}"
     },
     "message": {
       "delete": "Do you want to delete this {{attribute}}?"
     },
     "attribute": {
-      "role": "Role"
+      "role": "role"
     }
   },
   "message": {
@@ -43,121 +55,162 @@
       "delete": "Do you want to delete this {{attribute}}?"
     },
     "attribute": {
-      "role": "Role"
+      "role": "role"
     }
   },
   "table": {
-    "column": {
-      "viewDetail": "View Detail",
+    "colum": {
+      "viewDetail": "View Details",
       "role": {
         "name": "Role Name",
-        "created_at": "Creation Time",
-        "updated_at": "Update Time",
+        "created_at": "Created At",
+        "updated_at": "Updated At",
         "action": "Action"
       }
     }
   },
-  "labelView": {
+  "lableView": {
+    "roommates": {
+      "totalMembers": "Total members in the room"
+    },
+    "activeLog": {
+      "log_type": {
+        "adminAction": "Admin Log",
+        "userAction": "User Log"
+      },
+      "log_name": "Log Type",
+      "description": "Description",
+      "subject_type": "Type",
+      "event": "Event",
+      "properties": "Old Data",
+      "created_at": "Created At"
+    },
+    "role": {
+      "name": "Role Name",
+      "created_at": "Created At",
+      "updated_at": "Updated At",
+      "action": "Action"
+    },
     "staff": {
       "username": "Username",
       "rolename": "Role Name",
       "password": "Password",
       "passwordDefault": "Default Password",
       "fullname": "Full Name",
-      "addressDetail": "Address Detail",
+      "addressDetail": "Detailed Address",
       "address": "Address",
       "note": "Note",
-      "img": "Profile Picture",
-      "province": "Province/City",
+      "img": "Avatar",
+      "province": "Province, City",
       "district": "District",
       "ward": "Ward",
       "email": "Email",
-      "phoneNumber": "Phone Number"
-    },
-    "typeRoom": {
-      "name": "Room Type Name",
-      "code": "Room Type Code",
-      "created_at": "Creation Time",
-      "updated_at": "Update Time"
-    },
-    "floor": {
-      "name": "Floor Name",
-      "code": "Floor Code",
-      "created_at": "Creation Time",
-      "updated_at": "Update Time"
-    },
-    "building": {
-      "name": "Building Name",
-      "code": "Building Code",
-      "numberFloor": "Total Floors",
-      "numbeRoomsRent": "Total Rooms",
-      "address": "Address",
-      "note": "Note",
-      "img": "Profile Picture",
-      "province": "Province/City",
-      "district": "District",
-      "ward": "Ward",
-      "addressDetail": "Address Detail",
-      "created_at": "Creation Time",
-      "updated_at": "Update Time"
-    },
-    "service": {
-      "name": "Service Name",
-      "code": "Service Code",
-      "price": "Service Price",
-      "unit": "Unit",
-      "unitValue": {
-        "people": "People",
-        "room": "Room",
-        "number": "Number",
-        "block": "Block"
-      },
-      "quantity": "Quantity",
-      "created_at": "Creation Time",
-      "updated_at": "Update Time"
-    },
-    "furniture": {
-      "name": "Furniture Name",
-      "code": "Furniture Code",
-      "price": "Furniture Price",
-      "created_at": "Creation Time",
-      "updated_at": "Update Time"
-    },
-    "room": {
-      "name": "Room Name",
-      "code": "Room Code",
-      "typeRoom": "Room Type",
-      "floor": "Floor",
-      "image": "Room Image",
-      "building": "Building",
-      "length": "Length",
-      "height": "Height",
-      "width": "Width",
-      "note": "Note",
-      "acreage": "Acreage",
-      "service": "Service",
-      "furniture": "Furniture",
-      "created_at": "Creation Time",
-      "updated_at": "Update Time"
+      "phoneNumber": "Phone Number",
+      "total": "Total Accounts",
+      "totalActive": "Total Active Accounts",
+      "ban_expiration_at": "Ban Expiration Time",
+      "created_at": "Created At",
+      "updated_at": "Updated At"
     }
   },
   "actionView": {
     "create": "Create",
     "update": "Update",
     "delete": "Delete",
-    "detail": "View Detail",
+    "detail": "View Details",
     "close": "Close",
-    "upload": "Upload Image"
+    "upload": "Upload Image",
+    "deleted": "Deleted",
+    "created": "Created",
+    "updated": "Updated"
   },
   "messageView": {
-    "search": "Enter the information you want to find",
-    "selectTypeFilter": "Select the filter time type",
+    "search": "Enter information to search",
+    "selectTypeFilter": "Select filter type",
     "startTimeFilter": "Start Time",
-    "endTimeFilter": "End Time"
+    "endTimeFilter": "End Time",
+    "home": "Home",
+    "manage": "Manage",
+    "TableList": "Manage",
+    "Dashboard": "Dashboard"
   },
   "lang": {
     "vietnam": "Vietnamese",
     "english": "English"
   },
-  "noData": "No Data"
+  "noData": "No data available",
+  "loading": "Processing, please wait!",
+  "timeType": {
+    "created_at": "Created At",
+    "updated_at": "Updated At",
+    "start_at": "Start Time",
+    "end_at": "End Time",
+    "pay_at": "Payment Time",
+    "ban_at": "Ban Time",
+    "ban_expiration_at": "Ban Expiration Time",
+    "verify_email_at": "Email Verification Time",
+    "dateOfBirth": "Date of Birth",
+    "dateIssuanceCard": "ID Issuance Date"
+  },
+  "messageText": {
+    "latestBill": "Latest Bill",
+    "billList": "Bill List",
+    "latestContract": "Latest Contract",
+    "contractBill": "Contract Bill",
+    "yourInfoText": "Your Account Information",
+    "account": "Account",
+    "changeAll": "Select All",
+    "MyAccount": "My Account",
+    "staffCreate": "Enter staff creator",
+    "note": "Note",
+    "login": "Log in to access",
+    "sendOTP": "Send OTP",
+    "sumbitOTPText": "Enter OTP",
+    "sumbitOTP": "Please enter the OTP code to log in",
+    "loginPageMessage": "You must log in with an admin account to access the management page. If you do not have an account, contact the administrator to create one.",
+    "searchTitel": "Enter the {{attribute}} to search",
+    "verifyText": "Verify {{attribute}}",
+    "info": "{{attribute}} Information",
+    "permisstionDetailStatus": {
+      "active": "Active",
+      "notActive": "Contract Expired"
+    },
+    "verifyValue": {
+      "authenticated": "Verified",
+      "notAuthenticated": "Not Verified"
+    },
+    "contractStatus": {
+      "active": "Active",
+      "notActive": "Contract Expired"
+    },
+    "BillStatus": {
+      "notPaid": "Unpaid",
+      "payed": "Paid"
+    },
+    "BillPayMethodText": "Payment Method",
+    "BillPayMethod": {
+      "cashPayment": "Cash Payment",
+      "bankTransfer": "Bank Transfer",
+      "paymentViaWallet": "E-wallet Payment"
+    },
+    "statusText": "Account Status",
+    "statusTextAttribute": "{{attribute}} Status",
+    "statusValue": {
+      "active": "Active",
+      "ban": "Banned"
+    },
+    "statusValueUser": {
+      "active": "Renting",
+      "notActive": "Contract Expired",
+      "ban": "Banned"
+    },
+    "changeValue": "Enter {{attribute}}",
+    "billnow": "Current Contract",
+    "contractNow": "Current Contract",
+    "roomNow": "Current Room",
+    "viewInfo": "View Information",
+    "updateInfo": "Update Information",
+    "requiredChange": "Please select {{attribute}} to display data...",
+    "changeQuantityFail": "The quantity of {{attribute}} in the room is insufficient, or you have not selected an input field!"
+  }
 }

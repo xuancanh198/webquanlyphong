@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin\Room;
 
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\TypeRoomService;
+use App\Service\Function\Execute\Room\TypeRoom\TypeRoomServiceInterface;
 use App\Http\Resources\TypeRoomResource;
 use App\Http\Requests\TypeRoomRequest;
 class TypeRoomController extends Controller
 {
     protected $service;
     protected $request;
-    public function __construct(TypeRoomService $service, TypeRoomRequest $request)
+    public function __construct(TypeRoomServiceInterface $service, TypeRoomRequest $request)
     {
         $this->service = $service;
         $this->request = $request;

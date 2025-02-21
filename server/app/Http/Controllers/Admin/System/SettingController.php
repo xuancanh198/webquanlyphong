@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin\System;
 
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\SettingService;
+use App\Service\Function\Execute\System\Setting\SettingServiceInterface;
 use App\Http\Resources\SettingResource;
 use App\Http\Requests\SettingRequest;
 class SettingController extends Controller
 {
     protected $service;
     protected $request;
-    public function __construct(SettingService $service, SettingRequest $request)
+    public function __construct(SettingServiceInterface $service, SettingRequest $request)
     {
         $this->service = $service;
         $this->request = $request;

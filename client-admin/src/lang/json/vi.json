@@ -70,6 +70,9 @@
     }
   },
   "lableView": {
+    "roommates": {
+      "totalMembers": "Tổng số thành viên trong phòng"
+    },
     "activeLog": {
       "log_type": {
         "adminAction": "Log admin",
@@ -160,6 +163,7 @@
       "updated_at": "Thời gian cập nhật"
     },
     "room": {
+      "currentRoom": "Phòng hiện tại",
       "name": "Tên phòng",
       "code": "Mã phòng",
       "typeRoom": "Loại phòng",
@@ -199,16 +203,29 @@
       "phoneNumber": " Số điện thoại",
       "dateOfBirth": "Ngày sinh",
       "dateIssuanceCard": "Ngày cấp căn cước",
-      "placeIssue": "Nơi cấp căn cước"
+      "placeIssue": "Nơi cấp căn cước",
+      "isVerifiedInfor": "Trạng thái xác thực tài khoản",
+      "staus": "Trạng thái tài khoản",
+      "statusValue": {
+        "active": "Đang hoạt động",
+        "baned": "Đã bị khóa"
+      },
+      "isVerifiedInforValue": {
+        "authenticated": "Đã xác thực",
+        "notAuthenticated": "Chưa xác thực"
+      }
     },
     "login": {
       "username": "Tên đăng nhập",
       "password": "Mật khẩu",
-      "email" : "Emai",
-      "phoneNumber" : " Số điện thoại", 
-      "otp" : "otp"
+      "email": "Emai",
+      "phoneNumber": " Số điện thoại",
+      "otp": "otp"
     },
     "contract": {
+      "duration": "Thời hạn hợp đồng",
+      "remainingTime": "Thời gian còn lại",
+      "elapsedTime": "Thời gian đã thuê",
       "code": "Mã hợp đồng",
       "room": "Phòng cho thuê",
       "priceTime": "Giá lúc cho thuê",
@@ -283,8 +300,8 @@
     "detail": "Xem chi tiết",
     "close": "đóng",
     "upload": "tải ảnh lên",
-    "deleted" : "Xóa",
-    "created" : "Tạo mới",
+    "deleted": "Xóa",
+    "created": "Tạo mới",
     "updated": "Cập nhật"
   },
   "messageView": {
@@ -316,6 +333,10 @@
     "dateIssuanceCard": "Ngày cấp căn cước"
   },
   "messageText": {
+    "latestBill": "Hóa đơn gần nhất",
+    "billList": "Danh sách hóa đơn",
+    "latestContract": "Hợp đồng gần nhất",
+    "contractBill": "Hợp đồng hóa đơn",
     "yourInfoText": "Thông tin tài khoản của bạn",
     "account": "Tài khoản",
     "changeAll": "Chọn tất cả",
@@ -323,12 +344,14 @@
     "staffCreate": " Nhập nhân viên tạo",
     "note": "Ghi chú",
     "login": "Đăng nhập để vào trang",
-    "sendOTP" : "Gửi OTP",
-    "sumbitOTPText" : "Nhập OTP",
-    "sumbitOTP" : "Vui lòng nhập mã otp để đăng nhập",
+    "sendOTP": "Gửi OTP",
+    "sumbitOTPText": "Nhập OTP",
+    "sumbitOTP": "Vui lòng nhập mã otp để đăng nhập",
     "loginPageMessage": "Bạn phải đăng nhập bằng tài khoản quản trị viên để được vào trang quản trị nếu chưa có tài khoản liên hệ với quản trị để tạo tài khoản",
     "searchTitel": "Nhập {{attribute}} cần tìm",
     "verifyText": "Xác thực {{attribute}}",
+    
+    "info": "Thông  tin {{attribute}}",
     "permisstionDetailStatus": {
       "active": "Còn hiệu lực",
       "notActive": "Hết hạn hợp đồng"
@@ -363,6 +386,11 @@
       "ban": "Bị khóa"
     },
     "changeValue": "Nhập {{attribute}} ",
+    "billnow"  :  "Hợp đồng hiện tại",
+    "contractNow" : "Hợp đồng hiện  tại",
+    "roomNow" : "Phòng hiện  tại",
+    "viewInfo" : "Xem thông tin",
+    "updateInfo" : "Cập  nhật thông tin",
     "requiredChange": "Vui lòng chọn {{attribute}} để hiển thị dữ liệu ...",
     "changeQuantityFail": "Số lượng {{attribute}} trong phòng không đủ hoặc bạn chưa chọn ô nhập !"
   }

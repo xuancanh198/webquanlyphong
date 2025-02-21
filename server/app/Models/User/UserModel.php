@@ -15,7 +15,8 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use App\Enums\ActiveLog;
 use App\Enums\StaffsEnum;
-
+use App\Models\User\BilModel;
+use App\Models\Room\RoomModel;
 class UserModel extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, LogsActivity;
@@ -24,6 +25,56 @@ class UserModel extends Authenticatable
     protected static $logName = ActiveLog::USER_VALUE;
     protected static $logOnlyDirty = true;
     protected $fillable = ['username', 'password', 'fullname', 'defaultPassword', 'email', 'dateOfBirth', 'phoneNumber', 'address','dateIssuanceCard','placeIssue','identificationCard','imgLink','isVerifiedInfor','status','note','created_at','updated_at'];
+    protected $hidden = ['password'];
+    public function getMyContractIds()
+    {
+        return array_unique(array_merge(
+            ContractModel::where('userId', $this->id)->pluck('id')->toArray(),
+            UserContractModel::where('userId', $this->id)->pluck('contractId')->toArray()
+        ));
+    }
+    public function getMyRoom() {
+        $contract = $this->getMyContractNow();
+        if(!$contract) return null;
+        return RoomModel::find($contract->roomId);   
+    }
+    public function getRoommates()
+    {
+        $contract = $this->getMyContractNow();
+        if (!$contract) {
+            return collect();
+        }
+        $userIds = UserContractModel::where('contractId', $contract->id)
+            ->pluck('userId')
+            ->toArray();
+        $roommateIds = array_diff($userIds, [$this->id]);
+
+        return self::whereIn('id', $roommateIds)->get();
+    }
+    public function getMyContractNow()
+    {
+        $contractIds = $this->getMyContractIds();
+        return empty($contractIds) ? null : ContractModel::find(max($contractIds));
+    }
+
+    public function getMyBillNow()
+    {
+        $contract = $this->getMyContractNow();
+        return $contract ? BilModel::where('contractId', $contract->id)->orderByDesc('id')->first() : null;
+    }
+
+    public function getMyContracts()
+    {
+        $contractIds = $this->getMyContractIds();
+        return ContractModel::whereIn('id', $contractIds)->get();
+    }
+
+    public function getMyBills()
+    {
+        $contractIds = $this->getMyContractIds();
+        return empty($contractIds) ? collect() : BilModel::whereIn('contractId', $contractIds)->orderByDesc('id')->get();
+    }
+
     public function scopeFindUsersByRoomId($query, $roomId)
     {
         $contract = ContractModel::where('roomId', $roomId)

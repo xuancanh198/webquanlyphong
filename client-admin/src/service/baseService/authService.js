@@ -1,7 +1,7 @@
 import APILink from "../API";
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
-import { setLoading, setInfoStaff, setIsAdmin, setIsLoginAdmin, setIsLoginUser, setIsOpenOTPModal } from "../../redux/accction/reducers";
+import { setLoading, setDataUser, setInfoStaff, setIsAdmin, setIsLoginAdmin, setIsLoginUser, setIsOpenOTPModal } from "../../redux/accction/reducers";
 import { LOGIN_USER_BY_PASSWORD, LOGIN_USER_BY_EMAIL, LOGIN_USER_BY_PHONE } from "../../Constants/Login"
 export const loginFun = (value, navigate) => {
   return (dispatch) => {
@@ -151,7 +151,7 @@ export const updateInfoAuthUser = (data, configStatus = false) => {
   } : null;
   return (dispatch) => {
     dispatch(setLoading(true));
-    const url = `admin/update-staff-account`;
+    const url = `user/update-user-account`;
 
     const request = configStatus
       ? APILink.post(`${url}?_method=PUT`, data, config)
@@ -170,4 +170,25 @@ export const updateInfoAuthUser = (data, configStatus = false) => {
         dispatch(setLoading(false));
       });
   }
+}
+
+export const getMyAuthData = () => {
+  return (dispatch) => {
+    dispatch(setLoading(true));
+    APILink.get('user/my-account')
+      .then((response) => {
+        if (response.data.status === "success") {
+          dispatch(setDataUser(response.data.result))
+        } else {
+          toast.error(response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
+  }
+
 }

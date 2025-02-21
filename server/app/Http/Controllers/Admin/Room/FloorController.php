@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin\Room;
 
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\FloorService;
+use App\Service\Function\Execute\Room\Floor\FloorServiceInterface;
 use App\Http\Resources\FloorResource;
 use App\Http\Requests\FloorRequest;
 class FloorController extends Controller
 {
     protected $service;
     protected $request;
-    public function __construct(FloorService $service, FloorRequest $request)
+    public function __construct(FloorServiceInterface $service, FloorRequest $request)
     {
         $this->service = $service;
         $this->request = $request;

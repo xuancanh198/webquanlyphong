@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Room;
 
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\ServiceService;
+use App\Service\Function\Execute\Room\Service\ServiceServiceInterface;
 use App\Http\Resources\ServiceResource;
 use App\Http\Requests\ServiceRequest;
 
@@ -11,7 +11,7 @@ class ServiceController extends Controller
 {
     protected $service;
     protected $request;
-    public function __construct(ServiceService $service, ServiceRequest $request)
+    public function __construct(ServiceServiceInterface $service, ServiceRequest $request)
     {
         $this->service = $service;
         $this->request = $request;

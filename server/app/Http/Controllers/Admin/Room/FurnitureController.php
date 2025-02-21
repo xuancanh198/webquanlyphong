@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Admin\Room;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Service\Function\Execute\FurnitureService;
+use App\Service\Function\Execute\Room\Furniture\FurnitureServiceInterface;
 use App\Http\Resources\FurnitureResource;
 use App\Http\Requests\FurnitureRequest;
 class FurnitureController extends Controller
 {
     protected $service;
     protected $request;
-    public function __construct(FurnitureService $service, FurnitureRequest $request)
+    public function __construct(FurnitureServiceInterface $service, FurnitureRequest $request)
     {
         $this->service = $service;
         $this->request = $request;
