@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\ContractService;
+use App\Service\Function\Execute\User\Contract\ContractServiceInterface;
 use App\Http\Resources\ContractResource;
 use App\Http\Requests\ContractRequest;
 use App\Models\Room\RoomFurnitureModel;
@@ -12,7 +12,7 @@ class ContractController extends Controller
 {
     protected $service;
     protected $request;
-    public function __construct(ContractService $service, ContractRequest $request)
+    public function __construct(ContractServiceInterface $service, ContractRequest $request)
     {
         $this->service = $service;
         $this->request = $request;

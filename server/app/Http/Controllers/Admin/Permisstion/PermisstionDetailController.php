@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Permisstion;
 
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\PermisstionDetailService;
+use App\Service\Function\Execute\Permisstion\PermisstionDetail\PermisstionDetailServiceInterface;
 use App\Http\Resources\PermisstionDetailResource;
 use App\Http\Requests\PermisstionDetailRequest;
 
@@ -12,7 +12,7 @@ class PermisstionDetailController extends Controller
 {
     protected $service;
     protected $request;
-    public function __construct(PermisstionDetailService $service, PermisstionDetailRequest $request)
+    public function __construct(PermisstionDetailServiceInterface $service, PermisstionDetailRequest $request)
     {
         $this->service = $service;
         $this->request = $request;

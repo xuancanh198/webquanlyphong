@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\UserService;
+use App\Service\Function\Execute\User\User\UserServiceInterface;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\UserRequest;
 
@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     protected $service;
     protected $request;
-    public function __construct(UserService $service, UserRequest $request)
+    public function __construct(UserServiceInterface $service, UserRequest $request)
     {
         $this->service = $service;
         $this->request = $request;

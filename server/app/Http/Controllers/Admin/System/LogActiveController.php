@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Admin\System;
 
 
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\LogActiveService;
+use App\Service\Function\Execute\System\LogActive\LogActiveServiceInterface;
 use App\Http\Resources\LogActiveResource;
 use App\Http\Requests\LogActiveRequest;
 class LogActiveController extends Controller
 {
     protected $service;
     protected $request;
-    public function __construct(LogActiveService $service, LogActiveRequest $request)
+    public function __construct(LogActiveServiceInterface $service, LogActiveRequest $request)
     {
         $this->service = $service;
         $this->request = $request;

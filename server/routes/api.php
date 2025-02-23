@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\User\BillController;
 use App\Http\Controllers\Admin\Staff\AuthController;
 use App\Http\Controllers\Admin\Staff\StaffController;
 use App\Http\Controllers\Admin\System\SettingController;
+use App\Http\Controllers\Admin\System\LogActiveController;
 use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\BillAuthController;
 Route::middleware(['admin.middleware'])->group(function () {
@@ -32,6 +33,10 @@ Route::middleware(['admin.middleware'])->group(function () {
                     Route::post('/', [SettingController::class, 'store']);
                     Route::put('/{id}', [SettingController::class, 'update']);
                     Route::delete('/{id}', [SettingController::class, 'destroy']);
+                });
+                Route::group(['prefix' => 'active-log'], function () {
+                    Route::get('', [LogActiveController::class, 'index']);
+                    Route::delete('/{id}', [LogActiveController::class, 'destroy']);
                 });
             });
             Route::group(['prefix' => 'staff'], function () {

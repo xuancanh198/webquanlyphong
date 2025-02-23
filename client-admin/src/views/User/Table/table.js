@@ -13,41 +13,20 @@ import {
   CPaginationItem,
 } from '@coreui/react'
 
-import FurnitureList from "./List/Furniture/list";
-import UserList from "./List/User/list";
-import ServiceList from "./List/Service/list";
+// import UserList from "./List/User/list";
+// import ServiceList from "./List/Service/list";
 import BillList from "./List/Bill/list";
-import ContractList from "./List/Contract/list";
-import BillModal from "./Modal/Bill/modal";
-import FurnitureModal from "./Modal/Furniture/modal";
-import ServiceModal from "./Modal/Service/modal";
-import UserModal from "./Modal/User/modal";
+// import ContractList from "./List/Contract/list";
 
-import ContractModal from "./Modal/Contract/modal";
-import RoomFilter from "./Filter/Room"
-import UserFilter from "./Filter/User"
-import BillFilter from "./Filter/Bill"
+// import RoomFilter from "./Filter/Room"
+// import UserFilter from "./Filter/User"
+// import BillFilter from "./Filter/Bill"
 import {
-  getListRole,
-  getListAcction,
-  getListStaff,
-  getListTypeRoom,
-  getListFloor,
-  getListBuilding,
-  getListService,
-  getListFurniture,
-  getListRoom,
-  getListUser,
-  getListContract,
-  getListPermisstion,
-  getListSetting,
-  getListPermisstionDetail,
-  getListBill,
-  getListActiveLog
-} from "../../service/baseService/cruds";
+  getMyBill,
+} from "../../../service/baseService/authService";
 import { useSelector, useDispatch } from 'react-redux';
-import { setTypeFilter, setpage, setLimit, setFilterStatus, setStartFilter, setEndFilter, setSearchVluae, setSeachStatus, setEcelDowload, setFilter } from "../../redux/accction/listTable";
-import { convertDateTime } from "../../service/FunService/funweb";
+import { setTypeFilter, setpage, setLimit, setFilterStatus, setStartFilter, setEndFilter, setSearchVluae, setSeachStatus, setEcelDowload, setFilter } from "../../../redux/accction/listTable";
+import { convertDateTime } from "../../../service/FunService/funweb";
 import ReactPaginate from 'react-paginate';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -150,47 +129,47 @@ const Tables = () => {
   const getQueryUrl = () => {
     if (roleParam) {
       switch (roleParam) {    
-        case 'service':
-          setArrayTimeFilter([
-            created_at_time, updated_at_time
-          ])
-          SetTitel(t('page.service'));
-          dispatch(getListService(t('page.service'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
-          break;
-        case 'furniture':
-          setArrayTimeFilter([
-            created_at_time, updated_at_time
-          ])
-          SetTitel(t('page.furniture'));
-          dispatch(getListFurniture(t('page.furniture'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
-          break;
-        case 'room':
-          setArrayTimeFilter([
-            created_at_time, updated_at_time
-          ])
-          SetTitel(t('page.room'));
-          dispatch(getListRoom(t('page.room'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
-          break;
-        case 'user':
-          setArrayTimeFilter([
-            created_at_time, updated_at_time, dateOfBirth_time, dateIssuanceCard_time
-          ])
-          SetTitel(t('page.user'));
-          dispatch(getListUser(t('page.user'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
-          break;
-        case 'contract':
-          setArrayTimeFilter([
-            created_at_time, updated_at_time, start_at_timeContract, end_at_timeContract
-          ])
-          SetTitel(t('page.contract'));
-          dispatch(getListContract(t('page.contract'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
-          break;
+        // case 'service':
+        //   setArrayTimeFilter([
+        //     created_at_time, updated_at_time
+        //   ])
+        //   SetTitel(t('page.service'));
+        //   dispatch(getListService(t('page.service'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
+        //   break;
+        // case 'furniture':
+        //   setArrayTimeFilter([
+        //     created_at_time, updated_at_time
+        //   ])
+        //   SetTitel(t('page.furniture'));
+        //   dispatch(getListFurniture(t('page.furniture'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
+        //   break;
+        // case 'room':
+        //   setArrayTimeFilter([
+        //     created_at_time, updated_at_time
+        //   ])
+        //   SetTitel(t('page.room'));
+        //   dispatch(getListRoom(t('page.room'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
+        //   break;
+        // case 'user':
+        //   setArrayTimeFilter([
+        //     created_at_time, updated_at_time, dateOfBirth_time, dateIssuanceCard_time
+        //   ])
+        //   SetTitel(t('page.user'));
+        //   dispatch(getListUser(t('page.user'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
+        //   break;
+        // case 'contract':
+        //   setArrayTimeFilter([
+        //     created_at_time, updated_at_time, start_at_timeContract, end_at_timeContract
+        //   ])
+        //   SetTitel(t('page.contract'));
+        //   dispatch(getListContract(t('page.contract'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
+        //   break;
         case 'bill':
           setArrayTimeFilter([
             created_at_time, updated_at_time, start_at_time, end_at_time, pay_at_time
           ])
           SetTitel(t('page.bill'));
-          dispatch(getListBill(t('page.bill'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
+          dispatch(getMyBill(t('page.bill'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
         default:
           SetTitel('Tiêu đề mặc định');
@@ -317,7 +296,7 @@ const Tables = () => {
                     <label className='mb-2'> {t('messageView.endTimeFilter')} : </label>
                     <DatePicker selected={filterEndTime} onChange={(date) => startFilterFun(date)} />
                   </div>
-                  {(() => {
+                  {/* {(() => {
                     switch (roleParam) {
                       case 'room':
                         return <RoomFilter />;
@@ -330,7 +309,7 @@ const Tables = () => {
                       default:
                         return null;
                     }
-                  })()}
+                  })()} */}
                 </div>
               )
             }
@@ -340,16 +319,16 @@ const Tables = () => {
           {(() => {
             switch (roleParam) {
            
-              case 'service':
-                return <ServiceList data={listTabledata} />;
-              case 'furniture':
-                return <FurnitureList data={listTabledata} />;
-              case 'room':
-                return <RoomList data={listTabledata} />;
-              case 'user':
-                return <UserList data={listTabledata} />;
-              case 'contract':
-                return <ContractList data={listTabledata} />;
+              // case 'service':
+              //   return <ServiceList data={listTabledata} />;
+              // case 'furniture':
+              //   return <FurnitureList data={listTabledata} />;
+              // case 'room':
+              //   return <RoomList data={listTabledata} />;
+              // case 'user':
+              //   return <UserList data={listTabledata} />;
+              // case 'contract':
+              //   return <ContractList data={listTabledata} />;
               case 'bill':
                 return <BillList data={listTabledata} />;
               default:

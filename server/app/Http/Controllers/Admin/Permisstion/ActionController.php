@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Permisstion;
 
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\ActionService;
+use App\Service\Function\Execute\Permisstion\Action\ActionServiceInterface;
 use App\Http\Resources\ActionResource;
 use App\Http\Requests\ActionRequest;
 
@@ -11,7 +11,7 @@ class ActionController extends Controller
 {
      protected $service;
     protected $request;
-    public function __construct(ActionService $service, ActionRequest $request)
+    public function __construct(ActionServiceInterface $service, ActionRequest $request)
     {
         $this->service = $service;
         $this->request = $request;

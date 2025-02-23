@@ -6,6 +6,7 @@ const MyAccount = React.lazy(() => import('./views/Account/MyAccount'));
 
 
 const MyAccountUser = React.lazy(() => import('./views/User/Auth/MyAccount'));
+const MyTableUser = React.lazy(() => import('./views/User/Table/table'));
 
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
@@ -70,6 +71,7 @@ const routerUser = [
   { path: '/dashboard', name: 'Dashboard', element: DashboardUser },
   // { path: '/page', name: 'TableList', element: TableList },
   { path: '/my-account', name: 'MyAccount', element: MyAccountUser },
+  { path: '/page', name: 'TableList', element: MyTableUser },
 ]
 const routes = [...routesAdmin, ...routerUser];
 

@@ -1,6 +1,7 @@
 import APILink from "../API";
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
+import { getListFunService, getAllData, addFunService, updateFunService, deleteFunService } from "./baseFuntion";
 import { setLoading, setDataUser, setInfoStaff, setIsAdmin, setIsLoginAdmin, setIsLoginUser, setIsOpenOTPModal } from "../../redux/accction/reducers";
 import { LOGIN_USER_BY_PASSWORD, LOGIN_USER_BY_EMAIL, LOGIN_USER_BY_PHONE } from "../../Constants/Login"
 export const loginFun = (value, navigate) => {
@@ -192,3 +193,23 @@ export const getMyAuthData = () => {
   }
 
 }
+
+export const getMyBill = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
+  const objectGet = {
+    page: page,
+    limit: limit,
+    search: search,
+    fitler: fitler,
+    exportExcel: exportExcel,
+    filtersBase64: filtersBase64,
+    routerLink: 'bill/',
+    titelnameExcel: ["STT", "ID", "Tên chức vụ", "Thời gian tạo", "Cập nhật"],
+    columExcel: ['id', 'name', 'created_at', 'updated_at'],
+    titelExcel: titel,
+    filterBaseDecode: filterBaseDecode,
+    linkGroup: "user"
+  }
+  return (dispatch) => {
+    dispatch(getListFunService(objectGet))
+  };
+};

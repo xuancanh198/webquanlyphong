@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\BillService;
+use App\Service\Function\Execute\User\Bill\BillServiceInterface;
 use App\Http\Resources\BillResource;
 use App\Http\Requests\BillRequest;
 use App\Models\User\Contract\ServiceContractModel;
@@ -13,7 +13,7 @@ class BillController extends Controller
     protected $request;
     protected $columSearch = ['code'];
     protected $columCode = 'code';
-    public function __construct(BillService $service, BillRequest $request)
+    public function __construct(BillServiceInterface $service, BillRequest $request)
     {
         $this->service = $service;
         $this->request = $request;

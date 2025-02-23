@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\System\SettingModel;
 use Carbon\Carbon;
 use App\Enums\LableSystem;
-
+use Illuminate\Support\Str;
 class BaseRepositories implements BaseInterface
 {
     public function getListBaseFun(
@@ -122,5 +122,19 @@ class BaseRepositories implements BaseInterface
         $endDate = Carbon::createFromDate($currentYear, $nextMonth, (int)$day)->endOfDay();
 
         return $endDate;
+    }
+    public function generateUniqueCode($model, $colum)
+    {
+        $letters = Str::upper(Str::random(6));
+        $numbers = rand(100000, 999999);
+        $code = $letters . $numbers;
+
+        while ($model::where($colum, $code)->exists()) {
+            $letters = Str::upper(Str::random(6));
+            $numbers = rand(100000, 999999);
+            $code = $letters . $numbers;
+        }
+
+        return $code;
     }
 }

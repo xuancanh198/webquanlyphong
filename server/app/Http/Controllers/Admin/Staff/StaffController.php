@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Staff;
 
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\StaffService;
+use App\Service\Function\Execute\Staff\Staff\StaffServiceInterface;
 use App\Http\Resources\StaffResource;
 use App\Http\Requests\StaffRequest;
 
@@ -11,7 +11,7 @@ class StaffController extends Controller
 {
     protected $service;
     protected $request;
-    public function __construct(StaffService $service, StaffRequest $request)
+    public function __construct(StaffServiceInterface $service, StaffRequest $request)
     {
         $this->service = $service;
         $this->request = $request;

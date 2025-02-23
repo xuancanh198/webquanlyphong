@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin\Staff;
 
 use App\Http\Controllers\Controller;
-use App\Service\Function\Execute\RoleService;
+use App\Service\Function\Execute\Staff\Role\RoleServiceInterface;
 use App\Http\Resources\RoleResource;
 use App\Http\Requests\RoleRequest;
 class RoleController extends Controller
 {
     protected $service;
     protected $request;
-    public function __construct(RoleService $service, RoleRequest $request)
+    public function __construct(RoleServiceInterface $service, RoleRequest $request)
     {
         $this->service = $service;
         $this->request = $request;
