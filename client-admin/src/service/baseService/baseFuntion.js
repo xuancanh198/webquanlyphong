@@ -135,7 +135,8 @@ export const updateFunService = (objectUpdate, configStatus = false) => {
   } : null;
   return (dispatch) => {
     dispatch(setLoading(true));
-    const url = `admin/${objectUpdate.routerLink}/${objectUpdate.id}`;
+    const linkGroup = objectUpdate?.linkGroup && objectUpdate?.linkGroup === 'user' ? "user" : "admin"
+    const url = `${linkGroup}/${objectUpdate.routerLink}${objectUpdate?.id ? `/${objectUpdate?.id}` : ""}`;
 
     const request = configStatus
       ? APILink.post(`${url}?_method=PUT`, data, config)

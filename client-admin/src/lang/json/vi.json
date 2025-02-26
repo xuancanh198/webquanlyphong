@@ -260,6 +260,7 @@
       "user": "Người nhận hóa đơn",
       "staff": "Nhân viên tạo hóa đơn",
       "intoMoney": "Thành tiền",
+      "imageBill" : "Ảnh hóa đơn thanh toán",
       "checkIsNowStatus": {
         "has": "Đã thanh toán ",
         "hasnot": "Chưa thanh toán"
@@ -302,7 +303,8 @@
     "upload": "tải ảnh lên",
     "deleted": "Xóa",
     "created": "Tạo mới",
-    "updated": "Cập nhật"
+    "updated": "Cập nhật",
+    "pay": "Thanh toán"
   },
   "messageView": {
     "search": "Nhập thông tin cần tìm kiếm",

@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\System\SettingController;
 use App\Http\Controllers\Admin\System\LogActiveController;
 use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\BillAuthController;
+use App\Http\Controllers\User\PaymentController;
 Route::middleware(['admin.middleware'])->group(function () {
     Route::group(['prefix' => 'admin',], function () {
         Route::post('/login', [AuthController::class, 'login']);
@@ -139,6 +140,7 @@ Route::middleware(['admin.middleware'])->group(function () {
     Route::group(['prefix' => 'user'], function () {
         Route::group(['prefix' => 'bill'], function () {
             Route::get('', [BillAuthController::class, 'index']);
+            Route::put('/pay', [BillAuthController::class, 'pay']);   
         });
         Route::post('/login', [AccountController::class, 'login']);
         Route::post('/send-otp', [AccountController::class, 'authenticOTP']);
@@ -146,3 +148,4 @@ Route::middleware(['admin.middleware'])->group(function () {
         Route::put('/update-user-account', [AccountController::class, 'updateInfoUser']);
     });
 });
+Route::post('pay-bill', [PaymentController::class, 'payBill']);

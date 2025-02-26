@@ -1,6 +1,7 @@
 import APILink from "../API";
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
+
 import { getListFunService, getAllData, addFunService, updateFunService, deleteFunService } from "./baseFuntion";
 import { setLoading, setDataUser, setInfoStaff, setIsAdmin, setIsLoginAdmin, setIsLoginUser, setIsOpenOTPModal } from "../../redux/accction/reducers";
 import { LOGIN_USER_BY_PASSWORD, LOGIN_USER_BY_EMAIL, LOGIN_USER_BY_PHONE } from "../../Constants/Login"
@@ -211,5 +212,20 @@ export const getMyBill = (titel = null, page = 1, limit = 10, search = null, fit
   }
   return (dispatch) => {
     dispatch(getListFunService(objectGet))
+  };
+};
+
+
+export const updateBillUser = (data, resetForm, configStatus = false) => {
+
+  const objectUpdate = {
+    routerLink: 'bill/pay',
+    data: data,
+    resetForm: resetForm,
+    getList: getMyBill,
+    linkGroup: "user"
+  }
+  return (dispatch) => {
+    dispatch(updateFunService(objectUpdate, configStatus));
   };
 };

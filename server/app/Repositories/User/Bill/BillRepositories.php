@@ -69,7 +69,7 @@ class BillRepositories extends BaseRepositories implements BillInterface
         $this->model->roomId =  $room->roomId;
         $this->model->contractId =  $room->id;
         $this->model->totalMoney =  $request->totalMoney;
-        $this->model->status =  1;
+        $this->model->status =  0;
         $this->model->ends_at = $this->getEndDateBill();
         $this->model->started_at =  $this->getStartDateBill();
         $this->model->code =  $this->generateUniqueCode(BilModel::class, $this->columCode);
@@ -174,5 +174,14 @@ class BillRepositories extends BaseRepositories implements BillInterface
         ]);
         $result = $this->getListBaseFun($query, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end,  $filtersBase64, $isSelect, $this->columSelect, $filterBaseDecode);
         return $result;
+    }
+    public function find($id){
+        return $this->model->find($id);
+    }
+    public function updateStatus($id, $request){
+        $data = $this->model->find($id);
+        $data->status = $request->status;
+        $data->updated_at = Carbon::now();
+        return $data->save();
     }
 }

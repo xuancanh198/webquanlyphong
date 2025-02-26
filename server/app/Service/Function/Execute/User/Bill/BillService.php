@@ -3,7 +3,7 @@
 namespace App\Service\Function\Execute\User\Bill;
 
 use App\Http\Requests\BillRequest;
-use App\Repositories\User\Contract\ContractRepositories;
+use App\Repositories\User\Bill\BillInterface;
 use Carbon\Carbon;
 
 class BillService implements BillServiceInterface
@@ -11,7 +11,7 @@ class BillService implements BillServiceInterface
     protected $request;
 
     protected $repository;
-    public function __construct(BillRequest $request, ContractRepositories $repository)
+    public function __construct(BillRequest $request, BillInterface $repository)
     {
         $this->request = $request;
         $this->repository = $repository;

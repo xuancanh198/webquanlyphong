@@ -9,18 +9,8 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
-  CPagination,
-  CPaginationItem,
 } from '@coreui/react'
-
-// import UserList from "./List/User/list";
-// import ServiceList from "./List/Service/list";
 import BillList from "./List/Bill/list";
-// import ContractList from "./List/Contract/list";
-
-// import RoomFilter from "./Filter/Room"
-// import UserFilter from "./Filter/User"
-// import BillFilter from "./Filter/Bill"
 import {
   getMyBill,
 } from "../../../service/baseService/authService";
@@ -129,41 +119,6 @@ const Tables = () => {
   const getQueryUrl = () => {
     if (roleParam) {
       switch (roleParam) {    
-        // case 'service':
-        //   setArrayTimeFilter([
-        //     created_at_time, updated_at_time
-        //   ])
-        //   SetTitel(t('page.service'));
-        //   dispatch(getListService(t('page.service'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
-        //   break;
-        // case 'furniture':
-        //   setArrayTimeFilter([
-        //     created_at_time, updated_at_time
-        //   ])
-        //   SetTitel(t('page.furniture'));
-        //   dispatch(getListFurniture(t('page.furniture'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
-        //   break;
-        // case 'room':
-        //   setArrayTimeFilter([
-        //     created_at_time, updated_at_time
-        //   ])
-        //   SetTitel(t('page.room'));
-        //   dispatch(getListRoom(t('page.room'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
-        //   break;
-        // case 'user':
-        //   setArrayTimeFilter([
-        //     created_at_time, updated_at_time, dateOfBirth_time, dateIssuanceCard_time
-        //   ])
-        //   SetTitel(t('page.user'));
-        //   dispatch(getListUser(t('page.user'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
-        //   break;
-        // case 'contract':
-        //   setArrayTimeFilter([
-        //     created_at_time, updated_at_time, start_at_timeContract, end_at_timeContract
-        //   ])
-        //   SetTitel(t('page.contract'));
-        //   dispatch(getListContract(t('page.contract'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
-        //   break;
         case 'bill':
           setArrayTimeFilter([
             created_at_time, updated_at_time, start_at_time, end_at_time, pay_at_time

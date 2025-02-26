@@ -20,7 +20,6 @@ class Firebase
     public function uploadImages(array $images)
     {
         $imageLinks = [];
-
         foreach ($images as $image) {
             $fileName = time() . '_' . $image->getClientOriginalName();
             $filePath = 'images/' . $fileName;

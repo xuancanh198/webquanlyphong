@@ -40,7 +40,8 @@ class RepositoryServiceProvider extends ServiceProvider
             'App\Service\Function\Execute\User\Contract\ContractServiceInterface' => 'App\Service\Function\Execute\User\Contract\ContractService',
             'App\Repositories\User\Contract\ContractInterface' => 'App\Repositories\User\Contract\ContractRepositories',
             'App\Service\Function\Execute\User\Bill\BillServiceInterface' => 'App\Service\Function\Execute\User\Bill\BillService',
-            'App\Repositories\User\Bill\BillInterface' => 'App\Repositories\User\Bill\BillRepositories',        
+            'App\Repositories\User\Bill\BillInterface' => 'App\Repositories\User\Bill\BillRepositories',
+            'App\Service\Function\Execute\User\Payment\PaymentServiceInterface' => 'App\Service\Function\Execute\User\Payment\PaymentService',              
         ];
 
 

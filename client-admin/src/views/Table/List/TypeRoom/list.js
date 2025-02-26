@@ -14,16 +14,9 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import CIcon from '@coreui/icons-react';
 import { cilArrowTop, cilArrowBottom } from '@coreui/icons';
-import {
-  CCardBody,
-  CPagination,
-  CPaginationItem,
-} from '@coreui/react'
-import { DocsExample } from 'src/components'
 import { useSelector } from 'react-redux';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
