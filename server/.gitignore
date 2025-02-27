@@ -6,6 +6,7 @@
 /storage/*.key
 /vendor
 .env
+.projectroom-fcd04-firebase-adminsdk-d2n2l-9744218559.json
 .env.backup
 .env.production
 Homestead.json
