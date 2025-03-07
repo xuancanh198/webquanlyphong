@@ -137,4 +137,8 @@ class BaseRepositories implements BaseInterface
 
         return $code;
     }
+    public function actionThenReturnBoolOrData($model, $returnData = false){
+       $result =  $model->save();
+        return $returnData === true ? $model : $result;
+    }
 }

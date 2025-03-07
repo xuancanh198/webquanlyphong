@@ -9,10 +9,8 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class BillTypeFormPayment extends Enum
+final class ColumnTableEnums extends Enum
 {
-    const BANKPAYMENTVALUE =  "bank";
-    const VNPAYPAYMENTVALUE = "vnpay";
-    const MOMOPAYMENTVALUE = "momo";
-  
+    const COLUMNTABLESEARCHDEFAULT = ['name', 'code'];
+ 
 }

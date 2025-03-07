@@ -7,14 +7,18 @@ use Carbon\Carbon;
 
 use App\Enums\BillTypeFormPayment;
 use App\Repositories\User\Bill\BillInterface;
-use App\Repositories\User\Transaction\TransactionRepositories;
+use App\Repositories\User\Transaction\TransactionInterface;
+use App\Helpers\Images;
+use App\Enums\Bill;
 class PaymentService implements PaymentServiceInterface
 {
     protected $request;
 
+    protected $statusTransaction = BILL::STATUSTRANSACTIONWAITING;
+
     protected $billRepository;
     protected $transactionRepositories;
-    public function __construct(PaymentRequest $request, BillInterface $billRepository, TransactionRepositories $transactionRepositories)
+    public function __construct(PaymentRequest $request, BillInterface $billRepository, TransactionInterface $transactionRepositories)
     {
         $this->request = $request;
         $this->billRepository = $billRepository;
@@ -27,47 +31,57 @@ class PaymentService implements PaymentServiceInterface
         return $createTransaction  &&  $updateBill ? trans('message.updateSuccess') : trans('message.loginSuccess');
     }
 
+    public function createTransaction(){
+        $data = [
+            'billId' => $this->request->billId,
+            'userId' => $this->request->userId,
+            'totalMoney' => $this->request->totalMoney,
+            'status' => $this->statusTransaction,
+            'image' => app(Images::class)->checkImageIsStringOrUpdate($this->request->file('image'))
+        ];
+        $createBill = $this->transactionRepositories->create($data);
+    }
+
     public function payVNPay()
     {
-        session(['cost_id' => $this->request->id]);
-        session(['url_prev' => url()->previous()]);
-
+        $vnp_Url = env('VNPAY_vnp_Url');
+        $vnp_Returnurl =  env('VNAPY_Return_link');
         $vnp_TmnCode = env('VNPAYTerminalID');
         $vnp_HashSecret = env('VNPAYSecretKey');
-        $vnp_Url = env('VNPAY_vnp_Url');
-        $vnp_Returnurl = env('VNPAY_Return_link');
 
-        $vnp_TxnRef = rand(1, 10000); // Mã giao dịch
-        $vnp_IpAddr =  $_SERVER['REMOTE_ADDR']; // IP của khách hàng
+        $vnp_TxnRef = time();
+        $vnp_OrderInfo = 'Thanh toán đơn hàng test';
+        $vnp_OrderType = 'other';
+        $vnp_Amount =  1000000;
+        $vnp_Locale = 'vn';
 
-
-        $vnp_TxnRef = rand(1, 10000); //Mã giao dịch thanh toán tham chiếu của merchant
-        $vnp_IpAddr = $_SERVER['REMOTE_ADDR']; //IP Khách hàng thanh toán
-        $startTime = date("YmdHis");
-        $expire = date('YmdHis', strtotime('+15 minutes', strtotime($startTime)));
-        $inputData = array(
+        $vnp_IpAddr = $this->request->ip();
+        $inputData = [
             "vnp_Version" => "2.1.0",
-            "vnp_TmnCode" => "PLQNPF36",
-            "vnp_Amount" =>  10000,
+            "vnp_TmnCode" => $vnp_TmnCode,
+            "vnp_Amount" => $vnp_Amount,
             "vnp_Command" => "pay",
-            "vnp_CreateDate" => date('YmdHis'),
+            "vnp_CreateDate" => Carbon::now('Asia/Ho_Chi_Minh')->format('YmdHis'),
             "vnp_CurrCode" => "VND",
             "vnp_IpAddr" => $vnp_IpAddr,
-            "vnp_Locale" =>'vn',
-            "vnp_OrderInfo" => "Thanh toan GD:" . $vnp_TxnRef,
-            "vnp_OrderType" => "other",
-            "vnp_ReturnUrl" => "http://localhost/vnpay_php/vnpay_return.php",
-            "vnp_TxnRef" => rand(1, 10000),
-            "vnp_ExpireDate" => "20250225031413" 
-        );
-        if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+            "vnp_Locale" => $vnp_Locale,
+            "vnp_OrderInfo" => $vnp_OrderInfo,
+            "vnp_OrderType" => $vnp_OrderType,
+            "vnp_ReturnUrl" => $vnp_Returnurl,
+            "vnp_TxnRef" => $vnp_TxnRef,
+        ];
+
+        if (!empty($vnp_BankCode)) {
             $inputData['vnp_BankCode'] = $vnp_BankCode;
+        } else {
+            unset($inputData['vnp_BankCode']);
         }
 
         ksort($inputData);
-        $query = "";
-        $i = 0;
+
+        $queryString = "";
         $hashdata = "";
+        $i = 0;
         foreach ($inputData as $key => $value) {
             if ($i == 1) {
                 $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
@@ -75,15 +89,13 @@ class PaymentService implements PaymentServiceInterface
                 $hashdata .= urlencode($key) . "=" . urlencode($value);
                 $i = 1;
             }
-            $query .= urlencode($key) . "=" . urlencode($value) . '&';
+            $queryString .= urlencode($key) . "=" . urlencode($value) . '&';
         }
 
-        $vnp_Url = $vnp_Url . "?" . $query;
-        if (isset($vnp_HashSecret)) {
-            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //  
-            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
-        }
-        die($vnp_Url);
+        $queryString = rtrim($queryString, '&');
+        $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
+        $vnp_Url .= "?" . $queryString . "&vnp_SecureHash=" . $vnpSecureHash;
+
+        return $vnp_Url;
     }
-
 }

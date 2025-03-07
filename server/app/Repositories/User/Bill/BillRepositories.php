@@ -178,9 +178,12 @@ class BillRepositories extends BaseRepositories implements BillInterface
     public function find($id){
         return $this->model->find($id);
     }
-    public function updateStatus($id, $request){
+    public function updateStatus($id, $dataBill){
         $data = $this->model->find($id);
-        $data->status = $request->status;
+        $data->status = 1;
+        $data->formPayment = $dataBill['formPayment'];
+        $data->image = $dataBill['image'];
+        $data->pay_at =  Carbon::now();
         $data->updated_at = Carbon::now();
         return $data->save();
     }

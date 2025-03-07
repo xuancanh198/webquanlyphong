@@ -10,4 +10,6 @@ final class Bill extends Enum
     const BILLSTATUSPNOTYET = 0;
     const APPROVED = 1;
     const NOTAPPROVEDYET = 0;
+    const STATUSTRANSACTIONAPPROVED = 1;
+    const STATUSTRANSACTIONWAITING = 0;
 }

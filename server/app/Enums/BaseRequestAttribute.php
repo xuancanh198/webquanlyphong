@@ -9,10 +9,9 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class BillTypeFormPayment extends Enum
+final class BaseRequestAttribute extends Enum
 {
-    const BANKPAYMENTVALUE =  "bank";
-    const VNPAYPAYMENTVALUE = "vnpay";
-    const MOMOPAYMENTVALUE = "momo";
-  
+    const PAGE_DEFAULT = 1;
+    const LIMIT_DEFAULT = 10;
+    const DEFAULT_NULL =  null;
 }

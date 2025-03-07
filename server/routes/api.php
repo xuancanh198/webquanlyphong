@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\Permisstion\ActionController;
 use App\Http\Controllers\Admin\Permisstion\PermisstionDetailController;
 use App\Http\Controllers\Admin\User\ContractController;
 use App\Http\Controllers\Admin\User\BillController;
+use App\Http\Controllers\Admin\User\TransactionController;
 use App\Http\Controllers\Admin\Staff\AuthController;
 use App\Http\Controllers\Admin\Staff\StaffController;
 use App\Http\Controllers\Admin\System\SettingController;
@@ -75,6 +76,12 @@ Route::middleware(['admin.middleware'])->group(function () {
                     Route::put('/{id}', [BillController::class, 'update']);
                     Route::delete('/{id}', [BillController::class, 'destroy']);
                     Route::get('/get-service-room-contract/{roomId}', [BillController::class, 'getServiceRoomContract']);
+                });
+                Route::group(['prefix' => 'transaction'], function () {
+                    Route::get('', [TransactionController::class, 'index']);
+                    Route::post('/', [TransactionController::class, 'store']);
+                    Route::put('/{id}', [TransactionController::class, 'update']);
+                    Route::delete('/{id}', [TransactionController::class, 'destroy']);
                 });
             });
             Route::group(['prefix' => 'permission'], function () {
@@ -140,7 +147,8 @@ Route::middleware(['admin.middleware'])->group(function () {
     Route::group(['prefix' => 'user'], function () {
         Route::group(['prefix' => 'bill'], function () {
             Route::get('', [BillAuthController::class, 'index']);
-            Route::put('/pay', [BillAuthController::class, 'pay']);   
+            Route::put('/pay', [BillAuthController::class, 'pay']);
+            Route::post('pay-bill', [PaymentController::class, 'payBill']);
         });
         Route::post('/login', [AccountController::class, 'login']);
         Route::post('/send-otp', [AccountController::class, 'authenticOTP']);
@@ -148,4 +156,3 @@ Route::middleware(['admin.middleware'])->group(function () {
         Route::put('/update-user-account', [AccountController::class, 'updateInfoUser']);
     });
 });
-Route::post('pay-bill', [PaymentController::class, 'payBill']);

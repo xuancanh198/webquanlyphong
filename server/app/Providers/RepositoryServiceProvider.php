@@ -41,7 +41,9 @@ class RepositoryServiceProvider extends ServiceProvider
             'App\Repositories\User\Contract\ContractInterface' => 'App\Repositories\User\Contract\ContractRepositories',
             'App\Service\Function\Execute\User\Bill\BillServiceInterface' => 'App\Service\Function\Execute\User\Bill\BillService',
             'App\Repositories\User\Bill\BillInterface' => 'App\Repositories\User\Bill\BillRepositories',
-            'App\Service\Function\Execute\User\Payment\PaymentServiceInterface' => 'App\Service\Function\Execute\User\Payment\PaymentService',              
+            'App\Service\Function\Execute\User\Payment\PaymentServiceInterface' => 'App\Service\Function\Execute\User\Payment\PaymentService',
+            'App\Service\Function\Execute\User\Transaction\TransactionServiceInterface' => 'App\Service\Function\Execute\User\Transaction\TransactionService',
+            'App\Repositories\User\Transaction\TransactionInterface' => 'App\Repositories\User\Transaction\TransactionRepositories',             
         ];
 
 

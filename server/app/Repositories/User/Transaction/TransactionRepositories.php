@@ -6,10 +6,8 @@ use App\Models\User\TransactionModel;
 use Carbon\Carbon;
 use App\Repositories\BaseRepositories;
 use App\Service\Function\Action\Firebase;
-use App\Service\Function\Action\ConvertData;
 use Illuminate\Support\Facades\Auth;
-use App\Repositories\User\Bill\BillRepositories;
-use App\Repositories\User;
+
 use App\Enums\Bill;
 class TransactionRepositories extends BaseRepositories implements TransactionInterface
 {
@@ -33,40 +31,39 @@ class TransactionRepositories extends BaseRepositories implements TransactionInt
         $isSelect = $request->isSelect ?? false;
         $filtersBase64 = $request->filtersBase64 ?? null;
         $filterBaseDecode = $request->filterBaseDecode ?? null;
-        $result = $this->getListBaseFun($this->model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64, $isSelect, $this->columSelect, $filterBaseDecode);
+        $model =  $model = $this->model->with([
+            'user' => function ($query) {
+                $query->select('id', 'fullname', 'username');
+            },
+            'bill.room' => function ($query) {
+                $query->select('id', 'code', 'name');
+            },
+            'bill' => function ($query) {
+                $query->select('id', 'roomId', 'code', 'status', 'formPayment', 'image', 'started_at', 'ends_at', 'pay_at', 'created_at', 'totalMoney');
+            },
+        ]);
+        $result = $this->getListBaseFun($model, $page, $limit, $search, $this->columSearch, $excel, $typeTime, $start, $end, $filtersBase64, $isSelect, $this->columSelect, $filterBaseDecode);
         return $result;
     }
-    public function create($request)
+    public function create($data)
     {
 
-        $this->model->billId =  $request->billId;
-        $this->model->userId =  $request->is('admin*') ? $request->userId : Auth::user()->id;
-        $this->model->totalMoney =  $request->totalMoney;
-        $this->model->status = $request->is('admin*') ? Bill::APPROVED : Bill::NOTAPPROVEDYET ;
-        $this->model->image = app(Firebase::class)->uploadImage($request->file('image'));
+        $this->model->billId =  $data['billId'];
+        $this->model->userId =   $data['userId'];
+        $this->model->totalMoney =  $data['totalMoney'];
+        $this->model->status = $data['status'] ;
+        $this->model->image =  $data['image'];
         $this->model->created_at = Carbon::now();
         return $this->model->save();
     }
 
-    public function update($request, $id)
+    public function update($dataUpdate, $id)
     {
         $data = $this->model->find($id);
-        $data->identificationCard = $request->identificationCard;
-        $data->fullname = $request->fullname;
-        $data->username = $request->username;
-        $data->defaultPassword = $request->passwordDefault;
-        $data->phoneNumber = $request->phoneNumber;
-        $data->email = $request->email;
-        $data->address = $request->address;
-        $data->note = $request->note;
-        $data->dateOfBirth = app(ConvertData::class)->convertDateTimeFormat($request->dateOfBirth);
-        $data->dateIssuanceCard = app(ConvertData::class)->convertDateTimeFormat($request->dateIssuanceCard);
-        $data->placeIssue = $request->placeIssue;
-        if ($request->hasFile('image')) {
-            $data->imgLink = app(Firebase::class)->uploadImage($request->file('image'));
-        }
+        $data->status = $dataUpdate['status'];
         $data->updated_at = Carbon::now();
-        return $data->save();
+        $data->save();
+        return $data;
     }
 
     public function delete($id)

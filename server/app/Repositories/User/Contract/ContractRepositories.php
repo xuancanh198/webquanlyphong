@@ -71,9 +71,13 @@ class ContractRepositories extends BaseRepositories implements ContractInterface
         $this->model->startTime =  $request->startTime;
         $this->model->endTime =  $request->endTime;
         $this->model->roomId =  $request->roomId;
+        if ($request->hasFile('image')) {
+            $request->img = app(Firebase::class)->uploadImage($request->file('image'));
+        }
         $this->model->userId =  $request->userId;
         $this->model->note =  $request->note;
         $this->model->created_at = Carbon::now();
+       
         DB::beginTransaction();
 
         try {
@@ -140,4 +144,13 @@ class ContractRepositories extends BaseRepositories implements ContractInterface
             return false;
         }
     }
+    public function getLastContractByRoomId($roomId){
+     
+        return  $this->model->where('roomId', $roomId)
+            ->where('startTime', '<=', Carbon::now())
+            ->where('endTime', '>=', Carbon::now())
+            ->latest('startTime')
+            ->first();
+    }
+   
 }

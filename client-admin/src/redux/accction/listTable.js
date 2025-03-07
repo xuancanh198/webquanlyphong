@@ -148,6 +148,10 @@ export const setAcctionAll = (items) => ({
     type: 'SETACCTIONALL',
     payload: items,
 });
+export const setTransactionAll = (items) => ({
+    type: 'SETTTRANSACTIONALL',
+    payload: items,
+});
 export const setPermisstionDetailAll = (items) => ({
     type: 'SETPERMISSTIONDETAILALL',
     payload: items,

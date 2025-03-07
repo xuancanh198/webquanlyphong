@@ -20,7 +20,8 @@
     "system": "Hệ thống",
     "permisstionDetail": "Quyền chi tiết",
     "setting": "Cài đặt",
-    "activeLog": "Lịch sử hệ thống"
+    "activeLog": "Lịch sử hệ thống",
+    "transaction": "Giao dịch hệ thống"
   },
   "validation": {
     "attribute": {
@@ -260,10 +261,25 @@
       "user": "Người nhận hóa đơn",
       "staff": "Nhân viên tạo hóa đơn",
       "intoMoney": "Thành tiền",
-      "imageBill" : "Ảnh hóa đơn thanh toán",
+      "imageBill": "Ảnh hóa đơn thanh toán",
       "checkIsNowStatus": {
         "has": "Đã thanh toán ",
         "hasnot": "Chưa thanh toán"
+      }
+    },
+    "transaction": {
+      "totalMoney": "Tổng tiền  giao dịch",
+      "created_at": "Thời gian tạo",
+      "updated_at": "Thời gian cập nhật",
+      "status": "Trạng thái giao dịch",
+      "checkIsNowStatus": {
+        "payed": "Đã duyệt ",
+        "notPayed": "Chưa được đuyệt",
+        "canceled": "Bị hủy"
+      },
+      "action" : {
+          "pay": "Xác nhận thanh toán ",
+          "cancel": "Xác nhận hủy "
       }
     },
     "permisstion": {
@@ -352,7 +368,6 @@
     "loginPageMessage": "Bạn phải đăng nhập bằng tài khoản quản trị viên để được vào trang quản trị nếu chưa có tài khoản liên hệ với quản trị để tạo tài khoản",
     "searchTitel": "Nhập {{attribute}} cần tìm",
     "verifyText": "Xác thực {{attribute}}",
-    
     "info": "Thông  tin {{attribute}}",
     "permisstionDetailStatus": {
       "active": "Còn hiệu lực",
@@ -388,11 +403,11 @@
       "ban": "Bị khóa"
     },
     "changeValue": "Nhập {{attribute}} ",
-    "billnow"  :  "Hợp đồng hiện tại",
-    "contractNow" : "Hợp đồng hiện  tại",
-    "roomNow" : "Phòng hiện  tại",
-    "viewInfo" : "Xem thông tin",
-    "updateInfo" : "Cập  nhật thông tin",
+    "billnow": "Hợp đồng hiện tại",
+    "contractNow": "Hợp đồng hiện  tại",
+    "roomNow": "Phòng hiện  tại",
+    "viewInfo": "Xem thông tin",
+    "updateInfo": "Cập  nhật thông tin",
     "requiredChange": "Vui lòng chọn {{attribute}} để hiển thị dữ liệu ...",
     "changeQuantityFail": "Số lượng {{attribute}} trong phòng không đủ hoặc bạn chưa chọn ô nhập !"
   }

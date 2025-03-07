@@ -1,8 +1,8 @@
 <?php 
 namespace App\Repositories\Room\TypeRoom;
 interface TypeRoomInterface{
-    public function getList($request);
-    public function create($request);
-    public function update($request, $id);
+    public function getList($data);
+    public function create($data);
+    public function update($data, $id);
     public function delete($id);
 }

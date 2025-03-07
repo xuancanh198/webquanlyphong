@@ -26,6 +26,7 @@ import BillList from "./List/Bill/list";
 import FloorList from "./List/Floor/list";
 import LogActive from "./List/LogActive/list";
 import SettingList from "./List/Setting/list";
+import TransactionList from "./List/Transaction/list";
 import RoomList from "./List/Room/list";
 import ContractList from "./List/Contract/list";
 import FloorModal from "./Modal/Floor/modal";
@@ -66,10 +67,11 @@ import {
   getListSetting,
   getListPermisstionDetail,
   getListBill,
-  getListActiveLog
+  getListActiveLog,
+  getListTransaction
 } from "../../service/baseService/cruds";
 import { useSelector, useDispatch } from 'react-redux';
-import { setTypeFilter, setpage, setLimit, setFilterStatus, setStartFilter, setEndFilter, setSearchVluae, setSeachStatus, setEcelDowload, setFilter } from "../../redux/accction/listTable";
+import { setTypeFilter, setpage, setLimit, setFilterStatus, setStartFilter, setEndFilter, setSearchVluae, setSeachStatus, setEcelDowload, setFilter, setBaseDecode } from "../../redux/accction/listTable";
 import { convertDateTime } from "../../service/FunService/funweb";
 import ReactPaginate from 'react-paginate';
 import DatePicker from 'react-datepicker';
@@ -285,6 +287,14 @@ const Tables = () => {
           SetTitel(t('page.activeLog'));
           dispatch(getListActiveLog(t('page.activeLog'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
           break;
+        case 'transaction':
+          setArrayTimeFilter([
+            created_at_time, updated_at_time
+          ])
+          SetTitel(t('page.transaction'));
+          dispatch(getListTransaction(t('page.transaction'), page, limit, searchOb, filter, exportExcel, filtersbase64, filterBaseDecode));
+          break;
+          
         default:
           SetTitel('Tiêu đề mặc định');
           break;
@@ -310,7 +320,8 @@ const Tables = () => {
     dispatch(setEndFilter(new Date()));
     dispatch(setSearchVluae(null));
     dispatch(setSeachStatus(false));
-    dispatch(setFilter(null))
+    dispatch(setFilter(null));
+    dispatch(setBaseDecode(null))
   }
   const exproctExcelData = () => {
     if (exportExcel === false) {
@@ -509,6 +520,9 @@ const Tables = () => {
                 return <SettingList data={listTabledata} />;
               case 'activeLog':
                 return <LogActive data={listTabledata} />;
+              case 'transaction':
+                return <TransactionList data={listTabledata} />;
+                
               default:
                 return null;
             }

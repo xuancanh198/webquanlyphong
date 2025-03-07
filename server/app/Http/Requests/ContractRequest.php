@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Requests;
-
+use App\Service\Request\ContractServiceRequest;
 use App\Http\Requests\BaseRequest;
 class ContractRequest extends BaseRequest
 {
+   
     public function authorize(): bool
     {
         return true;
@@ -13,19 +14,24 @@ class ContractRequest extends BaseRequest
 
     public function rules(): array
     {
+        // $data = [
+        //     'roomId' => $this->roomId,
+        //     'startTime' => $this->startTime,
+        //     'endTime' => $this->endTime,
+        // ];
+        // app(ContractServiceRequest::class)->execute($data);
         $rule = []; 
         if ($this->isMethod('post') || $this->isMethod('put')) {
+           
             $rule = [
                 'code' => 'required|string|min:1|max:255',
                 'priceTime' => 'required|integer|min:1',
                 'userId' => 'required|integer|min:1|exists:tbl_user,id',
                 'roomId' => 'required|integer|min:1|exists:tbl_room,id',
                 'deposit' => 'required|integer|min:1',
-                'priceTime' => 'required|integer|min:1',
                 'startTime' => 'required|date',
                 'endTime' => 'required|date',
                 'note' => 'nullable|string|',
-                'service' => 'required|array|min:1',
                 'service' => 'required|array|min:1',
                 'furniture' => 'required|array|min:1',
                 'customers' => 'required|array|min:1',

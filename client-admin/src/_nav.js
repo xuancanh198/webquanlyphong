@@ -102,6 +102,11 @@ const NavConfig = () => {
           name: t('page.bill'),
           to: '/page?query=bill',
         },
+        {
+          component: CNavItem,
+          name: t('page.transaction'),
+          to: '/page?query=transaction',
+        },
       ],
     },
     {

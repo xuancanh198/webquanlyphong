@@ -12,7 +12,8 @@ import {
   setAcctionAll,
   setPermisstionAll,
   setStaffAll,
-  setPermisstionDetailAll
+  setPermisstionDetailAll,
+  setTransactionAll
 } from "../../redux/accction/listTable";
 import { setLoading } from "../../redux/accction/reducers";
 import APILink from "../API";
@@ -1060,5 +1061,67 @@ export const deleteActiveLog = (id) => {
   const routerLink = "system/active-log";
   return (dispatch) => {
     dispatch(deleteFunService(routerLink, id, getListActiveLog));
+  };
+};
+
+export const getListTransaction = (titel = null, page = 1, limit = 10, search = null, fitler = null, exportExcel = false, filtersBase64 = null, filterBaseDecode = null) => {
+  const objectGet = {
+    page: page,
+    limit: limit,
+    search: search,
+    fitler: fitler,
+    exportExcel: exportExcel,
+    filtersBase64: filtersBase64,
+    routerLink: 'user/transaction',
+    titelnameExcel: ["STT", "ID", "Tên chức vụ", "Thời gian tạo", "Cập nhật"],
+    columExcel: ['id', 'name', 'created_at', 'updated_at'],
+    titelExcel: titel,
+    filterBaseDecode: filterBaseDecode
+  }
+  return (dispatch) => {
+    dispatch(getListFunService(objectGet))
+  };
+};
+export const getAllTransaction = (exportExcel = false, isSelectAll = false, page = 1, limit = 10, search = null) => {
+  const objectGet = {
+    getList: setTransactionAll,
+    exportExcel: exportExcel,
+    routerLink: 'user/transaction',
+    isSelect: isSelectAll,
+    page: exportExcel === true ? page : null,
+    limit: exportExcel === true ? limit : null,
+    search: (search !== null && search.trim().length > 0) ? search : null
+  }
+  return (dispatch) => {
+    dispatch(getAllData(objectGet))
+  };
+};
+export const addTransaction = (data, resetForm) => {
+  const objectCreate = {
+    routerLink: 'user/transaction',
+    data: data,
+    resetForm: resetForm,
+    getList: getListTransaction
+  }
+  return (dispatch) => {
+    dispatch(addFunService(objectCreate));
+  };
+};
+export const updateTransaction = (data, id, resetForm) => {
+  const objectUpdate = {
+    id: id,
+    routerLink: 'user/transaction',
+    data: data,
+    resetForm: resetForm,
+    getList: getListTransaction
+  }
+  return (dispatch) => {
+    dispatch(updateFunService(objectUpdate));
+  };
+};
+export const deleteTransaction = (id) => {
+  const routerLink = "user/transaction";
+  return (dispatch) => {
+    dispatch(deleteFunService(routerLink, id, getListTransaction));
   };
 };

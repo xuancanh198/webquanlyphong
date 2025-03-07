@@ -10,4 +10,6 @@ interface ContractServiceInterface
     public function deleteAction($id);
 
     public function getDataInRoom($roomId, $model, $relationship);
+
+    public function checkIsStillValid($data);
 }

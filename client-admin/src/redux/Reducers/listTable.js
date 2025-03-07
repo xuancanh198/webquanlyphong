@@ -10,6 +10,7 @@ const initialState = {
   listUserAll: null,
   listServiceRoom: null,
   listStaffAll: null,
+  listTransactionAll: null,
   listActiveLog : null,
   listFurnitureRoom: null,
   listPermisstionAll: null,
@@ -176,7 +177,12 @@ const listTable = (state = initialState, action) => {
         ...state,
         listRoomAll: action.payload,
       };
-
+    case 'SETTTRANSACTIONALL':
+      return {
+        ...state,
+        listTransactionAll: action.payload,
+      };
+      
     case 'SETPERMISSTIONALL':
       return {
         ...state,
