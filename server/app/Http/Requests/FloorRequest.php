@@ -20,17 +20,17 @@ class FloorRequest extends BaseRequest
                 'code' => 'required|string|min:1|max:60',
             ];
             if($this->isMethod('post')){
-                $rule['code'] .= '|unique:tbl_type_room,code,';
+                $rule['code'] .= '|unique:tbl_floor,code,';
             }
             elseif($this->isMethod('put')){
-                $rule['code'] .= '|unique:tbl_type_room,code,' .$this->id;
+                $rule['code'] .= '|unique:tbl_floor,code,' .$this->id;
                 
-                $rule = array_merge($rule, $this->getMethodIdDeleteAndUpdat('tbl_type_room'));
+                $rule = array_merge($rule, $this->getMethodIdDeleteAndUpdat('tbl_floor'));
             }
             } elseif ($this->isMethod('get')) {
                 $rule = $this->getMethodGet();
             } elseif ($this->isMethod('delete')) {
-                $rule =$this->getMethodIdDeleteAndUpdat('tbl_type_room');
+                $rule =$this->getMethodIdDeleteAndUpdat('tbl_floor');
             }
         return $rule;
     }
@@ -43,10 +43,11 @@ class FloorRequest extends BaseRequest
     public function attributes()
     {
         $attributes = $this->attributesBase();
-       return (array_merge($attributes, [
-            'name' => trans('message.nameTypeRoom'), 
-            'code' => trans('message.codeTypeRoom'), 
-            'id' => trans('message.idTypeRoom'), 
+        return (array_merge($attributes, [
+                'name' => trans('message.nameFloor'), 
+                'code' => trans('message.codeFloor'), 
+                'id' => trans('message.idFloor'), 
         ]));
     }
+  
 }

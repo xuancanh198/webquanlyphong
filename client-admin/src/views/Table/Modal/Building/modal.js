@@ -34,14 +34,14 @@ function Example({ title }) {
     const show = useSelector((state) => state.listTable.modalAdd);
     const [note, setNote] = useState('')
     const [images, setImages] = useState([]);
-    const [address, setAddress] = useState('');
+    // const [address, setAddress] = useState('');
     const [provinceValue, setProvinceValue] = useState('');
     const [districtValue, setDistrictValue] = useState('');
     const [wardValue, setWardValue] = useState('');
-    const [addressDetail, setAddressDetail] = useState('');
-    const province = useSelector((state) => state.listTable.province);
-    const district = useSelector((state) => state.listTable.district);
-    const ward = useSelector((state) => state.listTable.ward);
+    // const [addressDetail, setAddressDetail] = useState('');
+    // const province = useSelector((state) => state.listTable.province);
+    // const district = useSelector((state) => state.listTable.district);
+    // const ward = useSelector((state) => state.listTable.ward);
     const page = useSelector((state) => state.listTable.page);
     const limit = useSelector((state) => state.listTable.limit);
     const [markerPosition, setMarkerPosition] = useState(null);
@@ -57,50 +57,50 @@ function Example({ title }) {
     const handleClose = () => dispatch(setModalAdd(false));
     const handleShow = () => dispatch(setModalAdd(true));
 
-    useEffect(() => {
-        const fetchData = async () => {
-            await dispatch(getListProvince());
-            dispatch(getAllRole(page, limit));
-        };
-        if (show === true) {
-            fetchData();
-        }
+    // useEffect(() => {
+    //     // const fetchData = async () => {
+    //     //     await dispatch(getListProvince());
+          
+    //     // };
+    //     // if (show === true) {
+    //     //     fetchData();
+    //     // }
+    //     dispatch(getAllRole(page, limit));
+    // }, [dispatch, page, limit, show]);
 
-    }, [dispatch, page, limit, show]);
+    // useEffect(() => {
+    //     if (province.length > 0) {
+    //         setProvinceValue(province[0].province_name);
+    //     }
+    // }, [province]);
 
-    useEffect(() => {
-        if (province.length > 0) {
-            setProvinceValue(province[0].province_name);
-        }
-    }, [province]);
+    // useEffect(() => {
+    //     if (district.length > 0) {
+    //         setDistrictValue(district[0].district_name);
+    //     }
+    // }, [district]);
+    // useEffect(() => {
+    //     formik.setValues({
+    //         ...formik.values,
+    //         addressDetail: addressDetail,
+    //     });
+    // }, [addressDetail]);
+    // useEffect(() => {
+    //     if (ward.length > 0) {
+    //         setWardValue(ward[0].ward_name);
+    //     }
+    // }, [ward]);
 
-    useEffect(() => {
-        if (district.length > 0) {
-            setDistrictValue(district[0].district_name);
-        }
-    }, [district]);
-    useEffect(() => {
-        formik.setValues({
-            ...formik.values,
-            addressDetail: addressDetail,
-        });
-    }, [addressDetail]);
-    useEffect(() => {
-        if (ward.length > 0) {
-            setWardValue(ward[0].ward_name);
-        }
-    }, [ward]);
+    // useEffect(() => {
+    //     setAddress(provinceValue + " ," + districtValue + " ," + wardValue + " ," + addressDetail);
+    // }, [provinceValue, districtValue, wardValue, addressDetail]);
 
-    useEffect(() => {
-        setAddress(provinceValue + " ," + districtValue + " ," + wardValue + " ," + addressDetail);
-    }, [provinceValue, districtValue, wardValue, addressDetail]);
-
-    useEffect(() => {
-        formik.setValues({
-            ...formik.values,
-            address: address,
-        });
-    }, [address]);
+    // useEffect(() => {
+    //     formik.setValues({
+    //         ...formik.values,
+    //         address: address,
+    //     });
+    // }, [address]);
     useEffect(() => {
         if (show === true) {
             if (markerPosition !== null && markerPosition.lat !== null && markerPosition.lng !== null) {
@@ -152,6 +152,11 @@ function Example({ title }) {
                 .max(255, t('validation.attribute.min', { attribute: t('lableView..building.name'), max: 50 }))
                 .matches(/^[\p{L}\s.']+$/u, t('validation.attribute.matches', { attribute: t('lableView.building.name') }))
                 .required(t('validation.attribute.required', { attribute: t('lableView.building.name') })),
+            address: Yup.string()
+                .min(5, t('validation.attribute.min', { attribute: t('lableView.building.address'), min: 2 }))
+                .max(255, t('validation.attribute.min', { attribute: t('lableView..building.address'), max: 500 }))
+                .matches(/^[\p{L}\s.']+$/u, t('validation.attribute.matches', { attribute: t('lableView.building.address') }))
+                .required(t('validation.attribute.required', { attribute: t('lableView.building.address') })),
             // addressDetail: Yup.string()
             //     .required(t('validation.attribute.required', { attribute: t('lableView.building.addressDetail') })),
             numberFloor: Yup.number()
@@ -182,17 +187,17 @@ function Example({ title }) {
     };
 
     let triggerImageUpload = null;
-    const provinceFun = (e) => {
-        dispatch(getListDistrict(e.target.value));
-        setProvinceValue(e.target.options[e.target.selectedIndex].text)
-    }
-    const districtFun = (e) => {
-        dispatch(getListward(e.target.value));
-        setDistrictValue(e.target.options[e.target.selectedIndex].text)
-    }
-    const wardFun = (e) => {
-        setWardValue(e.target.options[e.target.selectedIndex].text)
-    }
+    // const provinceFun = (e) => {
+    //     dispatch(getListDistrict(e.target.value));
+    //     setProvinceValue(e.target.options[e.target.selectedIndex].text)
+    // }
+    // const districtFun = (e) => {
+    //     dispatch(getListward(e.target.value));
+    //     setDistrictValue(e.target.options[e.target.selectedIndex].text)
+    // }
+    // const wardFun = (e) => {
+    //     setWardValue(e.target.options[e.target.selectedIndex].text)
+    // }
 
     return (
         <>

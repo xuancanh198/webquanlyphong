@@ -48,7 +48,6 @@ function List({ data }) {
   const [editorData, setEditorData] = useState('');
   const [note, setNote] = useState('')
   const [images, setImages] = useState([]);
-  const [address, setAddress] = useState('');
   const [validated, setValidated] = useState(false);
   const [id, setId] = useState(0);
   const [initialValues, setInitialValues] = useState({
@@ -62,30 +61,27 @@ function List({ data }) {
     note: '',
     image: null
   });
-  const province = useSelector((state) => state.listTable.province);
-  const district = useSelector((state) => state.listTable.district);
-  const ward = useSelector((state) => state.listTable.ward);
+  // const province = useSelector((state) => state.listTable.province);
+  // const district = useSelector((state) => state.listTable.district);
+  // const ward = useSelector((state) => state.listTable.ward);
   const page = useSelector((state) => state.listTable.page);
   const limit = useSelector((state) => state.listTable.limit);
   let filters = useSelector((state) => state.listTable.filters);
 
   const maxNumber = 1;
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(getListProvince());
-    };
-    if (show === true) {
-      fetchData();
-    }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await dispatch(getListProvince());
+  //   };
+  //   if (show === true) {
+  //     fetchData();
+  //   }
 
-  }, [dispatch, page, limit, show]);
+  // }, [dispatch, page, limit, show]);
 
-  useEffect(() => {
-    formik.setValues({
-      ...formik.values,
-      address: address,
-    });
-  }, [address]);
+  // useEffect(() => {
+  //       dispatch(getAllRole(page, limit));
+  //   }, [page, limit, show]);
 
   const handleClose = () => {
     dispatch(setModalUpdate(false));
@@ -179,6 +175,11 @@ function List({ data }) {
         .max(255, t('validation.attribute.min', { attribute: t('lableView..building.name'), max: 50 }))
         .matches(/^[\p{L}\s.']+$/u, t('validation.attribute.matches', { attribute: t('lableView.building.name') }))
         .required(t('validation.attribute.required', { attribute: t('lableView.building.name') })),
+      address: Yup.string()
+        .min(5, t('validation.attribute.min', { attribute: t('lableView.building.address'), min: 2 }))
+        .max(255, t('validation.attribute.min', { attribute: t('lableView..building.address'), max: 500 }))
+        .matches(/^[\p{L}\s.']+$/u, t('validation.attribute.matches', { attribute: t('lableView.building.address') }))
+        .required(t('validation.attribute.required', { attribute: t('lableView.building.address') })),
       numbeRoomsRent: Yup.number()
         .typeError(t('validation.attribute.integer', { attribute: t('lableView.building.numbeRoomsRent') }))
         .min(1, t('validation.attribute.minValue', { attribute: t('lableView.building.numbeRoomsRent'), min: 1 }))
@@ -208,17 +209,17 @@ function List({ data }) {
 
   let triggerImageUpload = null;
 
-  const provinceFun = (e) => {
-    dispatch(getListDistrict(e.target.value));
-    setProvinceValue(e.target.options[e.target.selectedIndex].text)
-  }
-  const districtFun = (e) => {
-    dispatch(getListward(e.target.value));
-    setDistrictValue(e.target.options[e.target.selectedIndex].text)
-  }
-  const wardFun = (e) => {
-    setWardValue(e.target.options[e.target.selectedIndex].text)
-  }
+  // const provinceFun = (e) => {
+  //   dispatch(getListDistrict(e.target.value));
+  //   setProvinceValue(e.target.options[e.target.selectedIndex].text)
+  // }
+  // const districtFun = (e) => {
+  //   dispatch(getListward(e.target.value));
+  //   setDistrictValue(e.target.options[e.target.selectedIndex].text)
+  // }
+  // const wardFun = (e) => {
+  //   setWardValue(e.target.options[e.target.selectedIndex].text)
+  // }
 
 
   useEffect(() => {
@@ -551,7 +552,7 @@ function List({ data }) {
                       <p> <span className='lable-form'> {t('lableView.building.address')}</span>  : {dataDeatil && dataDeatil !== null && dataDeatil.address ? dataDeatil.address : t('noData')} </p>
                     ) : (
                       <>
-                        <Form.Group as={Col} xl="4" lg="6" md="6" sm="12" className='mb-3 mt-3'>
+                        {/* <Form.Group as={Col} xl="4" lg="6" md="6" sm="12" className='mb-3 mt-3'>
                           <Form.Label>{t('lableView.building.province')}</Form.Label>
                           <Form.Select aria-label="Default select example" name='province' onChange={(e) => provinceFun(e)}>
                             {province && province.map((item) => (
@@ -578,26 +579,26 @@ function List({ data }) {
                             ))}
                           </Form.Select>
 
-                        </Form.Group>
+                        </Form.Group> */}
                         <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3'>
-                          <Form.Label> {t('lableView.building.addressDetail')}</Form.Label>
+                          <Form.Label> {t('lableView.building.address')}</Form.Label>
                           <Form.Control
                             type="text"
-                            value={formik.values.addressDetail}
+                            value={formik.values.address}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            isInvalid={formik.touched.addressDetail && formik.errors.addressDetail}
+                            isInvalid={formik.touched.address && formik.errors.address}
                           />
                           <Form.Control.Feedback type="invalid">
-                            {formik.errors.addressDetail}
+                            {formik.errors.address}
                           </Form.Control.Feedback>
                         </Form.Group>
                       </>
                     )
                   }
-                  <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3'>
+                  {/* <Form.Group as={Col} xl="12" lg="12" md="12" sm="12" className='mb-3 mt-3'>
                     <p>Nếu không chỉnh sửa địa chỉ, sẽ giữ nguyên địa chỉ cũ là :  {dataDeatil && dataDeatil !== null && dataDeatil.address ? dataDeatil.address : ""}   </p>
-                  </Form.Group>
+                  </Form.Group> */}
                   {checked === false ?
                     "" : (
                       <>

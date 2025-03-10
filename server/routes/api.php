@@ -23,7 +23,7 @@ use App\Http\Controllers\Admin\System\LogActiveController;
 use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\BillAuthController;
 use App\Http\Controllers\User\PaymentController;
-Route::middleware(['admin.middleware'])->group(function () {
+//Route::middleware(['admin.middleware'])->group(function () {
     Route::group(['prefix' => 'admin',], function () {
         Route::post('/login', [AuthController::class, 'login']);
         Route::middleware(['admin.checkPermisstion'])->group(function () {
@@ -155,4 +155,4 @@ Route::middleware(['admin.middleware'])->group(function () {
         Route::get('/my-account', [AccountController::class, 'getMyUser']);
         Route::put('/update-user-account', [AccountController::class, 'updateInfoUser']);
     });
-});
+//});

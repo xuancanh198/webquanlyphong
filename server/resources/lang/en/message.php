@@ -88,4 +88,8 @@ return [
     'updateAction' => 'Update',
     'deleteAction' => 'Delete',
     'invalid_excel_value' => 'The Excel value must be a boolean and its value must be true.',
+    'sendEmailSuccess' => 'Email sent successfully!',
+    'loginSuccess' => 'Login successful',
+    'updateSuccess' => 'Update successful',
+    'updateFail' => 'Update failed',
 ];

@@ -155,44 +155,44 @@ class BaseRequest extends FormRequest
             'numeric' => trans('message.numeric'),
         ];
     }
-    
+
     public function generateMessages(array $rules)
     {
         $messages = [];
-        $attributes = $this->attributes(); 
-    
+        $attributes = $this->attributes();
+
         foreach ($rules as $field => $fieldRules) {
             $fieldRulesArray = explode('|', $fieldRules);
             foreach ($fieldRulesArray as $rule) {
                 if (strpos($rule, ':') !== false) {
                     [$ruleName, $ruleValue] = explode(':', $rule);
-    
+                    if (in_array($ruleName, ['unique', 'exists'])) {
+                        $messages["{$field}.{$ruleName}"] = str_replace(
+                            [':attribute', ':value'],
+                            [$attributes[$field] ?? $field, $ruleValue],
+                            $this->defaultMessages[$ruleName] ?? "{$field} không hợp lệ."
+                        );
+                    }
                     if ($ruleName === 'min') {
                         if (is_numeric($ruleValue)) {
                             $messages["{$field}.{$ruleName}"] = str_replace(
                                 [':attribute', ":{$ruleName}"],
-                                [$attributes[$field] ?? $field, $ruleValue], 
-                                $this->defaultMessages['min_numeric'] ?? "{$field} must be at least :{$ruleName}."
+                                [$attributes[$field] ?? $field, $ruleValue],
+                                $this->defaultMessages['min_numeric'] ?? "{$field} phải có giá trị ít nhất :{$ruleName}."
                             );
                         } elseif (is_array($this->$field)) {
                             $messages["{$field}.{$ruleName}"] = str_replace(
                                 [':attribute', ":{$ruleName}"],
-                                [$attributes[$field] ?? $field, $ruleValue], 
-                                $this->defaultMessages['min_array'] ?? "{$field} must have at least :{$ruleName} items."
+                                [$attributes[$field] ?? $field, $ruleValue],
+                                $this->defaultMessages['min_array'] ?? "{$field} phải có ít nhất :{$ruleName} mục."
                             );
                         } else {
                             $messages["{$field}.{$ruleName}"] = str_replace(
                                 [':attribute', ":{$ruleName}"],
-                                [$attributes[$field] ?? $field, $ruleValue], 
-                                $this->defaultMessages['min_string'] ?? "{$field} must be at least :{$ruleName} characters."
+                                [$attributes[$field] ?? $field, $ruleValue],
+                                $this->defaultMessages['min_string'] ?? "{$field} phải có ít nhất :{$ruleName} ký tự."
                             );
                         }
-                    } else {
-                        $messages["{$field}.{$rule}"] = str_replace(
-                            ':attribute',
-                            $attributes[$field] ?? $field,
-                            $this->defaultMessages[$rule] ?? "{$field}.{$rule} không hợp lệ."
-                        );
                     }
                 } else {
                     $messages["{$field}.{$rule}"] = str_replace(
@@ -203,8 +203,7 @@ class BaseRequest extends FormRequest
                 }
             }
         }
-    
+
         return $messages;
     }
-    
 }

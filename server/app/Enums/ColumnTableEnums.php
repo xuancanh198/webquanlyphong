@@ -12,5 +12,7 @@ use BenSampo\Enum\Enum;
 final class ColumnTableEnums extends Enum
 {
     const COLUMNTABLESEARCHDEFAULT = ['name', 'code'];
+
+    const COLUMNTABLESELECTROOM = ['id', 'name', 'code'];
  
 }

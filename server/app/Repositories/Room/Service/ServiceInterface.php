@@ -2,11 +2,11 @@
 namespace App\Repositories\Room\Service;
 interface ServiceInterface{
 
-    public function getList($request);
+    public function getList($data);
 
-    public function create($request);
+    public function create($data);
 
-    public function update($request, $id);
+    public function update($data, $id);
 
     public function delete($id);
 }
